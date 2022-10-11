@@ -4,7 +4,7 @@ Table of Contents
 
 1. [Setting Up](#starting-up)
 2. [Technical Documents](#technical-documentation)
-3. [Workflow] (#workflow)
+3. [Workflow](#workflow)
 4. [Tech Stack](#tech-stack)
 
 ## Section 1: Setting up <a name="starting-up"></a>
