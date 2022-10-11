@@ -1,6 +1,6 @@
 # SD Atlas Guide
 
-Table of Contents
+## Table of Contents
 
 1. [Setting Up](#starting-up)
 2. [Technical Documents](#technical-documentation)
