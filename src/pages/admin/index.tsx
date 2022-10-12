@@ -2,7 +2,7 @@ import type { NextPage } from 'next'
 import { useState } from 'react'
 import { Input } from '@chakra-ui/react'
 import { parse, ParseResult } from 'papaparse'
-import DataTable from '../../components/admin/dataTable'
+import DataTable from '../../components/admin/DataTable'
 
 const DashboardPage: NextPage = () => {
   const [data, setData] = useState<tableDataType[]>([])

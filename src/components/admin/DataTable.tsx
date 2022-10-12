@@ -8,7 +8,7 @@ import {
   Thead,
   Tbody,
 } from '@chakra-ui/react'
-import { tableDataType } from '../../pages/admin/dashboard'
+import { tableDataType } from '../../pages/admin'
 
 export default function DataTable({ data }: { data: tableDataType[] }) {
   // Used to display the data on the screen
