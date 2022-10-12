@@ -2,10 +2,10 @@ import type { NextPage } from 'next'
 import { useState } from 'react'
 import { Input } from '@chakra-ui/react'
 import { parse, ParseResult } from 'papaparse'
-import DataTable from '../../components/admin/DataTable'
+import DataTable from '../../components/admin'
 
 const DashboardPage: NextPage = () => {
-  const [data, setData] = useState<tableDataType[]>([])
+  const [data, setData] = useState<itemType[]>([])
 
   // Used to parse the csv file
   const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -19,9 +19,10 @@ const DashboardPage: NextPage = () => {
         complete(results: ParseResult<itemType>) {
           const mapped = results.data.map((item) => {
             return {
-              name: item['Full Name'] || '',
-              email: item['NUS email (xxx@u.nus.edu)'] || item['Gmail'],
-              telegram: item['Telegram Handle(@xxx)'],
+              'Full Name': item['Full Name'],
+              'NUS email': item['NUS email (xxx@u.nus.edu)'],
+              Gmail: item['Gmail'],
+              'Telegram Handle(@xxx)': item['Telegram Handle(@xxx)'],
             }
           })
           setData(mapped)
@@ -33,23 +34,18 @@ const DashboardPage: NextPage = () => {
   // Used to return the components
   return (
     <>
-      <DataTable data={data} />
       <Input accept=".csv" onChange={handleFile} type="file" />
+      <DataTable data={data} />
     </>
   )
 }
 
-export type tableDataType = {
-  name?: string
-  email?: string
-  telegram?: string
-}
-
-type itemType = {
+export type itemType = {
   'Full Name': string
-  'NUS email (xxx@u.nus.edu)'?: string
+  'NUS email'?: string
   Gmail?: string
   'Telegram Handle(@xxx)'?: string
+  'NUS email (xxx@u.nus.edu)'?: string
 }
 
 export default DashboardPage
