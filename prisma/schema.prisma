@@ -25,12 +25,12 @@ model Account {
   type              String
   provider          String
   providerAccountId String
-  refresh_token     String? //@db.Text
-  access_token      String? //@db.Text
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
   expires_at        Int?
   token_type        String?
   scope             String?
-  id_token          String? //@db.Text
+  id_token          String? @db.Text
   session_state     String?
   user              User    @relation(fields: [userId], references: [student_id], onDelete: Cascade)
 
@@ -82,25 +82,25 @@ model Announcements {
 }
 
 model User {
-  attendance     Int
+  attendance     Int?
   batch          String
   department     String
-  discord        String
+  discord        String?
   gender         String
   faculty        String
-  hobbies        String
-  level          String
+  hobbies        String?
+  level          String?
   image          String?
   name           String
-  nus_email      String
+  nus_email      String?
   emailVerified  DateTime?
-  personal_email String
-  projects       String
+  personal_email String?
+  projects       String?
   roles          String
   student_id     String    @id
   telegram       String
-  total_events   String
-  wallet         String
+  total_events   String?
+  wallet         String?
   year           String
   accounts       Account[]
   sessions       Session[]
