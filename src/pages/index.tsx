@@ -1,10 +1,10 @@
-import type { NextPage } from "next";
-import Head from "next/head";
-import { trpc } from "../utils/trpc";
-import styles from "./index.module.css";
+import type { NextPage } from 'next'
+import Head from 'next/head'
+import { trpc } from '../utils/trpc'
+import styles from './index.module.css'
 
 const Home: NextPage = () => {
-  const { data } = trpc.useQuery(["example.hello", { text: "from tRPC" }]);
+  const { data } = trpc.useQuery(['example.hello', { text: 'from tRPC' }])
 
   return (
     <>
@@ -59,16 +59,16 @@ const Home: NextPage = () => {
         </div>
       </div>
     </>
-  );
-};
+  )
+}
 
-export default Home;
+export default Home
 
 type TechnologyCardProps = {
-  name: string;
-  description: string;
-  documentation: string;
-};
+  name: string
+  description: string
+  documentation: string
+}
 
 const TechnologyCard = ({
   name,
@@ -88,5 +88,5 @@ const TechnologyCard = ({
         Documentation
       </a>
     </section>
-  );
-};
+  )
+}
