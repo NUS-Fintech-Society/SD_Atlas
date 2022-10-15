@@ -48,3 +48,13 @@ Branch out from the **dev** branch and work on it. Create a PR to the dev branch
 |  ChakraUI  |                   UIUX                   |       FE       |
 |   Prisma   |           ORM for SQL Database           |       BE       |
 | Postgresql |                 Database                 |       BE       |
+
+## Section 5: Important Commands
+
+```sh
+
+yarn install # Install the neccessary dependencies
+yarn dev # Start the development
+yarn prettier --write . # Use prettier to format all the files
+
+```
