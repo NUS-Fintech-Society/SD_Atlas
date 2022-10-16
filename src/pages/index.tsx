@@ -21,8 +21,8 @@ const Home: NextPage = () => {
         </nav>
 
         {/* HomePage */}
-        <div className="flex flex-col font=[inter] ml-[2.5%]">
-          <div className="font-semibold text-6xl mb-[2.5%]">
+        <div className="flex flex-col font=[inter] ml-8">
+          <div className="font-semibold text-6xl mb-8">
             <div>NUS</div>
             <div className="underline decoration-[#97AEFF] decoration-8">
               Fintech Society
