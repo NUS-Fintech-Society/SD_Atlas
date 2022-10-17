@@ -14,6 +14,21 @@ export const profileRouter = createRouter()
                 const user =  await ctx.prisma.user.findUnique({
                     where: {
                         student_id: input.studentId },
+                    select:{
+                        name: true,
+                        gender: true,
+                        batch: true,
+                        year: true,
+                        faculty: true,
+                        telegram: true,
+                        discord: true,
+                        nus_email: true,
+                        personal_email: true,
+                        hobbies: true,
+                        department: true,
+                        roles: true,
+                        projects: true
+                    }
                 });
                 return {
                     props: {

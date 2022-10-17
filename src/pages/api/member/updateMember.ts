@@ -25,6 +25,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
             },
             data: {
                 gender,
+                name,
                 batch,
                 year,
                 faculty,
