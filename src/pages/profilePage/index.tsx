@@ -1,3 +1,21 @@
+import {
+    Table,
+    Tbody,
+    Tr,
+    Td,
+    TableContainer,
+} from '@chakra-ui/react'
+import {
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
+} from '@chakra-ui/modal'
+import { Box, Button, Container, useDisclosure } from '@chakra-ui/react'
+
 const mockData = {
   name: 'Bob tan',
   gender: 'M',
@@ -16,73 +34,69 @@ const mockData = {
 }
 const ProfilePage = () => {
   return (
-    <div
-      style={{
-        padding: '48px',
-      }}
+    <Box
     >
-      <h1>Profile Page</h1>
-      <div style={{ display: 'flex', justifyContent: 'center', gap: '24px' }}>
-        <ProfilePicture />
+      <Box className='flex justify-between gap-6 mt-4' >
         <ProfileInfo {...mockData} />
-      </div>
-    </div>
+        <Box className="flex flex-col">
+          <ProfilePicture />
+          <ProfileContactInfo  {...mockData} />
+        </Box>
+      </Box>
+    </Box>
+  )
+}
+
+const ProfileContactInfo = ( props : ProfileInfoProps) => {
+  return (
+    <Box className="flex flex-col">
+      <Box>
+        <p>{props.telegram}</p>
+      </Box>
+      <Box>
+        <p>{props.discord}</p>
+      </Box>
+      <Box>
+        <p>{props.personal_email}</p>
+      </Box>
+      <Box>
+        <p>{props.nus_email}</p>
+      </Box>
+    </Box>
   )
 }
 
 const ProfilePicture = () => {
   return (
-    <div
-      style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}
+    <Box
+      className={'flex flex-col items-center'}
     >
-      <div
-        style={{
-          border: '2px solid blue',
-        }}
+      <Box className={'border-2 border-solid border-blue-300'}
       >
-        <div
-          style={{
-            border: '2px solid red',
-            height: '300px',
-            width: '300px',
-          }}
-        >
+        <Box className='h-32 w-32 border-2 border-red-300' >
           Profile PIC
-        </div>
-        <div
-          style={{ display: 'flex', justifyContent: 'flex-end', gap: '4px' }}
-        >
+        </Box>
+        <Box className='flex justify-end gap-1' >
           <UploadImageBtn />
           <DeleteImageBtn />
-        </div>
-      </div>
-    </div>
+        </Box>
+      </Box>
+    </Box>
   )
 }
 const UploadImageBtn = () => {
   return (
-    <div
-      style={{
-        border: '2px solid red',
-        height: '40px',
-        width: '40px',
-      }}
-    >
+    <Box className='h-10 w-10 border-2'>
       Ubtn
-    </div>
+    </Box>
   )
 }
+
 const DeleteImageBtn = () => {
   return (
-    <div
-      style={{
-        border: '2px solid red',
-        height: '40px',
-        width: '40px',
-      }}
-    >
-      Dbtn
-    </div>
+      <Box className='h-10 w-10 border-2'>
+          Dbtn
+      </Box>
   )
 }
 
@@ -104,23 +118,75 @@ interface ProfileInfoProps {
 }
 const ProfileInfo = (props: ProfileInfoProps) => {
   return (
-    <div>
-      <p style={{ marginTop: '0px' }}>Name: {props.name}</p>
-      <p>Gender: {props.gender}</p>
-      <p>Batch: {props.batch}</p>
-      <p>Year: {props.year}</p>
-      <p>Faculty: {props.faculty}</p>
-      <p>Major: {props.major}</p>
-      <p>Telegram: {props.telegram}</p>
-      <p>Discord: {props.discord}</p>
-      <p>NUS Email: {props.nus_email}</p>
-      <p>Personal Email: {props.personal_email}</p>
-      <p>Hobbies: {props.hobbies}</p>
-      <p>Department: {props.department}</p>
-      <p>Role: {props.role}</p>
-      <p>Projects: {props.projects}</p>
-    </div>
+    <Box>
+        <p className={'text-3xl font-bold pl-4 mb-4'}>{props.name}</p>
+        <TableContainer>
+            <Table variant='unstyled' size={'sm'}>
+                <Tbody>
+                    <Tr>
+                        <Td>ROLE</Td>
+                        <Td>{props.role}</Td>
+                    </Tr>
+                    <Tr>
+                        <Td>GENDER</Td>
+                        <Td>{props.gender}</Td>
+                    </Tr>
+                    <Tr>
+                        <Td>BATCH</Td>
+                        <Td>{props.batch}</Td>
+                    </Tr>
+                    <Tr>
+                        <Td>YEAR</Td>
+                        <Td>{props.year}</Td>
+                    </Tr>
+                    <Tr>
+                        <Td>FACULTY</Td>
+                        <Td>{props.faculty}</Td>
+                    </Tr>
+                    <Tr>
+                        <Td>MAJOR</Td>
+                        <Td>{props.major}</Td>
+                    </Tr>
+                    <Tr>
+                        <Td>DEPARTMENT</Td>
+                        <Td>{props.department}</Td>
+                    </Tr>
+                    <Tr>
+                        <Td>PROJECTS</Td>
+                        <Td>{props.projects}</Td>
+                        {/*TODO expand array*/}
+                    </Tr>
+
+                </Tbody>
+            </Table>
+        </TableContainer>
+    </Box>
+  )
+}
+const ProfileInfoModal = () => {
+  const { isOpen, onOpen, onClose } = useDisclosure()
+  return (
+    <Container>
+      <Button onClick={onOpen}>View Profile</Button>
+      <Modal size={'xl'} isOpen={isOpen} onClose={onClose} isCentered>
+        <ModalOverlay />
+        <ModalContent backgroundColor={'white'} borderRadius={'lg'}>
+          <ModalHeader borderTopRadius={'lg'} className={'bg-blue-600'}><p className={'pl-4 text-white'}>Personal Information</p></ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <ProfilePage />
+          </ModalBody>
+
+          <ModalFooter>
+            <Button colorScheme="blue" mr={3} onClick={onClose}>
+              Close
+            </Button>
+            <Button variant="ghost">Secondary Action</Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+    </Container>
   )
 }
 
-export default ProfilePage
+export default ProfileInfoModal
