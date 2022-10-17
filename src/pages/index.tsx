@@ -21,7 +21,7 @@ const Home: NextPage = () => {
 
         {/* HomePage */}
 
-        <div>
+        <div className="flex flex-col-reverse md:flex-row bg-black">
           <div className="flex flex-col font=[inter] ml-8">
             <div className="font-semibold text-6xl mb-8">
               <div>NUS</div>
@@ -32,21 +32,18 @@ const Home: NextPage = () => {
                 Ideate. Innovate. Inspire
               </div>
             </div>
-            <button className="bg-transparent border-2 border-[#FF8A00] font-medium hover:bg-slate-800 p-3 rounded text-center text-xl w-44">
+            <button className="bg-transparent border-2 border-[#FF8A00] font-medium hover:bg-slate-800 mb-[5%] p-3 rounded text-center text-xl w-44">
               <Link href="/">Find Out More</Link>
             </button>
           </div>
           <Image
             alt="swe"
-            className=""
+            className="place-items-center ml-3 mr-3"
             height={600}
             src="/undraw_software_engineer_re_tnjc.svg"
             width={600}
           />
         </div>
-
-        {/* Footer */}
-        <footer className="w-full h-16 fixed left-0 bottom-0 bg-black"></footer>
       </div>
     </>
   )
