@@ -31,7 +31,7 @@ const mockData = {
 const ProfilePage = () => {
   return (
     <Box>
-      <Box className="flex justify-between gap-6 mt-4">
+      <Box className="flex flex-wrap justify-between gap-6 mt-4">
         <ProfileInfo {...mockData} />
         <Box className="flex flex-col">
           <ProfilePicture />
@@ -44,7 +44,7 @@ const ProfilePage = () => {
 
 const ProfileContactInfo = (props: ProfileInfoProps) => {
   return (
-    <Box className="flex flex-col gap-1">
+    <Box className="flex flex-col px-4 gap-1">
       <Box className="flex items-center gap-1">
         <BsTelegram className='fill-[#0088cc]'/>
         <p>{props.telegram}</p>
