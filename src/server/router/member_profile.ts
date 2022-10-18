@@ -35,7 +35,125 @@ export const profileRouter = createRouter()
                         user
                     }};
             } catch (error) {
-                console.log("error",error)
+                console.log("error retrieving member profile",error)
+            }
+        }
+    })
+    .query("getMemberImage", {
+        input: z
+            .object({
+                studentId: z.string(),
+            }),
+        async resolve({input, ctx}) {
+            try {
+                const user =  await ctx.prisma.user.findUnique({
+                    where: {
+                        student_id: input.studentId },
+                    select:{
+                        image: true
+                    }
+                });
+                return {
+                    props: {
+                        user
+                    }};
+            } catch (error) {
+                console.log("error retrieving image",error)
+            }
+        }
+    })
+    .mutation('deleteMemberImage', {
+        input:  z
+            .object({
+                studentId: z.string(),
+            }),
+        async resolve({input, ctx}) {
+            try {
+                const user =  await ctx.prisma.user.update({
+                    where: {
+                        student_id: input.studentId },
+                    data: {
+                        image: ""
+                    }
+                });
+                return {
+                    props: {
+                        user
+                    }};
+            } catch (error) {
+                console.log("error retrieving image",error)
+            }
+        }
+    })
+    .mutation('updateMemberProfile', {
+        input:  z
+            .object({
+                studentId: z.string(),
+                name: z.string(),
+                gender: z.string(),
+                batch: z.string(),
+                year: z.string(),
+                faculty: z.string(),
+                telegram: z.string(),
+                discord: z.string(),
+                nusEmail: z.string(),
+                personalEmail: z.string(),
+                hobbies: z.string(),
+                department: z.string(),
+                roles: z.string(),
+                projects: z.string()
+            }),
+        async resolve({input, ctx}) {
+            try {
+                const user =  await ctx.prisma.user.update({
+                    where: {
+                        student_id: input.studentId },
+                    data: {
+                        name: input.name,
+                        gender: input.gender,
+                        batch: input.batch,
+                        year: input.year,
+                        faculty: input.faculty,
+                        telegram: input.telegram,
+                        discord: input.discord,
+                        nus_email: input.nusEmail,
+                        personal_email: input.personalEmail,
+                        hobbies: input.hobbies,
+                        department: input.department,
+                        roles: input.roles,
+                        projects: input.projects
+                    }
+                });
+                return {
+                    props: {
+                        user
+                    }};
+            } catch (error) {
+                console.log("error retrieving image",error)
+            }
+        }
+    })
+    .mutation('updateMemberImage', {
+        input:  z
+            .object({
+                studentId: z.string(),
+                image: z.string()
+            }),
+        async resolve({input, ctx}) {
+            try {
+                const user =  await ctx.prisma.user.update({
+                    where: {
+                        student_id: input.studentId },
+                    data: {
+                        image: input.image
+                    }
+                });
+                return {
+                    props: {
+                        user
+                    }};
+            } catch (error) {
+                console.log("error retrieving image",error)
             }
         }
     })
