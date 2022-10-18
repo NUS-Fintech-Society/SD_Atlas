@@ -22,7 +22,6 @@ const Home: NextPage = () => {
         </nav>
 
         {/* HomePage */}
-
         <div className="flex flex-col-reverse md:flex-row bg-black">
           <div className="flex flex-col font=[inter] ml-8">
             <div className="font-semibold text-6xl mb-8">
@@ -34,24 +33,19 @@ const Home: NextPage = () => {
                 Ideate. Innovate. Inspire
               </div>
             </div>
-            {session === null ? (
-              <button
-                className="bg-transparent border-2 border-[#FF8A00] font-medium hover:bg-slate-800 mb-[5%] p-3 rounded text-center text-xl w-44"
-                onClick={() =>
-                  signIn('credentials', {
-                    email: 'woowenjun99@gmail.com',
-                  })
-                }
-              >
-                Sign In
-              </button>
-            ) : (
+            {session ? (
               <button
                 className="bg-transparent border-2 border-[#FF8A00] font-medium hover:bg-slate-800 mb-[5%] p-3 rounded text-center text-xl w-44"
                 onClick={() => signOut()}
               >
-                {/* <Link href="/">Home Page</Link> */}
-                Sign out
+                Sign Out
+              </button>
+            ) : (
+              <button
+                className="bg-transparent border-2 border-[#FF8A00] font-medium hover:bg-slate-800 mb-[5%] p-3 rounded text-center text-xl w-44"
+                onClick={() => signIn()}
+              >
+                Sign In
               </button>
             )}
           </div>

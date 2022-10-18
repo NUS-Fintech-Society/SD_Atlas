@@ -2,17 +2,11 @@ import NextAuth, { type NextAuthOptions } from 'next-auth'
 import Credentials from 'next-auth/providers/credentials'
 import { compare } from 'bcryptjs'
 
-// Prisma adapter for NextAuth, optional and can be removed
-import { PrismaAdapter } from '@next-auth/prisma-adapter'
 import { prisma } from '../../../server/db/client'
 import { env } from '../../../env/server.mjs'
 import { User } from '@prisma/client'
 
-const adapter = PrismaAdapter(prisma)
-
 export const authOptions: NextAuthOptions = {
-  // Configure one or more authentication providers
-  adapter,
   callbacks: {
     // We need this to ensure that the client knows when to log in
     async session({ session, token }) {
@@ -48,7 +42,10 @@ export const authOptions: NextAuthOptions = {
 
         try {
           // Step 3: Get the user by the email
-          const adapterUser = await adapter.getUserByEmail(email)
+          const adapterUser = await prisma.user.findUnique({
+            where: { email },
+          })
+
           if (!adapterUser) return null
 
           // Step 4: Type cast it to the type of User
@@ -65,7 +62,6 @@ export const authOptions: NextAuthOptions = {
             level: account.level,
           }
         } catch (e) {
-          console.log('THE ERROR IS ', e)
           return null
         }
       },
@@ -75,7 +71,7 @@ export const authOptions: NextAuthOptions = {
   secret: env.NEXTAUTH_SECRET,
   session: {
     strategy: 'jwt',
-    maxAge: 60 * 60, // <--- The user can only login for 1 hour
+    maxAge: 7 * 60 * 60, // <--- The user can only login for 1 hour
   },
 
   // Used to decorate the home page design
