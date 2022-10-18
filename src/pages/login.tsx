@@ -29,7 +29,7 @@ function ChakraNextLink({
   )
 }
 
-const SignInPage = () => {
+const Login = () => {
   return (
     <>
       <Head>
@@ -83,4 +83,4 @@ const SignInPage = () => {
   )
 }
 
-export default SignInPage
+export default Login

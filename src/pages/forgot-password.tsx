@@ -40,7 +40,7 @@ const ForgotPasswordPage = () => {
                 alignSelf="stretch"
                 justifyContent="space-between"
               >
-                <Link href="/signin">
+                <Link href="/login">
                   <a>
                     <ArrowBackIcon boxSize={8} />
                   </a>
