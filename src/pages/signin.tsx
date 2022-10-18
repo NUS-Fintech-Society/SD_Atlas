@@ -1,8 +1,8 @@
-import { ArrowBackIcon } from '@chakra-ui/icons'
 import {
   Box,
   Heading,
   Flex,
+  Link as ChakraLink,
   InputGroup,
   Input,
   InputRightAddon,
@@ -14,11 +14,26 @@ import Head from 'next/head'
 import Link from 'next/link'
 import styles from './index.module.css'
 
-const ForgotPasswordPage = () => {
+function ChakraNextLink({
+  href,
+  children,
+  ...props
+}: {
+  href: string
+  children: React.ReactNode
+} & typeof ChakraLink['defaultProps']) {
+  return (
+    <Link href={href} passHref>
+      <ChakraLink {...props}>{children}</ChakraLink>
+    </Link>
+  )
+}
+
+const SignInPage = () => {
   return (
     <>
       <Head>
-        <title>Forgot Password</title>
+        <title>Login</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <div className={styles.containerOuter}>
@@ -34,22 +49,9 @@ const ForgotPasswordPage = () => {
             transition="all 1s"
           >
             <Flex flexDirection="column" alignItems="start">
-              <Flex
-                alignItems="center"
-                mb={8}
-                alignSelf="stretch"
-                justifyContent="space-between"
-              >
-                <Link href="/signin">
-                  <a>
-                    <ArrowBackIcon boxSize={8} />
-                  </a>
-                </Link>
-                <Heading textAlign="center" alignSelf="center" size="2xl">
-                  Forgot Password
-                </Heading>
-                <div></div>
-              </Flex>
+              <Heading mb={8} textAlign="center" alignSelf="center" size="2xl">
+                Login
+              </Heading>
               <FormControl>
                 <FormLabel>NUS Email</FormLabel>
                 <InputGroup>
@@ -57,14 +59,21 @@ const ForgotPasswordPage = () => {
                   <InputRightAddon>@u.nus.edu</InputRightAddon>
                 </InputGroup>
               </FormControl>
+              <FormControl mt={4} id="password">
+                <FormLabel>Password</FormLabel>
+                <Input type="password" />
+              </FormControl>
+              <ChakraNextLink mt={4} href="/forgot-password">
+                Forgot your password?
+              </ChakraNextLink>
               <Button
-                mt={10}
+                mt={8}
                 size="lg"
                 isLoading={false}
                 type="submit"
                 alignSelf="stretch"
               >
-                Send Reset Link
+                Sign In
               </Button>
             </Flex>
           </Box>
@@ -74,4 +83,4 @@ const ForgotPasswordPage = () => {
   )
 }
 
-export default ForgotPasswordPage
+export default SignInPage
