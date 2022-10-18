@@ -81,7 +81,7 @@ export const profileRouter = createRouter()
                         user
                     }};
             } catch (error) {
-                console.log("error retrieving image",error)
+                console.log("error deleting image",error)
             }
         }
     })
@@ -129,7 +129,7 @@ export const profileRouter = createRouter()
                         user
                     }};
             } catch (error) {
-                console.log("error retrieving image",error)
+                console.log("error updating member profile details",error)
             }
         }
     })
@@ -153,7 +153,7 @@ export const profileRouter = createRouter()
                         user
                     }};
             } catch (error) {
-                console.log("error retrieving image",error)
+                console.log("error updating image",error)
             }
         }
     })
