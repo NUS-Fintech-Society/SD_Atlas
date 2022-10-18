@@ -1,8 +1,10 @@
 import type { NextPage } from 'next'
 import Image from 'next/image'
-import Link from 'next/link'
+import { signIn, signOut, useSession } from 'next-auth/react'
 
 const Home: NextPage = () => {
+  const { data: session } = useSession()
+
   return (
     <>
       <div className="bg-black text-white h-screen">
@@ -32,9 +34,26 @@ const Home: NextPage = () => {
                 Ideate. Innovate. Inspire
               </div>
             </div>
-            <button className="bg-transparent border-2 border-[#FF8A00] font-medium hover:bg-slate-800 mb-[5%] p-3 rounded text-center text-xl w-44">
-              <Link href="/">Find Out More</Link>
-            </button>
+            {session === null ? (
+              <button
+                className="bg-transparent border-2 border-[#FF8A00] font-medium hover:bg-slate-800 mb-[5%] p-3 rounded text-center text-xl w-44"
+                onClick={() =>
+                  signIn('credentials', {
+                    email: 'woowenjun99@gmail.com',
+                  })
+                }
+              >
+                Sign In
+              </button>
+            ) : (
+              <button
+                className="bg-transparent border-2 border-[#FF8A00] font-medium hover:bg-slate-800 mb-[5%] p-3 rounded text-center text-xl w-44"
+                onClick={() => signOut()}
+              >
+                {/* <Link href="/">Home Page</Link> */}
+                Sign out
+              </button>
+            )}
           </div>
           <Image
             alt="swe"
