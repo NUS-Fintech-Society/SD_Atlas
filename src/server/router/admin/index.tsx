@@ -2,8 +2,10 @@ import { createRouter } from '../context'
 import { z } from 'zod'
 import { hash } from 'bcryptjs'
 import type { User } from '@prisma/client'
+import { randomBytes } from 'crypto'
+import { PrismaClient } from '@prisma/client'
 
-const dashboardRouter = createRouter().mutation('/add-multiple-users', {
+const dashboardRouter = createRouter().mutation('add-multiple-users', {
   input: z.array(
     z.object({
       department: z.string(),
@@ -23,7 +25,9 @@ const dashboardRouter = createRouter().mutation('/add-multiple-users', {
   output: z.boolean(),
   resolve: async ({ ctx, input }) => {
     try {
-      const hashedPassword = await hash('Fintech Is Cool', 10)
+      console.log('THE INPUT IS ', input[0])
+      const password = randomBytes(8).toString('hex')
+      const hashedPassword = await hash(password, 10)
 
       const users: User[] = input.map((user) => {
         return {
@@ -49,12 +53,16 @@ const dashboardRouter = createRouter().mutation('/add-multiple-users', {
         }
       })
 
-      // Transaction is automatically rolled back if an error occurs
-      await ctx.prisma.user.createMany({
+      const prisma = new PrismaClient()
+      await prisma.user.createMany({
         data: users,
       })
+
+      // TODO: Generate an email to the user with name, nus_email and password
+
       return true
     } catch (e) {
+      console.error(e.message)
       return false
     }
   },

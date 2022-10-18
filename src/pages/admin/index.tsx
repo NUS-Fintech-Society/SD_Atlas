@@ -6,7 +6,7 @@ import { trpc } from '../../utils/trpc'
 import { Button } from '@chakra-ui/react'
 
 const DashboardPage: NextPage = () => {
-  const mutation = trpc.useMutation(['admin/add-multiple-users'])
+  const mutation = trpc.useMutation(['admin.add-multiple-users'])
   const [data, setData] = useState<AddUsersType[]>([])
 
   // Used to parse the csv file
@@ -27,12 +27,12 @@ const DashboardPage: NextPage = () => {
                   'Discord ID (eg: _marcus#2873 please create an account if you do not have one as Discord will be one of our main forms of communication)'
                 ],
               faculty: item['Faculty'],
-              gender: item['Gender '],
-              hobbies: item['Hobbies '],
+              gender: item['Gender '] || 'Male',
+              hobbies: item['Hobbies '] || '',
               name: item['Full Name'],
               nus_email: item['NUS email (xxx@u.nus.edu)'],
               personal_email: item['Gmail'],
-              roles: item['Appointed Role '],
+              roles: item['Appointed Role '] || '',
               student_id: item['Student ID (AXXXXXXXX)'],
               telegram: item['Telegram Handle(@xxx)'],
               year: item['Year of Study (AY22/23)'],
