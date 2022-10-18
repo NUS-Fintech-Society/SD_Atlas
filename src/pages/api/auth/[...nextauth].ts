@@ -71,7 +71,7 @@ export const authOptions: NextAuthOptions = {
   secret: env.NEXTAUTH_SECRET,
   session: {
     strategy: 'jwt',
-    maxAge: 7 * 60 * 60, // <--- The user can only login for 1 hour
+    maxAge: 7 * 60 * 60, // <--- The user can only login for 7 hours
   },
 
   // Used to decorate the home page design
