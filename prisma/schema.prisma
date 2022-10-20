@@ -26,7 +26,11 @@ model Account {
   session_state     String?
   email             String
   hashedPassword    String
+<<<<<<< HEAD
   User              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+=======
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+>>>>>>> dev
 
   @@unique([provider, providerAccountId])
 }
@@ -36,7 +40,11 @@ model Session {
   sessionToken String   @unique
   userId       String
   expires      DateTime
+<<<<<<< HEAD
   User         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+=======
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+>>>>>>> dev
 }
 
 model VerificationToken {
@@ -76,27 +84,42 @@ model Announcements {
 }
 
 model User {
+<<<<<<< HEAD
   attendance     Int       @default(0)
+=======
+  attendance     Int        @default(0)
+>>>>>>> dev
   batch          String
+  major          String?
   department     String
   discord        String
   gender         String
   faculty        String
+  hashedPassword String
   hobbies        String
+  id             String    @id @unique
   level          String
   image          String?
   name           String
+<<<<<<< HEAD
+=======
+  email          String    @unique
+>>>>>>> dev
   emailVerified  DateTime?
   personal_email String
   roles          String
   telegram       String
   wallet         String?
   year           String
+<<<<<<< HEAD
   email          String    @unique
   hashedPassword String
   id             String    @id @unique
   major          String?
   total_events   Int       @default(0)
+=======
+  total_events   Int        @default(0)
+>>>>>>> dev
   Account        Account[]
   Session        Session[]
 }
