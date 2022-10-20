@@ -25,10 +25,19 @@ export const profileRouter = createRouter()
             hobbies: true,
             department: true,
             roles: true,
-            //projects: true
-          },
+            major: true
+          }
         })
-        return user
+        const projects = (user == null) ? null : await ctx.prisma.departments.findUnique({
+          where: {
+            department_id: user.department
+          },
+          include : {
+            projects: true
+          }
+        })
+        const queryResult = {"user": user, "projects": projects};
+        return queryResult
       } catch (error) {
         console.log('error retrieving member profile', error)
       }
@@ -85,7 +94,7 @@ export const profileRouter = createRouter()
       hobbies: z.string(),
       department: z.string(),
       roles: z.string(),
-      projects: z.string(),
+      major: z.string(),
     }),
     async resolve({ input, ctx }) {
       try {
@@ -106,10 +115,19 @@ export const profileRouter = createRouter()
             hobbies: input.hobbies,
             department: input.department,
             roles: input.roles,
-            //projects: input.projects
+            major: input.major
           },
         })
-        return user
+        const projects = (user == null) ? null : await ctx.prisma.departments.findUnique({
+          where: {
+            department_id: user.department,
+          },
+          select: {
+            projects: true
+          },
+        })
+        const queryResult = {"user": user, "projects": projects};
+        return queryResult
       } catch (error) {
         console.log('error updating member profile details', error)
       }
