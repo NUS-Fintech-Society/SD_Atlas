@@ -76,8 +76,9 @@ model Announcements {
 }
 
 model User {
-  attendance     Int
+  attendance     Int        @default(0)
   batch          String
+  major          String?
   department     String
   discord        String
   gender         String
@@ -91,12 +92,11 @@ model User {
   email          String    @unique
   emailVerified  DateTime?
   personal_email String
-  projects       String
   roles          String
   telegram       String
-  total_events   String
-  wallet         String
+  wallet         String?
   year           String
-  accounts       Account[]
-  sessions       Session[]
+  total_events   Int        @default(0)
+  Account        Account[]
+  Session        Session[]
 }
