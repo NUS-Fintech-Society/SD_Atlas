@@ -5,14 +5,12 @@ import { prisma } from '../db/client'
 
 export const profileRouter = createRouter()
   .query('getMemberProfile', {
-    input: z.object({
-      studentId: z.string(),
-    }),
+    input: z.string(),
     async resolve({ input, ctx }) {
       try {
         const user = await ctx.prisma.user.findUnique({
           where: {
-            id: input.studentId,
+            id: input,
           },
           select: {
             name: true,
@@ -37,14 +35,12 @@ export const profileRouter = createRouter()
     },
   })
   .query('getMemberImage', {
-    input: z.object({
-      studentId: z.string(),
-    }),
+    input: z.string(),
     async resolve({ input, ctx }) {
       try {
         const user = await ctx.prisma.user.findUnique({
           where: {
-            id: input.studentId,
+            id: input,
           },
           select: {
             image: true,
@@ -57,14 +53,12 @@ export const profileRouter = createRouter()
     },
   })
   .mutation('deleteMemberImage', {
-    input: z.object({
-      studentId: z.string(),
-    }),
+    input: z.string(),
     async resolve({ input, ctx }) {
       try {
         const user = await ctx.prisma.user.update({
           where: {
-            id: input.studentId,
+            id: input,
           },
           data: {
             image: '',
