@@ -1,5 +1,5 @@
 import NextAuth, { type NextAuthOptions } from 'next-auth'
-import Credentials from 'next-auth/providers/credentials'
+import CredentialsProvider from 'next-auth/providers/credentials'
 import { compare } from 'bcryptjs'
 
 import { prisma } from '../../../server/db/client'
@@ -29,47 +29,40 @@ export const authOptions: NextAuthOptions = {
   },
 
   providers: [
-    Credentials({
+    CredentialsProvider({
       name: 'NUS Email',
-      credentials: {
-        email: {
-          label: 'NUS Email',
-          type: 'email',
-          placeholder: 'XXX@u.nus.edu',
-        },
-        password: {
-          label: 'Password',
-          type: 'password',
-        },
-      },
+      credentials: {},
       authorize: async (credential) => {
-        // Step 1: If no credentials are provided, return null.
-        if (!credential || !credential.email || !credential.password) {
-          return null
+        // Step 1: Destructure and get the email and password
+        const { email, password } = credential as {
+          email: string
+          password: string
         }
 
-        // Step 2: Destructure and get the email and password.
-        const { email, password } = credential
+        // Step 2: If no credentials are provided, throw an error
+        if (!credential || !email || !password) {
+          throw new Error('No email or password provided')
+        }
 
-        try {
-          // Step 3: Get the user by the email
-          const adapterUser = await prisma.user.findUnique({
-            where: { email },
-          })
-          if (!adapterUser) return null
-          // Step 4: Type cast it to the type of User
-          const account = adapterUser as User
-          // If the account is found, challenge the hashPassword with the password
-          const success = await compare(password, account.hashedPassword)
-          if (!success) return null
-          // The user object is passed to the session callback
-          return {
-            id: account.id,
-            email: account.email,
-            level: account.level,
-          }
-        } catch (e) {
-          return null
+        // Step 3: Get the user by the email
+        const adapterUser = await prisma.user.findUnique({
+          where: { email: email.concat('@u.nus.edu') },
+        })
+        if (!adapterUser) throw new Error('Invalid NUS email or password')
+
+        // Step 4: Type cast it to the type of User
+        const account = adapterUser as User
+
+        // If the account is found, challenge the hashPassword with the password
+        const success = await compare(password, account.hashedPassword)
+        if (!success) throw new Error('Invalid NUS email or password')
+
+        // The user object is passed to the session callback in session.data.user
+        return {
+          id: account.id,
+          name: account.name,
+          email: account.email,
+          level: account.level,
         }
       },
     }),
@@ -80,11 +73,8 @@ export const authOptions: NextAuthOptions = {
     strategy: 'jwt',
     maxAge: 24 * 60 * 60,
   },
-
-  // Used to decorate the home page design
-  theme: {
-    colorScheme: 'dark',
-    logo: '/fintech_logo_final-removebg_white.png',
+  pages: {
+    signIn: '/login',
   },
 }
 
