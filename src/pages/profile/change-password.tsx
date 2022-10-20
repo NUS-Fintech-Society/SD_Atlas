@@ -5,31 +5,30 @@ import {
   Icon,
   InputGroup,
   Input,
-  InputRightAddon,
   FormControl,
   FormLabel,
   Button,
   Spacer,
 } from '@chakra-ui/react'
 import { BsArrowLeftShort } from 'react-icons/bs'
-import styles from './index.module.css'
+import styles from '../index.module.css'
 
 import Head from 'next/head'
-import ChakraNextLink from '../components/ChakraNextLink'
+import ChakraNextLink from '../../components/ChakraNextLink'
 
 import { useRouter } from 'next/router'
 import { useSession } from 'next-auth/react'
 
-const ForgotPasswordPage = () => {
+const ChangePasswordPage = () => {
   const router = useRouter()
   const session = useSession()
 
-  if (session.status === 'authenticated') router.push('/profile')
+  if (session.status === 'unauthenticated') router.push('/login')
 
   return (
     <>
       <Head>
-        <title>Forgot Password</title>
+        <title>Change Password</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <div className={styles.containerOuter}>
@@ -45,20 +44,30 @@ const ForgotPasswordPage = () => {
             transition="all 1s"
           >
             <Flex flexDirection="column" alignItems="start">
-              <Flex mb={8} w="100%" alignItems="center" justifyContent="center">
-                <ChakraNextLink href="/login" flex={1}>
+              <Flex
+                mb={8}
+                w="100%"
+                alignItems="center"
+                justifyContent="space-between"
+              >
+                <ChakraNextLink href="/profile" flex={1}>
                   <Icon as={BsArrowLeftShort} boxSize={12} />
                 </ChakraNextLink>
                 <Heading as="h1" size="2xl" textAlign="center">
-                  Forgot Password
+                  Change Password
                 </Heading>
                 <Spacer></Spacer>
               </Flex>
-              <FormControl>
-                <FormLabel>NUS Email</FormLabel>
+              <FormControl mt={4}>
+                <FormLabel>Password</FormLabel>
                 <InputGroup>
-                  <Input type="email" />
-                  <InputRightAddon>@u.nus.edu</InputRightAddon>
+                  <Input type="password" />
+                </InputGroup>
+              </FormControl>
+              <FormControl mt={4}>
+                <FormLabel>Confirm Password</FormLabel>
+                <InputGroup>
+                  <Input type="password" />
                 </InputGroup>
               </FormControl>
               <Button
@@ -68,7 +77,7 @@ const ForgotPasswordPage = () => {
                 type="submit"
                 alignSelf="stretch"
               >
-                Send Reset Link
+                Confirm Change
               </Button>
             </Flex>
           </Box>
@@ -78,4 +87,4 @@ const ForgotPasswordPage = () => {
   )
 }
 
-export default ForgotPasswordPage
+export default ChangePasswordPage

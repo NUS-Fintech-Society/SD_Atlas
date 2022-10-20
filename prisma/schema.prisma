@@ -53,7 +53,9 @@ model Projects {
   description              String
   project_id               Int          @id
   departmentsDepartment_id String?
+  userId                   String?
   Departments              Departments? @relation(fields: [departmentsDepartment_id], references: [department_id])
+  User                     User?        @relation(fields: [userId], references: [id])
 }
 
 model Departments {
@@ -76,7 +78,7 @@ model Announcements {
 }
 
 model User {
-  attendance     Int
+  attendance     Int        @default(0)
   batch          String
   department     String
   discord        String
@@ -84,19 +86,18 @@ model User {
   faculty        String
   hashedPassword String
   hobbies        String
-  id             String    @id @unique
-  level          String
+  id             String     @id @unique
+  level          String     @default("student")
   image          String?
   name           String
-  email          String    @unique
-  emailVerified  DateTime?
+  email          String     @unique
   personal_email String
-  projects       String
   roles          String
   telegram       String
-  total_events   String
-  wallet         String
+  wallet         String?
   year           String
+  total_events   Int        @default(0)
   accounts       Account[]
+  Projects       Projects[]
   sessions       Session[]
 }
