@@ -1,3 +1,4 @@
+import { trpc } from '../../utils/trpc'
 import {
   BsDiscord,
   BsEnvelopeFill,
@@ -44,18 +45,26 @@ const mockData = {
   projects: ['Atlas HRMS', 'DAO', 'Fintech Month'],
 }
 const ProfilePage = () => {
-  return (
-    <Box className="flex flex-wrap justify-between gap-6 mt-4">
-      <ProfileInfo {...mockData} />
-      <Box className="flex flex-col">
-        <ProfilePicture />
-        <ProfileContactInfo {...mockData} />
+  const query = trpc.useQuery([
+    'member-profile.getMemberProfile',
+    { studentId: 'A0123456Z' },
+  ])
+  if (!query.data) {
+    return <div>Loading...</div>
+  } else {
+    return (
+      <Box className="flex flex-wrap justify-between gap-6 mt-4">
+        <ProfileInfo {...query.data} />
+        <Box className="flex flex-col">
+          <ProfilePicture />
+          <ProfileContactInfo {...query.data} />
+        </Box>
       </Box>
-    </Box>
-  )
+    )
+  }
 }
 
-const ProfileContactInfo = (props: ProfileInfoProps) => {
+const ProfileContactInfo = (props: any) => {
   return (
     <Box className="flex flex-col px-4 gap-1">
       <Box className="flex items-center gap-1">
@@ -63,7 +72,7 @@ const ProfileContactInfo = (props: ProfileInfoProps) => {
         <p>{props.telegram}</p>
       </Box>
       <Box className="flex items-center gap-1">
-        <BsDiscord className='fill-[#5865F2]' />
+        <BsDiscord className="fill-[#5865F2]" />
         <p>{props.discord}</p>
       </Box>
       <Box className="flex items-center gap-1">
@@ -72,7 +81,7 @@ const ProfileContactInfo = (props: ProfileInfoProps) => {
       </Box>
       <Box className="flex items-center gap-1">
         <BsEnvelopeFill className="fill-blue-300" />
-        <p>{props.nus_email}</p>
+        <p>{props.email}</p>
       </Box>
     </Box>
   )
@@ -80,7 +89,7 @@ const ProfileContactInfo = (props: ProfileInfoProps) => {
 
 const ProfilePicture = () => {
   return (
-    <Box className='flex flex-col items-center'>
+    <Box className="flex flex-col items-center">
       <Box className="my-2">
         <Box className="h-40 w-40 mb-1 border-2 border-red-300">
           Profile PIC
@@ -130,10 +139,11 @@ interface ProfileInfoProps {
   projects: string[]
 }
 
-const ProfileInfo = (props: ProfileInfoProps) => {
+const ProfileInfo = (props: any) => {
+  console.log(props)
   return (
     <Box>
-      <p className='text-3xl font-bold pl-4 mb-4'>{props.name}</p>
+      <p className="text-3xl font-bold pl-4 mb-4">{props.name}</p>
       <TableContainer>
         <Table variant="unstyled" size={'sm'}>
           <Tbody>
@@ -165,18 +175,18 @@ const ProfileInfo = (props: ProfileInfoProps) => {
               <Td>DEPARTMENT</Td>
               <Td>{props.department}</Td>
             </Tr>
-            <Tr>
-              <Td className="align-baseline">PROJECTS</Td>
-              <Td>
-                <ol>
-                  {props.projects.map((projectName) => (
-                    <li key={projectName}>
-                      <p>{projectName}</p>
-                    </li>
-                  ))}
-                </ol>
-              </Td>
-            </Tr>
+            {/*<Tr>*/}
+            {/*  <Td className="align-baseline">PROJECTS</Td>*/}
+            {/*  <Td>*/}
+            {/*    <ol>*/}
+            {/*      {props.projects.map((projectName) => (*/}
+            {/*        <li key={projectName}>*/}
+            {/*          <p>{projectName}</p>*/}
+            {/*        </li>*/}
+            {/*      ))}*/}
+            {/*    </ol>*/}
+            {/*  </Td>*/}
+            {/*</Tr>*/}
           </Tbody>
         </Table>
       </TableContainer>
@@ -188,11 +198,11 @@ const ProfileInfoModal = () => {
   return (
     <Container>
       <Button onClick={onOpen}>View Profile</Button>
-      <Modal size='xl' isOpen={isOpen} onClose={onClose} isCentered>
+      <Modal size="xl" isOpen={isOpen} onClose={onClose} isCentered>
         <ModalOverlay />
-        <ModalContent backgroundColor='white' borderRadius='lg'>
-          <ModalHeader borderTopRadius='lg' className='bg-blue-600'>
-            <p className='pl-4 text-white'>Personal Information</p>
+        <ModalContent backgroundColor="white" borderRadius="lg">
+          <ModalHeader borderTopRadius="lg" className="bg-blue-600">
+            <p className="pl-4 text-white">Personal Information</p>
           </ModalHeader>
           <ModalCloseButton color="white" />
           <ModalBody>
