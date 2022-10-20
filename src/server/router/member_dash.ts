@@ -45,7 +45,7 @@ export const dashRouter = createRouter()
 //                     gender: input.gender,
 //                     faculty: input.faculty,
 //                     roles: input.role,
-//                     student_id: input.student_id,
+//                     id: input.student_id,
 //                     telegram: input.telegram,
 //                     year: input.year 
 //                 }
