@@ -26,7 +26,7 @@ model Account {
   session_state     String?
   email             String
   hashedPassword    String
-  User              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
 }
@@ -36,7 +36,7 @@ model Session {
   sessionToken String   @unique
   userId       String
   expires      DateTime
-  User         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model VerificationToken {
@@ -53,9 +53,7 @@ model Projects {
   description              String
   project_id               Int          @id
   departmentsDepartment_id String?
-  userId                   String?
   Departments              Departments? @relation(fields: [departmentsDepartment_id], references: [department_id])
-  User                     User?        @relation(fields: [userId], references: [id])
 }
 
 model Departments {
@@ -80,17 +78,19 @@ model Announcements {
 model User {
   attendance     Int        @default(0)
   batch          String
+  major          String?
   department     String
   discord        String
   gender         String
   faculty        String
   hashedPassword String
   hobbies        String
-  id             String     @id @unique
-  level          String     @default("student")
+  id             String    @id @unique
+  level          String
   image          String?
   name           String
-  email          String     @unique
+  email          String    @unique
+  emailVerified  DateTime?
   personal_email String
   roles          String
   telegram       String
@@ -98,6 +98,5 @@ model User {
   year           String
   total_events   Int        @default(0)
   Account        Account[]
-  Projects       Projects[]
   Session        Session[]
 }

@@ -45,10 +45,7 @@ const mockData = {
   projects: ['Atlas HRMS', 'DAO', 'Fintech Month'],
 }
 const ProfilePage = () => {
-  const query = trpc.useQuery([
-    'member-profile.getMemberProfile',
-    { studentId: 'A0123456Z' },
-  ])
+  const query = trpc.useQuery(['member-profile.getMemberProfile', 'A0123456Z'])
   if (!query.data) {
     return <div>Loading...</div>
   } else {

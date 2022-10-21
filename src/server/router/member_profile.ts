@@ -5,14 +5,12 @@ import { prisma } from '../db/client'
 
 export const profileRouter = createRouter()
   .query('getMemberProfile', {
-    input: z.object({
-      studentId: z.string(),
-    }),
+    input: z.string(),
     async resolve({ input, ctx }) {
       try {
         const user = await ctx.prisma.user.findUnique({
           where: {
-            id: input.studentId,
+            id: input,
           },
           select: {
             name: true,
@@ -27,24 +25,31 @@ export const profileRouter = createRouter()
             hobbies: true,
             department: true,
             roles: true,
-            //projects: true
-          },
+            major: true
+          }
         })
-        return user
+        const projects = (user == null) ? null : await ctx.prisma.departments.findUnique({
+          where: {
+            department_id: user.department
+          },
+          include : {
+            projects: true
+          }
+        })
+        const queryResult = {"user": user, "projects": projects};
+        return queryResult
       } catch (error) {
         console.log('error retrieving member profile', error)
       }
     },
   })
   .query('getMemberImage', {
-    input: z.object({
-      studentId: z.string(),
-    }),
+    input: z.string(),
     async resolve({ input, ctx }) {
       try {
         const user = await ctx.prisma.user.findUnique({
           where: {
-            id: input.studentId,
+            id: input,
           },
           select: {
             image: true,
@@ -57,14 +62,12 @@ export const profileRouter = createRouter()
     },
   })
   .mutation('deleteMemberImage', {
-    input: z.object({
-      studentId: z.string(),
-    }),
+    input: z.string(),
     async resolve({ input, ctx }) {
       try {
         const user = await ctx.prisma.user.update({
           where: {
-            id: input.studentId,
+            id: input,
           },
           data: {
             image: '',
@@ -91,7 +94,7 @@ export const profileRouter = createRouter()
       hobbies: z.string(),
       department: z.string(),
       roles: z.string(),
-      projects: z.string(),
+      major: z.string(),
     }),
     async resolve({ input, ctx }) {
       try {
@@ -112,10 +115,19 @@ export const profileRouter = createRouter()
             hobbies: input.hobbies,
             department: input.department,
             roles: input.roles,
-            //projects: input.projects
+            major: input.major
           },
         })
-        return user
+        const projects = (user == null) ? null : await ctx.prisma.departments.findUnique({
+          where: {
+            department_id: user.department,
+          },
+          select: {
+            projects: true
+          },
+        })
+        const queryResult = {"user": user, "projects": projects};
+        return queryResult
       } catch (error) {
         console.log('error updating member profile details', error)
       }
