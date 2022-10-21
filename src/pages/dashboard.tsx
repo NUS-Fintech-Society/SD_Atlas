@@ -1,5 +1,23 @@
 import { Avatar } from '@chakra-ui/react'
 import React from 'react';
+import { trpc } from '../utils/trpc'
+
+const Members = () => {
+    const{data: messages} = trpc.useQuery(["memberdash.getAll",{roles: 'Co-Directors'}])
+  
+    return (
+      <div className="flex flex-col gap-4">
+        {messages?.map((msg, index) => {
+          return (
+            <div key={index}>
+              <h1>{msg.name}</h1>
+              <h2> {msg.batch}</h2>
+            </div>
+          );
+        })}
+      </div>
+    );      
+  }
 
 
 export default function dashboard() {
