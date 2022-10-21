@@ -9,6 +9,7 @@ import {
 import { IconContext } from 'react-icons'
 import {
   Box,
+  Spinner,
   Button,
   Container,
   Table,
@@ -41,24 +42,30 @@ const mockData = {
   personal_email: 'bobtan@gmail.com',
   hobbies: ['fishing', 'coding', 'running'],
   department: 'Software Development',
-  role: 'Backend Engineer',
+  roles: 'Backend Engineer',
   projects: ['Atlas HRMS', 'DAO', 'Fintech Month'],
 }
 const ProfilePage = () => {
-  const query = trpc.useQuery(['member-profile.getMemberProfile', 'A0123456Z'])
+  const query = trpc.useQuery(['member-profile.getMemberProfile', 'asd'])
   if (!query.data) {
-    return <div>Loading...</div>
-  } else {
     return (
-      <Box className="flex flex-wrap justify-between gap-6 mt-4">
-        <ProfileInfo {...query.data} />
-        <Box className="flex flex-col">
-          <ProfilePicture />
-          <ProfileContactInfo {...query.data} />
-        </Box>
+      <Box className="flex justify-center">
+        <Spinner size="lg" />
       </Box>
     )
   }
+  if (!query.data.user) {
+    return <p className={'text-3xl'}>Something is wrong</p>
+  }
+  return (
+    <Box className="flex flex-wrap justify-between gap-6 mt-4">
+      <ProfileInfo {...query.data.user} />
+      <Box className="flex flex-col">
+        <ProfilePicture />
+        <ProfileContactInfo {...query.data.user} />
+      </Box>
+    </Box>
+  )
 }
 
 const ProfileContactInfo = (props: any) => {
@@ -146,7 +153,7 @@ const ProfileInfo = (props: any) => {
           <Tbody>
             <Tr>
               <Td>ROLE</Td>
-              <Td>{props.role}</Td>
+              <Td>{props.roles}</Td>
             </Tr>
             <Tr>
               <Td>GENDER</Td>
