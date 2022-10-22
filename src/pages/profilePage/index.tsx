@@ -31,23 +31,6 @@ import {
 } from '@chakra-ui/modal'
 import Image from 'next/image'
 
-const mockData = {
-  name: 'Bob Tan',
-  gender: 'M',
-  batch: 'AY2022/23',
-  year: 2,
-  faculty: 'Computing',
-  major: 'Computer Science',
-  telegram: '@bobbytan',
-  discord: 'bobtan #123',
-  nus_email: 'bobtan@u.nus.edu',
-  personal_email: 'bobtan@gmail.com',
-  hobbies: ['fishing', 'coding', 'running'],
-  department: 'Software Development',
-  roles: 'Backend Engineer',
-  projects: ['Atlas HRMS', 'DAO', 'Fintech Month'],
-}
-
 const ProfilePage = () => {
   const userQuery = trpc.useQuery(['member-profile.getMemberProfile', 'asd'], {
     refetchOnWindowFocus: false,
@@ -143,10 +126,8 @@ const UploadImageBtn = ({
   const handleFileSelected = (e: ChangeEvent<HTMLInputElement>): void => {
     if (e.target.files) {
       const file = e.target.files.item(0)
-      console.log('file:', file)
       const reader = new FileReader()
       reader.addEventListener('load', () => {
-        console.log('loaded image')
         const imageDataURI = reader.result
         setImage(imageDataURI)
         const image = imageDataURI as string
@@ -185,23 +166,6 @@ const DeleteImageBtn = () => {
   )
 }
 
-interface ProfileInfoProps {
-  name: string
-  gender: string
-  batch: string
-  year: number
-  faculty: string
-  major: string
-  telegram: string
-  discord: string
-  nus_email: string
-  personal_email: string
-  hobbies: string[]
-  department: string
-  role: string
-  projects: string[]
-}
-
 const ProfileInfo = (props: any) => {
   return (
     <Box>
@@ -237,18 +201,6 @@ const ProfileInfo = (props: any) => {
               <Td>DEPARTMENT</Td>
               <Td>{props.department}</Td>
             </Tr>
-            {/*<Tr>*/}
-            {/*  <Td className="align-baseline">PROJECTS</Td>*/}
-            {/*  <Td>*/}
-            {/*    <ol>*/}
-            {/*      {props.projects.map((projectName) => (*/}
-            {/*        <li key={projectName}>*/}
-            {/*          <p>{projectName}</p>*/}
-            {/*        </li>*/}
-            {/*      ))}*/}
-            {/*    </ol>*/}
-            {/*  </Td>*/}
-            {/*</Tr>*/}
           </Tbody>
         </Table>
       </TableContainer>
