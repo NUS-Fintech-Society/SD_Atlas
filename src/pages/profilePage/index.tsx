@@ -1,3 +1,4 @@
+import { ChangeEvent, useEffect, useRef, useState } from 'react'
 import { trpc } from '../../utils/trpc'
 import {
   BsDiscord,
@@ -28,6 +29,7 @@ import {
   ModalHeader,
   ModalOverlay,
 } from '@chakra-ui/modal'
+import Image from 'next/image'
 
 const mockData = {
   name: 'Bob Tan',
@@ -45,24 +47,27 @@ const mockData = {
   roles: 'Backend Engineer',
   projects: ['Atlas HRMS', 'DAO', 'Fintech Month'],
 }
+
 const ProfilePage = () => {
-  const query = trpc.useQuery(['member-profile.getMemberProfile', 'asd'])
-  if (!query.data) {
+  const userQuery = trpc.useQuery(['member-profile.getMemberProfile', 'asd'], {
+    refetchOnWindowFocus: false,
+  })
+  if (!userQuery || !userQuery.data) {
     return (
       <Box className="flex justify-center">
         <Spinner size="lg" />
       </Box>
     )
   }
-  if (!query.data.user) {
+  if (!userQuery.data.user) {
     return <p className={'text-3xl'}>Something is wrong</p>
   }
   return (
     <Box className="flex flex-wrap justify-between gap-6 mt-4">
-      <ProfileInfo {...query.data.user} />
+      <ProfileInfo {...userQuery.data.user} />
       <Box className="flex flex-col">
         <ProfilePicture />
-        <ProfileContactInfo {...query.data.user} />
+        <ProfileContactInfo {...userQuery.data.user} />
       </Box>
     </Box>
   )
@@ -70,7 +75,7 @@ const ProfilePage = () => {
 
 const ProfileContactInfo = (props: any) => {
   return (
-    <Box className="flex flex-col px-4 gap-1">
+    <Box className="flex flex-col gap-1">
       <Box className="flex items-center gap-1">
         <BsTelegram className="fill-[#0088cc]" />
         <p>{props.telegram}</p>
@@ -92,37 +97,91 @@ const ProfileContactInfo = (props: any) => {
 }
 
 const ProfilePicture = () => {
+  const imageQuery = trpc.useQuery(['member-profile.getMemberImage', 'asd'], {
+    refetchOnWindowFocus: false,
+  })
+  const [image, setImage] = useState('/150.png')
+  useEffect(() => {
+    if (imageQuery.data?.image) {
+      setImage(imageQuery.data.image as string)
+    }
+  }, [imageQuery])
   return (
     <Box className="flex flex-col items-center">
       <Box className="my-2">
-        <Box className="h-40 w-40 mb-1 border-2 border-red-300">
-          Profile PIC
-        </Box>
-        <Box className="flex justify-end gap-1">
-          <UploadImageBtn />
+        <Image
+          src={image}
+          height={150}
+          width={150}
+          unoptimized={true} // needed for use with objectURLs
+        ></Image>
+        <Box className="flex justify-end">
+          <UploadImageBtn setImage={setImage} studentId={'asd'} />
           <DeleteImageBtn />
         </Box>
       </Box>
     </Box>
   )
 }
-const UploadImageBtn = () => {
+// reference: https://hacks.mozilla.org/2011/01/how-to-develop-a-html5-image-uploader/
+// https://developer.mozilla.org/en-US/docs/Web/API/File_API/Using_files_from_web_applications
+const UploadImageBtn = ({
+  setImage,
+  studentId,
+}: {
+  setImage: any
+  studentId: string
+}) => {
+  // trigger a click event on the file input element when button is clicked
+  const uploadRef = useRef<HTMLInputElement>(null)
+  const updateImageMutation = trpc.useMutation([
+    'member-profile.updateMemberImage',
+  ])
+  const onUpload = () => {
+    uploadRef.current?.click()
+  }
+  const handleFileSelected = (e: ChangeEvent<HTMLInputElement>): void => {
+    if (e.target.files) {
+      const file = e.target.files.item(0)
+      console.log('file:', file)
+      const reader = new FileReader()
+      reader.addEventListener('load', () => {
+        console.log('loaded image')
+        const imageDataURI = reader.result
+        setImage(imageDataURI)
+        const image = imageDataURI as string
+        updateImageMutation.mutate({ studentId, image })
+      })
+      reader.readAsDataURL(file as Blob)
+    }
+  }
   return (
-    <IconContext.Provider value={{ size: '24px' }}>
-      <div>
-        <BsUpload />
-      </div>
-    </IconContext.Provider>
+    <Button variant={'ghost'} size={'xs'} onClick={onUpload}>
+      <IconContext.Provider value={{ size: '24px' }}>
+        <div>
+          <BsUpload />
+        </div>
+      </IconContext.Provider>
+      <input
+        type={'file'}
+        accept={'image/png, image/jpeg'}
+        ref={uploadRef}
+        onChange={handleFileSelected}
+        className={'hidden'}
+      />
+    </Button>
   )
 }
 
 const DeleteImageBtn = () => {
   return (
-    <IconContext.Provider value={{ size: '24px' }}>
-      <div>
-        <BsTrash />
-      </div>
-    </IconContext.Provider>
+    <Button variant={'ghost'} size={'xs'}>
+      <IconContext.Provider value={{ size: '24px' }}>
+        <div>
+          <BsTrash />
+        </div>
+      </IconContext.Provider>
+    </Button>
   )
 }
 
@@ -144,7 +203,6 @@ interface ProfileInfoProps {
 }
 
 const ProfileInfo = (props: any) => {
-  console.log(props)
   return (
     <Box>
       <p className="text-3xl font-bold pl-4 mb-4">{props.name}</p>
