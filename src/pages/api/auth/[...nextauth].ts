@@ -52,7 +52,7 @@ export const authOptions: NextAuthOptions = {
         const { email, password } = credential
 
         try {
-          // // Step 3: Get the user by the email
+          // Step 3: Get the user by the email
           const adapterUser = await prisma.user.findUnique({
             where: { email },
           })
