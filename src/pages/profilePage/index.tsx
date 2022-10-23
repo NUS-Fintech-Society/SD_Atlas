@@ -31,10 +31,16 @@ import {
 } from '@chakra-ui/modal'
 import Image from 'next/image'
 
-const ProfilePage = () => {
-  const userQuery = trpc.useQuery(['member-profile.getMemberProfile', 'asd'], {
-    refetchOnWindowFocus: false,
-  })
+const MOCK_STUDENT_ID = 'asd'
+const defaultImage = '/150.png'
+
+const ProfilePage = ({ studentId }: { studentId: string }) => {
+  const userQuery = trpc.useQuery(
+    ['member-profile.getMemberProfile', studentId],
+    {
+      refetchOnWindowFocus: false,
+    }
+  )
   if (!userQuery || !userQuery.data) {
     return (
       <Box className="flex justify-center">
@@ -49,7 +55,7 @@ const ProfilePage = () => {
     <Box className="flex flex-wrap justify-between gap-6 mt-4">
       <ProfileInfo {...userQuery.data.user} />
       <Box className="flex flex-col">
-        <ProfilePicture />
+        <ProfilePicture studentId={studentId} />
         <ProfileContactInfo {...userQuery.data.user} />
       </Box>
     </Box>
@@ -79,11 +85,14 @@ const ProfileContactInfo = (props: any) => {
   )
 }
 
-const ProfilePicture = () => {
-  const imageQuery = trpc.useQuery(['member-profile.getMemberImage', 'asd'], {
-    refetchOnWindowFocus: false,
-  })
-  const [image, setImage] = useState('/150.png')
+const ProfilePicture = ({ studentId }: { studentId: string }) => {
+  const imageQuery = trpc.useQuery(
+    ['member-profile.getMemberImage', studentId],
+    {
+      refetchOnWindowFocus: false,
+    }
+  )
+  const [image, setImage] = useState(defaultImage)
   useEffect(() => {
     if (imageQuery.data?.image) {
       setImage(imageQuery.data.image as string)
@@ -99,8 +108,8 @@ const ProfilePicture = () => {
           unoptimized={true} // needed for use with objectURLs
         ></Image>
         <Box className="flex justify-end">
-          <UploadImageBtn setImage={setImage} studentId={'asd'} />
-          <DeleteImageBtn />
+          <UploadImageBtn setImage={setImage} studentId={studentId} />
+          <DeleteImageBtn setImage={setImage} studentId={studentId} />
         </Box>
       </Box>
     </Box>
@@ -154,9 +163,26 @@ const UploadImageBtn = ({
   )
 }
 
-const DeleteImageBtn = () => {
+const DeleteImageBtn = ({
+  setImage,
+  studentId,
+}: {
+  setImage: any
+  studentId: string
+}) => {
+  const deleteImageMutation = trpc.useMutation(
+    ['member-profile.deleteMemberImage'],
+    {
+      onSuccess: (data) => {
+        setImage(defaultImage)
+      },
+    }
+  )
+  const handleDelete = () => {
+    deleteImageMutation.mutate(studentId)
+  }
   return (
-    <Button variant={'ghost'} size={'xs'}>
+    <Button variant={'ghost'} size={'xs'} onClick={handleDelete}>
       <IconContext.Provider value={{ size: '24px' }}>
         <div>
           <BsTrash />
@@ -220,7 +246,7 @@ const ProfileInfoModal = () => {
           </ModalHeader>
           <ModalCloseButton color="white" />
           <ModalBody>
-            <ProfilePage />
+            <ProfilePage studentId={MOCK_STUDENT_ID} />
           </ModalBody>
           <ModalFooter></ModalFooter>
         </ModalContent>
