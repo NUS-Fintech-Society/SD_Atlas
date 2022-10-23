@@ -183,12 +183,117 @@ import {
               </Grid>
     )
   }
-  
+
+  const TechLeads = () => { 
+    return (
+      <Grid templateColumns='repeat(5,1fr)' gap='9'>
+                <GridItem colSpan={1}>
+                  <Member/>
+                </GridItem>
+                <GridItem colSpan={1}>
+                  <Member/>
+                </GridItem>
+                <GridItem colSpan={1}>
+                  <Member/>
+                </GridItem>
+                <GridItem colSpan={1}>
+                  <Member/>
+                </GridItem>
+              </Grid>
+    )
+  }
+
+  const SoftwareEngineers = () => { 
+    return (
+      <Grid templateColumns='repeat(5,1fr)' gap='9'>
+                <GridItem colSpan={1}>
+                  <Member/>
+                </GridItem>
+                <GridItem colSpan={1}>
+                  <Member/>
+                </GridItem>
+                <GridItem colSpan={1}>
+                  <Member/>
+                </GridItem>
+                <GridItem colSpan={1}>
+                  <Member/>
+                </GridItem>
+                <GridItem colSpan={1}>
+                  <Member/>
+                </GridItem>
+                <GridItem colSpan={1}>
+                  <Member/>
+                </GridItem>
+                <GridItem colSpan={1}>
+                  <Member/>
+                </GridItem>
+                <GridItem colSpan={1}>
+                  <Member/>
+                </GridItem>
+                <GridItem colSpan={1}>
+                  <Member/>
+                </GridItem>
+                <GridItem colSpan={1}>
+                  <Member/>
+                </GridItem>
+                <GridItem colSpan={1}>
+                  <Member/>
+                </GridItem>
+                <GridItem colSpan={1}>
+                  <Member/>
+                </GridItem>
+                <GridItem colSpan={1}>
+                  <Member/>
+                </GridItem>
+                <GridItem colSpan={1}>
+                  <Member/>
+                </GridItem>
+                <GridItem colSpan={1}>
+                  <Member/>
+                </GridItem>
+                <GridItem colSpan={1}>
+                  <Member/>
+                </GridItem>
+                <GridItem colSpan={1}>
+                  <Member/>
+                </GridItem>
+                <GridItem colSpan={1}>
+                  <Member/>
+                </GridItem>
+                <GridItem colSpan={1}>
+                  <Member/>
+                </GridItem>
+              </Grid>
+    )
+  }
+
+  const ProductManagers = () => { 
+    return (
+      <Grid templateColumns='repeat(5,1fr)' gap='9'>
+                <GridItem colSpan={1}>
+                  <Member/>
+                </GridItem>
+                <GridItem colSpan={1}>
+                  <Member/>
+                </GridItem>
+                <GridItem colSpan={1}>
+                  <Member/>
+                </GridItem>
+                <GridItem colSpan={1}>
+                  <Member/>
+                </GridItem>
+                <GridItem colSpan={1}>
+                  <Member/>
+                </GridItem>
+              </Grid>
+    )
+  }
+
   const MemberBoard = () => { 
     return (
         <div>
         <Container centerContent paddingTop='20px'bg='black'>
-        <Text fontSize='40px' color='#FF9900' >Software development</Text>
+        <Text fontSize='40px' color='#FF9900' >Software Development</Text>
         </Container>
   
           <Grid height='600px' templateRows='repeat(3,1fr)' templateColumns='repeat(7,1fr)' gap='9' paddingTop='30px' paddingStart='150px' paddingEnd='150px'>
@@ -227,6 +332,33 @@ import {
             <GridItem colSpan={5} rowSpan={1}>
               <UIUXDesigners/>
             </GridItem>
+
+            <GridItem colSpan={2} rowSpan={1} >
+              <Container centerContent paddingTop='50px'>
+                <Text fontSize='30px' color='#FFFFFF'>Tech Leads</Text>
+              </Container>
+            </GridItem>
+            <GridItem colSpan={5} rowSpan={1}>
+              <TechLeads/>
+            </GridItem>
+
+            <GridItem colSpan={2} rowSpan={1} >
+              <Container centerContent paddingTop='50px'>
+                <Text fontSize='30px' color='#FFFFFF'>Software Engineers</Text>
+              </Container>
+            </GridItem>
+            <GridItem colSpan={5} rowSpan={1}>
+              <SoftwareEngineers/>
+            </GridItem>
+
+            <GridItem colSpan={2} rowSpan={1} >
+              <Container centerContent paddingTop='50px'>
+                <Text fontSize='30px' color='#FFFFFF'>Product Managers</Text>
+              </Container>
+            </GridItem>
+            <GridItem colSpan={5} rowSpan={1}>
+              <ProductManagers/>
+            </GridItem>
           </Grid> 
           </div>
         
@@ -246,10 +378,21 @@ export default function dashboard() {
                 <p>batch</p>
                 </div>
             </div> */}
-            <Container centerContent>
-            <Heading fontSize='56px'> Our Members </Heading>
-          </Container >
-          {/* <Input borderRadius='10px' placeholder='Search' borderColor='#FF9900' size='sm' htmlSize={20} width='auto'/> */}
+          
+            <Grid  templateColumns='repeat(6,1fr)' >
+              <GridItem colStart={3} colEnd={5}>
+              <Container centerContent>
+              <Heading fontSize='56px'> Our Members </Heading>
+              </Container >
+              </GridItem>
+              <GridItem colSpan={2}>
+              <Container centerContent paddingTop='20px'>
+              <Input borderRadius='10px' placeholder='Search' borderColor='#FF9900' size='sm' htmlSize={35} width='auto'/>
+              </Container >
+              </GridItem>
+            </Grid>
+          
+          
   
           <ExcoBoard/>
           <MemberBoard/>
