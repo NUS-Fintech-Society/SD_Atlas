@@ -236,7 +236,7 @@ import {
 
 export default function dashboard() {
     return(
-        <div className="flex flex-col bg-black text-white h-screen">
+        <div>
             {/* <div className = "h-48 grid grid-cols-7 grid-rows-1 gap-4">
                 <div className = " col-span-2 flex justify-center items-center">
                     <p className = "text-3xl">Co-Directors</p></div>

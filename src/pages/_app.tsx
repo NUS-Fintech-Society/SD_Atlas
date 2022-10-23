@@ -53,6 +53,16 @@ export const theme: ThemeConfig = extendTheme({
       },
     },
   },
+}, 
+{
+  styles: {
+    global: {
+      // styles for the `body`
+      body: {
+        bg: '#000000',
+      },
+    },
+  },
 })
 
 const MyApp: AppType<{ session: Session | null }> = ({
