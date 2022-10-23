@@ -60,6 +60,7 @@ export const theme: ThemeConfig = extendTheme({
       // styles for the `body`
       body: {
         bg: '#000000',
+        color: 'white',
       },
     },
   },
