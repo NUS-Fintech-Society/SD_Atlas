@@ -1,21 +1,16 @@
 import React from 'react';
 import { trpc } from '../utils/trpc'
+import { ExcoMembersInfo, TopThreeInfo, MembersInfo } from './memberDashboard/constants';
 
 import {
-  Box,
-  Button,
   Container,
-  Table,
-  TableContainer,
-  Tbody,
-  Td,
   Input,
-  useDisclosure,
   Heading, 
   Text,
   Grid,
   GridItem,
-  Avatar
+  Avatar,
+  Box
 } from '@chakra-ui/react'
 
 // const Members = () => {
@@ -34,26 +29,12 @@ import {
 //       </div>
 //     );      
 //   }
-
-  const ExcoMember = () => { 
-    return (
-      <Container centerContent padding='20px'>
-          {/* Link : https://bit.ly/dan-abramov */}
-              <Avatar height='100px' width='100px' bg='tomato' src='link'/>
-              <Container centerContent paddingTop='20px'>
-              <Text fontSize='25px' color='#FFFFFF'> Role </Text>
-              <Text fontSize='20px' color='#FFFFFF'> Name </Text>
-              <Text fontSize='20px' color='#FFFFFF'> Batch </Text>
-              </Container>
-      </Container>
-    )
-  }
   
   const Member = () => { 
     return (
       <Container centerContent padding='20px'>
           {/* Link : https://bit.ly/dan-abramov */}
-              <Avatar height='100px' width='100px' bg='tomato' src='link'/>
+              <Avatar height='100px' width='100px'  src='link'/>
               <Container centerContent paddingTop='20px'>
               <Text fontSize='20px' color='#FFFFFF'> Name </Text>
               <Text fontSize='20px' color='#FFFFFF'> Batch </Text>
@@ -69,223 +50,38 @@ import {
         <Text fontSize='40px' color='#FF9900' >EXCO</Text>
         </Container>
       
-      <Grid height='600px' templateRows='repeat(2,1fr)' templateColumns='repeat(7,1fr)' gap='9' paddingTop='30px' paddingStart='150px' paddingEnd='150px'> 
-            <GridItem colStart={2} colEnd={3}>
-              <ExcoMember/>
-            </GridItem>
-            <GridItem colStart={4} colEnd={5}>
-              <ExcoMember/>
-            </GridItem>
-            <GridItem colStart={6} colEnd={7}>
-              <ExcoMember/>
-            </GridItem>
-            <GridItem rowStart={2} rowSpan={1} colSpan={1}>
-              <ExcoMember/>
-            </GridItem>
-            <GridItem rowStart={2} rowSpan={1} colSpan={1}>
-              <ExcoMember/>
-            </GridItem>
-            <GridItem rowStart={2} rowSpan={1} colSpan={1}>
-              <ExcoMember/>
-            </GridItem>
-            <GridItem rowStart={2} rowSpan={1} colSpan={1}>
-              <ExcoMember/>
-            </GridItem>
-            <GridItem rowStart={2} rowSpan={1} colSpan={1}>
-              <ExcoMember/>
-            </GridItem>
-            <GridItem rowStart={2} rowSpan={1} colSpan={1}>
-              <ExcoMember/>
-            </GridItem>
-            <GridItem rowStart={2} rowSpan={1} colSpan={1}>
-              <ExcoMember/>
-            </GridItem>
+        <Grid height='600px' templateRows='repeat(2,1fr)' templateColumns='repeat(7,1fr)' gap='9' paddingTop='30px' paddingStart='150px' paddingEnd='150px'> 
+            {TopThreeInfo.map((p, i) => {
+                  return (
+                    <GridItem colStart={2*i + 2} colEnd={2*i + 3} key={i}>
+                      <Container centerContent padding='20px'>
+                          <Avatar height='100px' width='100px' src={p.image}/>
+                          <Container centerContent paddingTop='20px'>
+                          <Text fontSize='25px' color='#FFFFFF'> {p.role} </Text>
+                          <Text fontSize='20px' color='#FFFFFF'> {p.name}</Text>
+                          <Text fontSize='20px' color='#FFFFFF'> {p.batch}</Text>
+                          </Container>
+                      </Container>
+                    </GridItem>
+                  );
+                })}
+            
+            {ExcoMembersInfo.map((p, i) => {
+              return (
+                <GridItem rowStart={2} rowSpan={1} colSpan={1} key={i}>
+                    <Container centerContent padding='20px'>
+                    <Avatar height='100px' width='100px' src={p.image}/>
+                    <Container centerContent paddingTop='20px'>
+                    <Text fontSize='25px' color='#FFFFFF'> {p.role} </Text>
+                    <Text fontSize='20px' color='#FFFFFF'> {p.name}</Text>
+                    <Text fontSize='20px' color='#FFFFFF'> {p.batch}</Text>
+                    </Container>
+                </Container>
+                </GridItem>
+              );
+            })}
         </Grid>
         </div>
-    )
-  }
-  
-  const CDirectors = () => { 
-    return (
-      <Grid templateColumns='repeat(5,1fr)' gap='9'>
-                <GridItem colSpan={1}>
-                  <Member/>
-                </GridItem>
-                <GridItem colSpan={1}>
-                  <Member/>
-                </GridItem>
-              </Grid>
-    )
-  }
-  
-  const HoDesign = () => { 
-    return (
-      <Grid templateColumns='repeat(5,1fr)' gap='9'>
-                <GridItem colSpan={1}>
-                  <Member/>
-                </GridItem>
-              </Grid>
-    )
-  }
-  
-  const DManagers = () => { 
-    return (
-      <Grid templateColumns='repeat(5,1fr)' gap='9'>
-                <GridItem colSpan={1}>
-                  <Member/>
-                </GridItem>
-                <GridItem colSpan={1}>
-                  <Member/>
-                </GridItem>
-                <GridItem colSpan={1}>
-                  <Member/>
-                </GridItem>
-                <GridItem colSpan={1}>
-                  <Member/>
-                </GridItem>
-                <GridItem colSpan={1}>
-                  <Member/>
-                </GridItem>
-              </Grid>
-    )
-  }
-  
-  const UIUXDesigners = () => { 
-    return (
-      <Grid templateColumns='repeat(5,1fr)' gap='9'>
-                <GridItem colSpan={1}>
-                  <Member/>
-                </GridItem>
-                <GridItem colSpan={1}>
-                  <Member/>
-                </GridItem>
-                <GridItem colSpan={1}>
-                  <Member/>
-                </GridItem>
-                <GridItem colSpan={1}>
-                  <Member/>
-                </GridItem>
-                <GridItem colSpan={1}>
-                  <Member/>
-                </GridItem>
-                <GridItem colSpan={1}>
-                  <Member/>
-                </GridItem>
-                <GridItem colSpan={1}>
-                  <Member/>
-                </GridItem>
-                <GridItem colSpan={1}>
-                  <Member/>
-                </GridItem>
-                <GridItem colSpan={1}>
-                  <Member/>
-                </GridItem>
-              </Grid>
-    )
-  }
-
-  const TechLeads = () => { 
-    return (
-      <Grid templateColumns='repeat(5,1fr)' gap='9'>
-                <GridItem colSpan={1}>
-                  <Member/>
-                </GridItem>
-                <GridItem colSpan={1}>
-                  <Member/>
-                </GridItem>
-                <GridItem colSpan={1}>
-                  <Member/>
-                </GridItem>
-                <GridItem colSpan={1}>
-                  <Member/>
-                </GridItem>
-              </Grid>
-    )
-  }
-
-  const SoftwareEngineers = () => { 
-    return (
-      <Grid templateColumns='repeat(5,1fr)' gap='9'>
-                <GridItem colSpan={1}>
-                  <Member/>
-                </GridItem>
-                <GridItem colSpan={1}>
-                  <Member/>
-                </GridItem>
-                <GridItem colSpan={1}>
-                  <Member/>
-                </GridItem>
-                <GridItem colSpan={1}>
-                  <Member/>
-                </GridItem>
-                <GridItem colSpan={1}>
-                  <Member/>
-                </GridItem>
-                <GridItem colSpan={1}>
-                  <Member/>
-                </GridItem>
-                <GridItem colSpan={1}>
-                  <Member/>
-                </GridItem>
-                <GridItem colSpan={1}>
-                  <Member/>
-                </GridItem>
-                <GridItem colSpan={1}>
-                  <Member/>
-                </GridItem>
-                <GridItem colSpan={1}>
-                  <Member/>
-                </GridItem>
-                <GridItem colSpan={1}>
-                  <Member/>
-                </GridItem>
-                <GridItem colSpan={1}>
-                  <Member/>
-                </GridItem>
-                <GridItem colSpan={1}>
-                  <Member/>
-                </GridItem>
-                <GridItem colSpan={1}>
-                  <Member/>
-                </GridItem>
-                <GridItem colSpan={1}>
-                  <Member/>
-                </GridItem>
-                <GridItem colSpan={1}>
-                  <Member/>
-                </GridItem>
-                <GridItem colSpan={1}>
-                  <Member/>
-                </GridItem>
-                <GridItem colSpan={1}>
-                  <Member/>
-                </GridItem>
-                <GridItem colSpan={1}>
-                  <Member/>
-                </GridItem>
-              </Grid>
-    )
-  }
-
-  const ProductManagers = () => { 
-    return (
-      <Grid templateColumns='repeat(5,1fr)' gap='9'>
-                <GridItem colSpan={1}>
-                  <Member/>
-                </GridItem>
-                <GridItem colSpan={1}>
-                  <Member/>
-                </GridItem>
-                <GridItem colSpan={1}>
-                  <Member/>
-                </GridItem>
-                <GridItem colSpan={1}>
-                  <Member/>
-                </GridItem>
-                <GridItem colSpan={1}>
-                  <Member/>
-                </GridItem>
-              </Grid>
     )
   }
 
@@ -296,69 +92,38 @@ import {
         <Text fontSize='40px' color='#FF9900' >Software Development</Text>
         </Container>
   
-          <Grid height='600px' templateRows='repeat(3,1fr)' templateColumns='repeat(7,1fr)' gap='9' paddingTop='30px' paddingStart='150px' paddingEnd='150px'>
-            <GridItem colSpan={2} rowSpan={1} >
-              <Container centerContent paddingTop='50px'>
-                <Text fontSize='30px' color='#FFFFFF'>Co-Directors</Text>
-              </Container>
-            </GridItem>
-            <GridItem colSpan={5} rowSpan={1}>
-              <CDirectors/>
-            </GridItem>
-  
-            <GridItem colSpan={2} rowSpan={1} >
-              <Container centerContent paddingTop='50px'>
-                <Text fontSize='30px' color='#FFFFFF'>Head of Design</Text>
-              </Container>
-            </GridItem>
-            <GridItem colSpan={5} rowSpan={1}>
-              <HoDesign/>
-            </GridItem>
-  
-            <GridItem colSpan={2} rowSpan={1} >
-              <Container centerContent paddingTop='50px'>
-                <Text fontSize='30px' color='#FFFFFF'>Design Managers</Text>
-              </Container>
-            </GridItem>
-            <GridItem colSpan={5} rowSpan={1}>
-              <DManagers/>
-            </GridItem>
-  
-            <GridItem colSpan={2} rowSpan={1} >
-              <Container centerContent paddingTop='50px'>
-                <Text fontSize='30px' color='#FFFFFF'>UI/UX Designers</Text>
-              </Container>
-            </GridItem>
-            <GridItem colSpan={5} rowSpan={1}>
-              <UIUXDesigners/>
-            </GridItem>
+          <Grid height='600px' templateColumns='repeat(7,1fr)' gap='9' paddingTop='30px' paddingStart='150px' paddingEnd='150px'>
+          {MembersInfo.map((p, i) => {
+              return (
+                <GridItem colSpan={2} rowStart={i + 1} key={i}>
+                  <Container centerContent paddingTop='50px'>
+                    <Text fontSize='30px' color='#FFFFFF'>{p.role}</Text>
+                  </Container>
+                </GridItem>
+              );
+            })}
 
-            <GridItem colSpan={2} rowSpan={1} >
-              <Container centerContent paddingTop='50px'>
-                <Text fontSize='30px' color='#FFFFFF'>Tech Leads</Text>
-              </Container>
-            </GridItem>
-            <GridItem colSpan={5} rowSpan={1}>
-              <TechLeads/>
-            </GridItem>
-
-            <GridItem colSpan={2} rowSpan={1} >
-              <Container centerContent paddingTop='50px'>
-                <Text fontSize='30px' color='#FFFFFF'>Software Engineers</Text>
-              </Container>
-            </GridItem>
-            <GridItem colSpan={5} rowSpan={1}>
-              <SoftwareEngineers/>
-            </GridItem>
-
-            <GridItem colSpan={2} rowSpan={1} >
-              <Container centerContent paddingTop='50px'>
-                <Text fontSize='30px' color='#FFFFFF'>Product Managers</Text>
-              </Container>
-            </GridItem>
-            <GridItem colSpan={5} rowSpan={1}>
-              <ProductManagers/>
-            </GridItem>
+          {MembersInfo.map((p, i) => {
+              return (
+                <GridItem colSpan={5} rowStart={i + 1} key={i}>
+                  <Grid templateColumns='repeat(5,1fr)' gap='9'>
+                  {p.members.map((m, j) => {
+                      return (
+                          <GridItem colSpan={1} key={j}>
+                            <Container centerContent padding='20px'>
+                                <Avatar height='100px' width='100px'  src={m.image}/>
+                                <Container centerContent paddingTop='20px'>
+                                <Text fontSize='20px' color='#FFFFFF'>{m.name}</Text>
+                                <Text fontSize='20px' color='#FFFFFF'>{m.batch}</Text>
+                                </Container>
+                        </Container>
+                          </GridItem>
+                      );
+                    })}
+                    </Grid>
+                </GridItem>
+              );
+            })}
           </Grid> 
           </div>
         
