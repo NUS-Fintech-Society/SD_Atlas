@@ -80,6 +80,7 @@ model Announcements {
 model User {
   attendance     Int        @default(0)
   batch          String
+  major          String?
   department     String
   discord        String
   gender         String
