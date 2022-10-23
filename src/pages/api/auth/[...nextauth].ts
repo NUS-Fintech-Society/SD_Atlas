@@ -15,6 +15,14 @@ export const authOptions: NextAuthOptions = {
       }
       return session
     },
+
+    async jwt({ user, token }) {
+      // The level is only available for the first time
+      if (user) {
+        token.level = user.level
+      }
+      return token
+    },
   },
 
   providers: [
@@ -45,16 +53,12 @@ export const authOptions: NextAuthOptions = {
           const adapterUser = await prisma.user.findUnique({
             where: { email },
           })
-
           if (!adapterUser) return null
-
           // Step 4: Type cast it to the type of User
           const account = adapterUser as User
-
           // If the account is found, challenge the hashPassword with the password
           const success = await compare(password, account.hashedPassword)
           if (!success) return null
-
           // The user object is passed to the session callback
           return {
             id: account.id,
@@ -71,7 +75,7 @@ export const authOptions: NextAuthOptions = {
   secret: env.NEXTAUTH_SECRET,
   session: {
     strategy: 'jwt',
-    maxAge: 7 * 60 * 60, // <--- The user can only login for 7 hours
+    maxAge: 24 * 60 * 60, // <--- The user can only login for 7 hours
   },
 
   // Used to decorate the home page design
