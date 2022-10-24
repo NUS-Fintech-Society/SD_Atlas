@@ -100,4 +100,5 @@ model User {
   total_events   Int        @default(0)
   Account        Account[]
   Session        Session[]
+  Projects       Projects[]
 }
