@@ -1,6 +1,8 @@
 import React from 'react';
 import { trpc } from '../utils/trpc'
 import { ExcoMembersInfo, TopThreeInfo, MembersInfo } from './memberDashboard/constants';
+import Members from './memberDashboard/component'
+
 
 import {
   Container,
@@ -76,28 +78,31 @@ import {
     )
   }
 
+
+
   const MemberBoard = () => { 
+    const{data: roles} = trpc.useQuery(["memberdash.getRoles"])
     return (
         <div>
         <Container centerContent paddingTop='20px'bg='black'>
         <Text fontSize='40px' color='#FF9900' >Software Development</Text>
         </Container>
-  
           <Grid height='600px' templateColumns='repeat(7,1fr)' gap='9' paddingTop='30px' paddingStart='150px' paddingEnd='150px'>
-          {MembersInfo.map((p, i) => {
+          {roles?.map((p,i) => {
               return (
                 <GridItem colSpan={2} rowStart={i + 1} key={i}>
                   <Container centerContent paddingTop='50px'>
-                    <Text fontSize='30px' color='#FFFFFF'>{p.role}</Text>
+                    <Text fontSize='30px' color='#FFFFFF'>{p.roles}</Text>
                   </Container>
                 </GridItem>
               );
             })}
-
-          {MembersInfo.map((p, i) => {
+          
+          {roles?.map((p, i) => {
               return (
                 <GridItem colSpan={5} rowStart={i + 1} key={i}>
-                  <Grid templateColumns='repeat(5,1fr)' gap='9'>
+                  <Members roles = {p.roles}/>
+                  {/* <Grid templateColumns='repeat(5,1fr)' gap='9'>
                   {p.members.map((m, j) => {
                       return (
                           <GridItem colSpan={1} key={j}>
@@ -111,7 +116,7 @@ import {
                           </GridItem>
                       );
                     })}
-                    </Grid>
+                    </Grid> */}
                 </GridItem>
               );
             })}
