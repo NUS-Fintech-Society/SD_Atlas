@@ -13,23 +13,14 @@ import {
   Box
 } from '@chakra-ui/react'
 
-// const Members = () => {
-//     const{data: messages} = trpc.useQuery(["memberdash.getAll",{roles: 'Co-Directors'}])
-  
-//     return (
-//       <div className="flex flex-col gap-4">
-//         {messages?.map((msg, index) => {
-//           return (
-//             <div key={index}>
-//               <h1>{msg.name}</h1>
-//               <h2> {msg.batch}</h2>
-//             </div>
-//           );
-//         })}
-//       </div>
-//     );      
-//   }
-  
+// const{data: roles} = trpc.useQuery(["memberdash.getRoles"]) -> this will give you an array of object, each object has only 1 
+// attribute called roles
+//     console.log(roles)
+//     {roles?.map((role,index) => {
+//         const{data: memberinfo} = trpc.useQuery(["memberdash.getAll",{roles: role.roles}]) -> this is to use each role from the prev query
+// to call the second query -> get all members info for this role, the output is also an array of object, each object has the person's info
+//         console.log(memberinfo)
+//     })}
   const Member = () => { 
     return (
       <Container centerContent padding='20px'>
@@ -143,7 +134,6 @@ export default function dashboard() {
                 <p>batch</p>
                 </div>
             </div> */}
-          
             <Grid  templateColumns='repeat(6,1fr)' >
               <GridItem colStart={3} colEnd={5}>
               <Container centerContent>

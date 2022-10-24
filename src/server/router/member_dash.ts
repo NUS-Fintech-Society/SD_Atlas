@@ -2,20 +2,14 @@ import {z} from "zod";
 import {createRouter} from "./context"
 
 export const dashRouter = createRouter()
-.query("countNum", {
-    input: z.object({
-        roles:z.string(),
-    }),
-    async resolve({ctx, input}) {
+.query("getRoles", {
+    async resolve({ctx}) {
         try {
-            return await ctx.prisma.user.aggregate({
-                where: {
-                    roles: input.roles,
-                  },
-                _count: {
-                    id: true
-                }
-            })
+            return await ctx.prisma.user.findMany({
+                where: {},
+                distinct: ['roles'],
+                select:{roles:true}
+              })
         } catch (error) {
             console.log("error",error)
         }
@@ -35,6 +29,7 @@ export const dashRouter = createRouter()
                     name: true,
                     gender: true,
                     batch: true,
+                    image: true,
                     year: true,
                     faculty: true,
                     telegram: true,
