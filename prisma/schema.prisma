@@ -76,27 +76,27 @@ model Announcements {
 }
 
 model User {
-  attendance     Int       @default(0)
-  batch          String
-  department     String
-  discord        String
-  gender         String
-  faculty        String
-  hobbies        String
+  attendance     Int?      @default(0)
+  batch          String?
+  department     String?
+  discord        String?
+  gender         String?
+  faculty        String?
+  hobbies        String?
   level          String
   image          String?
-  name           String
+  name           String?
   emailVerified  DateTime?
-  personal_email String
-  roles          String
-  telegram       String
+  personal_email String?
+  roles          String?
+  telegram       String?
   wallet         String?
-  year           String
+  year           String?
   email          String    @unique
   hashedPassword String
   id             String    @id @unique
   major          String?
-  total_events   Int       @default(0)
+  total_events   Int?      @default(0)
   Account        Account[]
   Session        Session[]
 }

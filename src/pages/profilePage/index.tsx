@@ -49,7 +49,7 @@ const ProfilePage = ({ studentId }: { studentId: string }) => {
     )
   }
   if (!userQuery.data.user) {
-    return <p className={'text-3xl'}>Something is wrong</p>
+    return <p className="text-3xl">Something is wrong</p>
   }
   return (
     <Box className="flex flex-wrap justify-between gap-6 mt-4">
