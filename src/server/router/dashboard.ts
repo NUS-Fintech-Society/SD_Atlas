@@ -12,7 +12,7 @@ const dashboardRouter = createRouter().mutation('create-user', {
   }),
   output: z.object({
     success: z.boolean(),
-    message: z.string(),
+    message: z.string()
   }),
   resolve: async ({ ctx, input }) => {
     // If there is no contex or session, there is an issue.
@@ -36,6 +36,15 @@ const dashboardRouter = createRouter().mutation('create-user', {
 
     try {
       const hashedPassword = await hash(password, 10)
+
+      const foundUser = await ctx.prisma.user.findUnique({where: { email }})
+      if (foundUser) {
+        throw new TRPCError({
+          code: "CONFLICT",
+          message: "User already exists"
+        })
+      }
+
       await ctx.prisma.user.create({
         data: {
           email,
@@ -47,13 +56,13 @@ const dashboardRouter = createRouter().mutation('create-user', {
 
       return {
         success: true,
-        message: 'User saved successfully',
+        message: "User created successfully"
       }
     } catch (e) {
-      return {
-        success: false,
+      throw new TRPCError({
+        code: 'BAD_REQUEST',
         message: (e as Error).message,
-      }
+      })
     }
   },
 })
