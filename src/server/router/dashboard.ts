@@ -3,12 +3,12 @@ import { z } from 'zod'
 import { TRPCError } from '@trpc/server'
 import { hash } from 'bcryptjs'
 
-const dashboardRouter = createRouter().mutation('upload-single-user', {
+const dashboardRouter = createRouter().mutation('create-user', {
   input: z.object({
     id: z.string(),
     email: z.string(),
     password: z.string(),
-    level: z.enum(['member', 'lead', 'codirector', 'director', 'super']),
+    level: z.string(),
   }),
   output: z.object({
     success: z.boolean(),
