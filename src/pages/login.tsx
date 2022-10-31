@@ -146,17 +146,11 @@ const Login = () => {
                 <ChakraNextLink
                   href="/forgot-password"
                   mt={4}
-                  textDecoration={'underline'}
+                  textDecoration="underline"
                 >
                   Forgot your password?
                 </ChakraNextLink>
-                <Button
-                  mt={8}
-                  size="lg"
-                  isLoading={false}
-                  type="submit"
-                  alignSelf="stretch"
-                >
+                <Button mt={8} size="lg" type="submit" alignSelf="stretch">
                   Sign In
                 </Button>
               </Flex>
