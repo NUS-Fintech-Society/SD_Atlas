@@ -1,11 +1,12 @@
 import type { NextPage } from 'next'
 import { useSession } from 'next-auth/react'
 import UserForm from '../../components/admin/UserForm'
-import SideBar from '../../components/common/sidebar'
+import SideBar from '../../components/admin/Sidebar'
 import { HStack } from '@chakra-ui/react'
+import ChangePasswordPage from '../../components/admin/ChangePassword'
 import { useState } from 'react'
 
-const components = [<UserForm key={0} />]
+const components = [<UserForm key={0} />, <ChangePasswordPage key={2} />]
 
 const AdminPage: NextPage = () => {
   const { data: session, status } = useSession()

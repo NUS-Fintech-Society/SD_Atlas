@@ -1,7 +1,13 @@
 import { Button } from '@chakra-ui/react'
+import { AddIcon, EditIcon } from '@chakra-ui/icons'
 import { Dispatch, SetStateAction } from 'react'
+import { AiFillHome } from 'react-icons/ai'
 
-const menuItems = ['Create a user', 'Change Password']
+const menuItems = [
+  // { title: 'Home Page', icon: <AiFillHome /> },
+  { title: 'Create a user', icon: <AddIcon /> },
+  { title: 'Change Password', icon: <EditIcon /> },
+]
 
 type SideBarType = {
   setOption: Dispatch<SetStateAction<number>>
@@ -13,17 +19,18 @@ export default function SideBar({ setOption }: SideBarType) {
       <aside className="bg-gray-100 w-60">
         <nav>
           <ul>
-            {menuItems.map((item, index) => (
-              <li className="m-2 flex-1" key={item}>
+            {menuItems.map(({ title, icon }, index) => (
+              <li className="m-2 flex-1" key={title}>
                 <Button
                   className="flex p-2 bg-gray-300 rounded hover:bg-gray-500 cursor-pointer"
+                  leftIcon={icon}
                   onClick={(e) => {
                     e.preventDefault()
                     setOption(index)
                   }}
                   width="100%"
                 >
-                  {item}
+                  {title}
                 </Button>
               </li>
             ))}
