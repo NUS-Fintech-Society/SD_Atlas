@@ -1,11 +1,9 @@
 import type { NextPage } from 'next'
 import Image from 'next/image'
 import { signIn, signOut, useSession } from 'next-auth/react'
-import { useRouter } from 'next/router'
 
 const Home: NextPage = () => {
   const { data: session } = useSession()
-  const router = useRouter()
 
   return (
     <>
