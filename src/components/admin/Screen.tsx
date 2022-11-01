@@ -1,4 +1,3 @@
-import type { NextPage } from 'next'
 import { useSession } from 'next-auth/react'
 import UserForm from '../../components/admin/UserForm'
 import SideBar from '../../components/admin/Sidebar'
@@ -8,7 +7,7 @@ import { useState } from 'react'
 
 const components = [<UserForm key={0} />, <ChangePasswordPage key={2} />]
 
-const AdminPage: NextPage = () => {
+const AdminPage = () => {
   const { data: session, status } = useSession()
   const [options, setOption] = useState(0)
 

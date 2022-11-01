@@ -1,14 +1,19 @@
 import type { NextPage } from 'next'
 import Image from 'next/image'
-import { signIn, signOut, useSession } from 'next-auth/react'
+import AdminPage from '../components/admin/Screen'
+import { signIn, useSession } from 'next-auth/react'
 
 const Home: NextPage = () => {
-  const { data: session } = useSession()
+  const { data: session, status } = useSession()
+  if (status === 'loading') return <h1>Loading...</h1>
+
+  if (session && session.level === 'super') {
+    return <AdminPage />
+  }
 
   return (
     <>
       <div className="bg-black text-white h-screen">
-        {/* HomePage */}
         <div className="flex flex-col-reverse md:flex-row bg-black">
           <div className="flex flex-col font=[inter] ml-8">
             <div className="font-semibold text-6xl mb-8">
@@ -20,21 +25,12 @@ const Home: NextPage = () => {
                 Ideate. Innovate. Inspire
               </div>
             </div>
-            {session ? (
-              <button
-                className="bg-transparent border-2 border-[#FF8A00] font-medium hover:bg-slate-800 mb-[5%] p-3 rounded text-center text-xl w-44"
-                onClick={() => signOut()}
-              >
-                Sign Out
-              </button>
-            ) : (
-              <button
-                className="bg-transparent border-2 border-[#FF8A00] font-medium hover:bg-slate-800 mb-[5%] p-3 rounded text-center text-xl w-44"
-                onClick={() => signIn()}
-              >
-                Sign In
-              </button>
-            )}
+            <button
+              className="bg-transparent border-2 border-[#FF8A00] font-medium hover:bg-slate-800 mb-[5%] p-3 rounded text-center text-xl w-44"
+              onClick={() => signIn()}
+            >
+              Sign In
+            </button>
           </div>
           <Image
             alt="swe"

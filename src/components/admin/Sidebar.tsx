@@ -1,7 +1,8 @@
 import { Button } from '@chakra-ui/react'
 import { AddIcon, EditIcon } from '@chakra-ui/icons'
 import { Dispatch, SetStateAction } from 'react'
-import { AiFillHome } from 'react-icons/ai'
+import { AiOutlineLogout } from 'react-icons/ai'
+import { signOut } from 'next-auth/react'
 
 const menuItems = [
   // { title: 'Home Page', icon: <AiFillHome /> },
@@ -34,6 +35,19 @@ export default function SideBar({ setOption }: SideBarType) {
                 </Button>
               </li>
             ))}
+            <li className="m-2 flex-1">
+              <Button
+                className="flex p-2 bg-gray-300 rounded hover:bg-gray-500 cursor-pointer"
+                leftIcon={<AiOutlineLogout />}
+                onClick={(e) => {
+                  e.preventDefault()
+                  signOut()
+                }}
+                width="100%"
+              >
+                Sign Out
+              </Button>
+            </li>
           </ul>
         </nav>
       </aside>
