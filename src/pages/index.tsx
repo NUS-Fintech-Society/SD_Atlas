@@ -8,19 +8,6 @@ const Home: NextPage = () => {
   return (
     <>
       <div className="bg-black text-white h-screen">
-        {/* NavBar */}
-        <nav className="md:flex md:items-center md:justify-between w-full">
-          <span className="cursor-pointer">
-            <Image
-              alt="Fintech Logo"
-              className="inline"
-              height={82}
-              src="/fintech_logo_final-removebg_white.png"
-              width={188}
-            />
-          </span>
-        </nav>
-
         {/* HomePage */}
         <div className="flex flex-col-reverse md:flex-row bg-black">
           <div className="flex flex-col font=[inter] ml-8">
