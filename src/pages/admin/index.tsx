@@ -1,6 +1,6 @@
 import type { NextPage } from 'next'
 import { useSession } from 'next-auth/react'
-import UserForm from '../../components/admin/form'
+import UserForm from '../../components/admin/UserForm'
 import SideBar from '../../components/common/sidebar'
 import { HStack } from '@chakra-ui/react'
 import { useState } from 'react'
