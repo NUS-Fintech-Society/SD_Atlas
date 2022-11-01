@@ -7,8 +7,12 @@ const Home: NextPage = () => {
   const { data: session, status } = useSession()
   if (status === 'loading') return <h1>Loading...</h1>
 
-  if (session && session.level === 'super') {
-    return <AdminPage />
+  if (session) {
+    return session.level === 'super' ? (
+      <AdminPage />
+    ) : (
+      <h1>Fill up a page here please</h1>
+    )
   }
 
   return (
