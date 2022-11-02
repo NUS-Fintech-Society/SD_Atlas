@@ -18,7 +18,7 @@ import {
 } from '@chakra-ui/react'
 import styles from './index.module.css'
 
-import React from 'react'
+import { useState } from 'react'
 import Head from 'next/head'
 import ChakraNextLink from '../components/ChakraNextLink'
 
@@ -27,14 +27,14 @@ import { useSession, signIn } from 'next-auth/react'
 
 const Login = () => {
   const router = useRouter()
-  const session = useSession()
+  const { status } = useSession()
 
-  if (session.status === 'authenticated') router.push('/profile')
+  if (status === 'authenticated') router.push('/profile')
 
-  const [show, setShow] = React.useState(false)
+  const [show, setShow] = useState(false)
   const handleShowPassword = () => setShow(!show)
 
-  const [userInfo, setUserInfo] = React.useState({
+  const [userInfo, setUserInfo] = useState({
     email: '',
     password: '',
   })
@@ -44,7 +44,7 @@ const Login = () => {
     onClose,
     onOpen,
   } = useDisclosure({ defaultIsOpen: false })
-  const [errorMessage, setErrorMessage] = React.useState('')
+  const [errorMessage, setErrorMessage] = useState('')
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
