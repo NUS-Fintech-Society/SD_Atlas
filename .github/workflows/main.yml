@@ -30,7 +30,7 @@ jobs:
           cache: 'yarn'
           cache-dependency-path: '**/yarn.lock'
 
-      - name: Step 3 -- NPM build, install and test
+      - name: Step 3 -- yarn install, lint and build
         run: |
           yarn install --frozen-lockfile
           yarn lint
