@@ -29,25 +29,27 @@ const Login = () => {
   const router = useRouter()
   const { status } = useSession()
 
-  if (status === 'authenticated') router.push('/profile')
-
   const [show, setShow] = useState(false)
-  const handleShowPassword = () => setShow(!show)
-
+  const [loading, setLoading] = useState(false)
+  const [errorMessage, setErrorMessage] = useState('')
   const [userInfo, setUserInfo] = useState({
     email: '',
     password: '',
   })
+
+  const handleShowPassword = () => setShow(!show)
 
   const {
     isOpen: isVisible,
     onClose,
     onOpen,
   } = useDisclosure({ defaultIsOpen: false })
-  const [errorMessage, setErrorMessage] = useState('')
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+    setErrorMessage('')
+    onClose()
+    setLoading(true)
     const res = await signIn('credentials', {
       email: userInfo.email,
       password: userInfo.password,
@@ -55,15 +57,15 @@ const Login = () => {
       redirect: false,
     })
 
-    if (res) {
-      if (res.error) {
-        onOpen()
-        setErrorMessage(res.error)
-      } else {
-        router.push('/')
-      }
+    if (res && res.error) {
+      onOpen()
+      setErrorMessage(res.error)
+      setLoading(false)
     }
   }
+
+  // Push the user to the home page
+  if (status === 'authenticated') router.push('/')
 
   return (
     <>
@@ -101,10 +103,8 @@ const Login = () => {
                 {isVisible && (
                   <Alert status="error" borderRadius={10} mb={8}>
                     <AlertIcon />
-                    <AlertTitle>{errorMessage}!</AlertTitle>
-                    <AlertDescription>
-                      Remember not to enter &quot;@u.nus.edu&quot; yourself
-                    </AlertDescription>
+                    <AlertTitle>Something Went Wrong!</AlertTitle>
+                    <AlertDescription>{errorMessage}</AlertDescription>
                     <CloseButton
                       position="absolute"
                       right={1}
@@ -150,7 +150,13 @@ const Login = () => {
                 >
                   Forgot your password?
                 </ChakraNextLink>
-                <Button mt={8} size="lg" type="submit" alignSelf="stretch">
+                <Button
+                  isLoading={loading}
+                  mt={8}
+                  size="lg"
+                  type="submit"
+                  alignSelf="stretch"
+                >
                   Sign In
                 </Button>
               </Flex>

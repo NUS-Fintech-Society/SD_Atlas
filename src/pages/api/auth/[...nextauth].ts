@@ -55,7 +55,7 @@ export const authOptions: NextAuthOptions = {
 
         // If the account is found, challenge the hashPassword with the password
         const success = await compare(password, account.hashedPassword)
-        if (!success) throw new Error('Invalid NUS email or password')
+        if (!success) throw new Error('Wrong password')
 
         // The user object is passed to the session callback in session.data.user
         return {
