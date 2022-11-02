@@ -1,0 +1,37 @@
+# Source: https://github.com/actions/setup-node
+# Source: https://stackoverflow.com/questions/68527897/how-to-specifiy-path-for-actions-setup-node-in-github
+name: Continuous Integration
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - 'main'
+      - '**'
+  pull_request:
+    branches:
+      - 'main'
+  schedule:
+    - cron: "0 0 * * *"
+
+jobs:
+  job_1:
+    name: Continuous Integration (Testing)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Step 1 -- Clone the repository
+        uses: actions/checkout@v3
+
+      - name: Step 2 -- Tell the runner we want to use npm 16
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+          cache: 'yarn'
+          cache-dependency-path: '**/yarn.lock'
+
+      - name: Step 3 -- NPM build, install and test
+        run: |
+          yarn install --frozen-lockfile
+          yarn lint
+          yarn build
