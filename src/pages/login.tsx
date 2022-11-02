@@ -64,9 +64,10 @@ const Login = () => {
     }
   }
 
-  // Push the user to the home page
+  // Push the user to the home page after the user is authenticated
   if (status === 'authenticated') router.push('/')
 
+  // If the user is not authenticated and is on this page, show the sign in form
   return (
     <>
       <Head>
