@@ -31,7 +31,7 @@ export const profileRouter = createRouter()
         if (!user) {
           throw new TRPCError({
             code: 'BAD_REQUEST',
-            message: 'No user requested',
+            message: 'No user found',
           })
         }
 
@@ -130,21 +130,31 @@ export const profileRouter = createRouter()
             major: input.major,
           },
         })
-        const projects =
-          user == null
-            ? null
-            : await ctx.prisma.departments.findUnique({
-                where: {
-                  department_id: user.department,
-                },
-                select: {
-                  projects: true,
-                },
-              })
-        const queryResult = { user: user, projects: projects }
-        return queryResult
-      } catch (error) {
-        console.log('error updating member profile details', error)
+
+        if (!user) {
+          throw new TRPCError({
+            code: 'BAD_REQUEST',
+            message: 'No user found',
+          })
+        }
+
+        if (!user.department) return { user }
+
+        const projects = await ctx.prisma.departments.findUnique({
+          where: {
+            department_id: user.department,
+          },
+          select: {
+            projects: true,
+          },
+        })
+
+        return { user, projects }
+      } catch (e) {
+        throw new TRPCError({
+          code: 'INTERNAL_SERVER_ERROR',
+          message: (e as Error).message,
+        })
       }
     },
   })
