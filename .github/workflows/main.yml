@@ -37,5 +37,4 @@ jobs:
           NEXTAUTH_URL: ${{ secrets.NEXTAUTH_URL }}
         run: |
           yarn install --frozen-lockfile
-          yarn lint
           yarn build
