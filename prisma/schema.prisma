@@ -78,24 +78,24 @@ model Announcements {
 model User {
   attendance     Int?      @default(0)
   batch          String?
+  major          String?
   department     String?
   discord        String?
   gender         String?
   faculty        String?
+  hashedPassword String
   hobbies        String?
-  level          String
+  id             String    @id @unique
+  level          String // enum: "member" | "lead" | "codirector" | "director" | "super"
   image          String?
   name           String?
+  email          String    @unique
   emailVerified  DateTime?
   personal_email String?
   roles          String?
   telegram       String?
   wallet         String?
   year           String?
-  email          String    @unique
-  hashedPassword String
-  id             String    @id @unique
-  major          String?
   total_events   Int?      @default(0)
   Account        Account[]
   Session        Session[]
