@@ -12,7 +12,7 @@ on:
     branches:
       - 'main'
   schedule:
-    - cron: "0 0 * * *"
+    - cron: '0 0 * * *'
 
 jobs:
   job_1:
@@ -31,6 +31,10 @@ jobs:
           cache-dependency-path: '**/yarn.lock'
 
       - name: Step 3 -- yarn install, lint and build
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
+          NEXTAUTH_URL: ${{ secrets.NEXTAUTH_URL }}
         run: |
           yarn install --frozen-lockfile
           yarn lint
