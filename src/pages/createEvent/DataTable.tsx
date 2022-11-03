@@ -8,10 +8,9 @@ import {
   useReactTable,
 } from '@tanstack/react-table'
 import { Box, chakra, Table, Tbody, Td, Th, Thead, Tr } from '@chakra-ui/react'
-import React from 'react'
+import React, { HTMLProps } from 'react'
 
 type Attendees = {
-  checkbox: string
   department: string
   role: string
   name: string
@@ -20,50 +19,78 @@ type Attendees = {
 //TODO: find a way to add checkbox to id each row
 export const data: Attendees[] = [
   {
-    checkbox: 'inches',
     department: 'millimetres (mm)',
     role: 'adam role',
     name: 'adam',
   },
   {
-    checkbox: 'feet',
     department: 'centimetres (cm)',
     role: 'bob role',
     name: 'bobby',
   },
   {
-    checkbox: 'yards',
     department: 'metres (m)',
     role: 'sal role',
     name: 'sal',
   },
   {
-    checkbox: 'inches',
     department: 'millimetres (mm)',
     role: 'adam role',
     name: 'adam',
   },
   {
-    checkbox: 'feet',
     department: 'centimetres (cm)',
     role: 'bob role',
     name: 'bobby',
   },
   {
-    checkbox: 'yards',
     department: 'metres (m)',
     role: 'sal role',
     name: 'sal',
   },
 ]
+function IndeterminateCheckbox({
+  indeterminate,
+  className = '',
+  ...rest
+}: { indeterminate?: boolean } & HTMLProps<HTMLInputElement>) {
+  const ref = React.useRef<HTMLInputElement>(null!)
+
+  React.useEffect(() => {
+    if (typeof indeterminate === 'boolean') {
+      ref.current.indeterminate = !rest.checked && indeterminate
+    }
+  }, [ref, indeterminate])
+
+  return (
+    <input
+      type="checkbox"
+      ref={ref}
+      className={className + ' cursor-pointer'}
+      {...rest}
+    />
+  )
+}
 
 const columnHelper = createColumnHelper<Attendees>()
 
 export const columns = [
-  columnHelper.accessor('checkbox', {
-    cell: (info) => info.getValue(),
+  {
+    id: 'select',
     header: 'select',
-  }),
+    //TODO: make attendee object
+    cell: ({ row }) => (
+      <div>
+        <IndeterminateCheckbox
+          {...{
+            checked: row.getIsSelected(),
+            indeterminate: row.getIsSomeSelected(),
+            onChange: row.getToggleSelectedHandler(),
+          }}
+        />
+      </div>
+    ),
+  },
   columnHelper.accessor('department', {
     cell: (info) => info.getValue(),
     header: 'Department',
@@ -86,11 +113,11 @@ export type DataTableProps<Data extends object> = {
 // ref https://github.com/chakra-ui/chakra-ui/discussions/4380
 //TODO: Make Clear selection, Select all button
 //TODO: Add filtering
-// make table that is scrollable
 export function DataTable<Data extends object>({
   data,
   columns,
 }: DataTableProps<Data>) {
+  const [rowSelection, setRowSelection] = React.useState({})
   const [sorting, setSorting] = React.useState<SortingState>([])
   const table = useReactTable({
     columns,
@@ -100,9 +127,14 @@ export function DataTable<Data extends object>({
     getSortedRowModel: getSortedRowModel(),
     state: {
       sorting,
+      rowSelection,
     },
+    onRowSelectionChange: (e) => {
+      setRowSelection(e)
+      console.log(rowSelection)
+    },
+    debugTable: true,
   })
-  const [checkedItems, setCheckedItems] = React.useState([])
 
   return (
     <Box
