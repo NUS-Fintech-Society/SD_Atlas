@@ -8,11 +8,12 @@ import {
   VStack,
 } from '@chakra-ui/react'
 import { DataTable, data, columns } from './DataTable'
+//TODO: Make the form submit stuff
 //https://chakra-ui.com/docs/components/form-control
 //https://chakra-ui.com/docs/components/checkbox
 const EventPage = () => {
   return (
-    <div className="p-10">
+    <div className="p-10 bg-black text-white">
       <h1 className="text-4xl">Create new event</h1>
       <FormControl>
         <VStack align="left" spacing="6">
