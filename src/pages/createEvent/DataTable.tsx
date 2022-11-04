@@ -7,7 +7,17 @@ import {
   SortingState,
   useReactTable,
 } from '@tanstack/react-table'
-import { Box, chakra, Table, Tbody, Td, Th, Thead, Tr } from '@chakra-ui/react'
+import {
+  Button,
+  Box,
+  chakra,
+  Table,
+  Tbody,
+  Td,
+  Th,
+  Thead,
+  Tr,
+} from '@chakra-ui/react'
 import React, { HTMLProps } from 'react'
 
 type Attendees = {
@@ -135,74 +145,99 @@ export function DataTable<Data extends object>({
     },
     debugTable: true,
   })
+  const clearSelection = () => {
+    setRowSelection({})
+  }
+
+  const selectAll = () => {
+    if (!table.getIsAllRowsSelected()) {
+      table.toggleAllRowsSelected()
+    }
+  }
 
   return (
-    <Box
-      overflowY="auto"
-      maxHeight="200px"
-      className="border-2 border-[#97AEFF]"
-    >
-      <Table variant="unstyled" className="border-collapse">
-        <Thead className="sticky top-0 bg-[#4365DD]">
-          {table.getHeaderGroups().map((headerGroup) => (
-            <Tr key={headerGroup.id}>
-              {headerGroup.headers.map((header) => {
-                // see https://tanstack.com/table/v8/docs/api/core/column-def#meta to type this correctly
-                const meta: any = header.column.columnDef.meta
-                return (
-                  <Th
-                    key={header.id}
-                    isNumeric={meta?.isNumeric}
-                    className="border-x-2 border-[#97AEFF]"
-                  >
-                    <div className="flex">
-                      {flexRender(
-                        header.column.columnDef.header,
-                        header.getContext()
-                      )}
-
-                      <chakra.span
-                        onClick={header.column.getToggleSortingHandler()}
-                        pl="4"
-                        className="hover:cursor-pointer"
-                      >
-                        {header.column.getIsSorted() ? (
-                          header.column.getIsSorted() === 'desc' ? (
-                            <p>👆🏻</p>
-                          ) : (
-                            <p>👇🏻</p>
-                          )
-                        ) : (
-                          <p>🫥</p>
+    <div>
+      <div className="flex justify-between items-center py-4">
+        <p className="text-2xl">Attendees</p>
+        <div className="flex gap-4">
+          <Button bgColor="#4365DD" onClick={clearSelection}>
+            Clear Selection
+          </Button>
+          <Button bgColor="#4365DD" onClick={selectAll}>
+            Select All
+          </Button>
+        </div>
+      </div>
+      <Box
+        overflowY="auto"
+        maxHeight="300px"
+        className="border-2 border-[#97AEFF]"
+      >
+        <Table variant="unstyled" className="border-collapse">
+          <Thead className="sticky top-0 bg-[#4365DD]">
+            {table.getHeaderGroups().map((headerGroup) => (
+              <Tr key={headerGroup.id}>
+                {headerGroup.headers.map((header) => {
+                  // see https://tanstack.com/table/v8/docs/api/core/column-def#meta to type this correctly
+                  const meta: any = header.column.columnDef.meta
+                  return (
+                    <Th
+                      key={header.id}
+                      isNumeric={meta?.isNumeric}
+                      className="border-x-2 border-[#97AEFF]"
+                    >
+                      <div className="flex">
+                        {flexRender(
+                          header.column.columnDef.header,
+                          header.getContext()
                         )}
-                      </chakra.span>
-                    </div>
-                  </Th>
-                )
-              })}
-            </Tr>
-          ))}
-        </Thead>
-        <Tbody>
-          {table.getRowModel().rows.map((row) => (
-            <Tr key={row.id}>
-              {row.getVisibleCells().map((cell) => {
-                // see https://tanstack.com/table/v8/docs/api/core/column-def#meta to type this correctly
-                const meta: any = cell.column.columnDef.meta
-                return (
-                  <Td
-                    key={cell.id}
-                    isNumeric={meta?.isNumeric}
-                    className="border-2 border-[#97AEFF]"
-                  >
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </Td>
-                )
-              })}
-            </Tr>
-          ))}
-        </Tbody>
-      </Table>
-    </Box>
+
+                        <chakra.span
+                          onClick={header.column.getToggleSortingHandler()}
+                          pl="4"
+                          className="hover:cursor-pointer"
+                        >
+                          {header.column.getIsSorted() ? (
+                            header.column.getIsSorted() === 'desc' ? (
+                              <p>👆🏻</p>
+                            ) : (
+                              <p>👇🏻</p>
+                            )
+                          ) : (
+                            <p>🫥</p>
+                          )}
+                        </chakra.span>
+                      </div>
+                    </Th>
+                  )
+                })}
+              </Tr>
+            ))}
+          </Thead>
+          <Tbody>
+            {table.getRowModel().rows.map((row) => (
+              <Tr key={row.id}>
+                {row.getVisibleCells().map((cell) => {
+                  // see https://tanstack.com/table/v8/docs/api/core/column-def#meta to type this correctly
+                  const meta: any = cell.column.columnDef.meta
+                  return (
+                    <Td
+                      key={cell.id}
+                      isNumeric={meta?.isNumeric}
+                      className="border-2 border-[#97AEFF]"
+                    >
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
+                      )}
+                    </Td>
+                  )
+                })}
+              </Tr>
+            ))}
+          </Tbody>
+        </Table>
+      </Box>
+    </div>
   )
 }
