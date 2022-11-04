@@ -76,27 +76,33 @@ model Announcements {
 }
 
 model User {
-  attendance     Int?      @default(0)
+  attendance     Int?    @default(0)
   batch          String?
+  date_of_birth  String?
   department     String?
+  diet           String?
   discord        String?
-  gender         String?
+  email          String  @unique
   faculty        String?
+  gender         String?
+  hashedPassword String
   hobbies        String?
-  level          String
+  id             String  @id @unique
   image          String?
+  level          String
+  linkedin       String?
+  major          String?
   name           String?
-  emailVerified  DateTime?
+  phone          String?
   personal_email String?
+  race           String?
   roles          String?
+  shirt          String?
   telegram       String?
+  total_events   Int?    @default(0)
   wallet         String?
   year           String?
-  email          String    @unique
-  hashedPassword String
-  id             String    @id @unique
-  major          String?
-  total_events   Int?      @default(0)
-  Account        Account[]
-  Session        Session[]
+
+  Account Account[]
+  Session Session[]
 }

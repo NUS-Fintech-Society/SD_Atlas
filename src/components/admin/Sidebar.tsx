@@ -8,6 +8,7 @@ const menuItems = [
   // { title: 'Home Page', icon: <AiFillHome /> },
   { title: 'Create a user', icon: <AddIcon /> },
   { title: 'Change Password', icon: <EditIcon /> },
+  { title: 'Multiple Uploads', icon: undefined },
 ]
 
 type SideBarType = {

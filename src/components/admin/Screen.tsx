@@ -3,8 +3,13 @@ import SideBar from '../../components/admin/Sidebar'
 import { HStack } from '@chakra-ui/react'
 import ChangePasswordPage from '../../components/admin/ChangePassword'
 import { useState } from 'react'
+import CsvPage from './CSV/Screen'
 
-const components = [<UserForm key={0} />, <ChangePasswordPage key={2} />]
+const components = [
+  <UserForm key={0} />,
+  <ChangePasswordPage key={1} />,
+  <CsvPage key={2} />,
+]
 
 const AdminPage = () => {
   const [options, setOption] = useState(0)
