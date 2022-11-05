@@ -5,7 +5,7 @@ import {
   useReactTable,
   getCoreRowModel,
 } from '@tanstack/react-table'
-import { AddUsersType } from './Screen'
+import { AddUsersType } from '../../../pages/admin/upload-multiple-users'
 
 const columnHelper = createColumnHelper<AddUsersType>()
 const columns: ColumnDef<AddUsersType>[] = [

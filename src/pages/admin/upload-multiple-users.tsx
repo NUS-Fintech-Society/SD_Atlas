@@ -2,9 +2,10 @@ import type { NextPage } from 'next'
 import { useState } from 'react'
 import { Input } from '@chakra-ui/react'
 import { parse, ParseResult } from 'papaparse'
-import { trpc } from '../../../utils/trpc'
+import { trpc } from '../../utils/trpc'
 import { Button } from '@chakra-ui/react'
-import DataTable from './DataTable'
+import DataTable from '../../components/admin/CSV/DataTable'
+import SidebarWithHeader from '../../components/admin/CSV/AdminSidebar'
 
 const DashboardPage: NextPage = () => {
   const { isLoading, mutateAsync } = trpc.useMutation([
@@ -47,7 +48,7 @@ const DashboardPage: NextPage = () => {
               shirt: item['Shirt size'],
               student_id: item['Student ID (AXXXXXXXX)'],
               telegram: item['Telegram Handle(@xxx)'],
-              year: item['Year of Study (AY22/23)'],
+              year: item['Year of Study'],
             }
           })
 
@@ -60,7 +61,7 @@ const DashboardPage: NextPage = () => {
 
   // Used to return the components
   return (
-    <>
+    <SidebarWithHeader>
       <DataTable data={data} />
       <Input accept=".csv" onChange={handleFile} type="file" />
       <Button
@@ -77,7 +78,7 @@ const DashboardPage: NextPage = () => {
       >
         Submit File
       </Button>
-    </>
+    </SidebarWithHeader>
   )
 }
 
@@ -110,7 +111,7 @@ export type CSVType = {
   'Race ': string
   Faculty: string
   'Major and Specialization (if any)': string
-  'Year of Study (AY22/23)': string
+  'Year of Study': string
   Department: string
   'Appointed Role ': string
   Gmail: string

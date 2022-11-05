@@ -1,18 +1,16 @@
 import type { NextPage } from 'next'
 import Image from 'next/image'
-import AdminPage from '../components/admin/Screen'
 import { signIn, useSession } from 'next-auth/react'
+import { useRouter } from 'next/router'
 
 const Home: NextPage = () => {
   const { data: session, status } = useSession()
+  const router = useRouter()
   if (status === 'loading') return <h1>Loading...</h1>
 
   if (session) {
-    return session.level === 'super' ? (
-      <AdminPage />
-    ) : (
-      <h1>Fill up a page here please</h1>
-    )
+    if (session.level === 'super') router.push('/admin/change-password')
+    return <h1>Please fill up this page</h1>
   }
 
   return (
