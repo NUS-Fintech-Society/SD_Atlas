@@ -16,7 +16,7 @@ import {
   useDisclosure,
   CloseButton,
 } from '@chakra-ui/react'
-import styles from './index.module.css'
+import styles from '../index.module.css'
 
 import { useState } from 'react'
 import Head from 'next/head'
@@ -27,7 +27,7 @@ import { useSession, signIn } from 'next-auth/react'
 
 const Login = () => {
   const router = useRouter()
-  const { status } = useSession()
+  const { data: session } = useSession()
 
   const [show, setShow] = useState(false)
   const [loading, setLoading] = useState(false)
@@ -65,7 +65,10 @@ const Login = () => {
   }
 
   // Push the user to the home page after the user is authenticated
-  if (status === 'authenticated') router.push('/')
+  if (session) {
+    if (session.level === 'super') router.push('/admin')
+    return <h1>Please fill up a page here</h1>
+  }
 
   // If the user is not authenticated and is on this page, show the sign in form
   return (

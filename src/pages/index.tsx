@@ -1,3 +1,6 @@
+/**
+ * @deprecated
+ */
 import type { NextPage } from 'next'
 import Image from 'next/image'
 import { signIn, useSession } from 'next-auth/react'
@@ -9,7 +12,7 @@ const Home: NextPage = () => {
   if (status === 'loading') return <h1>Loading...</h1>
 
   if (session) {
-    if (session.level === 'super') router.push('/admin/change-password')
+    if (session.level === 'super') router.push('/admin')
     return <h1>Please fill up this page</h1>
   }
 

@@ -1,16 +1,6 @@
 import { trpc } from '../../../utils/trpc'
 import { useFormik } from 'formik'
-import { useState } from 'react'
-import {
-  Alert,
-  AlertIcon,
-  AlertTitle,
-  AlertDescription,
-  Button,
-  Container,
-  Input,
-  Select,
-} from '@chakra-ui/react'
+import { Button, Container, Input, Select, useToast } from '@chakra-ui/react'
 
 interface FormValues {
   id: string
@@ -20,9 +10,8 @@ interface FormValues {
 }
 
 const UserForm = () => {
-  const [success, setSuccess] = useState(false)
-  const [error, setError] = useState('')
   const { mutateAsync } = trpc.useMutation('member.create-user')
+  const toast = useToast()
   const initialValues: FormValues = {
     id: '',
     level: '',
@@ -33,90 +22,84 @@ const UserForm = () => {
   const formik = useFormik({
     initialValues,
     onSubmit: async (values) => {
-      setSuccess(false)
-      setError('')
       try {
         await mutateAsync(values)
-        setSuccess(true)
+        toast({
+          title: 'Successfully updated!',
+          description: 'User successfully created',
+          status: 'success',
+          isClosable: true,
+          duration: 9000,
+        })
       } catch (e) {
-        setError((e as Error).message)
+        toast({
+          title: 'Oops! Something went wrong',
+          description: (e as Error).message,
+          status: 'error',
+          isClosable: true,
+          duration: 9000,
+        })
       }
     },
   })
 
   return (
-    <Container centerContent className="mx-10">
-      <Alert
-        marginTop={5}
-        hidden={!success && !error}
-        status={success ? 'success' : 'error'}
+    <form onSubmit={formik.handleSubmit}>
+      <Input
+        id="id"
+        isRequired
+        marginY={5}
+        name="id"
+        onChange={formik.handleChange}
+        placeholder="Enter the student id"
+        value={formik.values.id}
+        variant="outline"
+      />
+
+      <Input
+        id="email"
+        isRequired
+        marginBottom={5}
+        name="email"
+        type="email"
+        onChange={formik.handleChange}
+        placeholder="Enter a email"
+        value={formik.values.email}
+        variant="outline"
+      />
+
+      <Input
+        id="password"
+        isRequired
+        marginBottom={5}
+        name="password"
+        type="password"
+        onChange={formik.handleChange}
+        placeholder="Enter a password"
+        value={formik.values.password}
+        variant="outline"
+      />
+
+      <Select
+        marginBottom={5}
+        isRequired
+        onChange={(e) => {
+          e.preventDefault()
+          formik.values.level = e.target.value
+        }}
+        placeholder="Select the level"
       >
-        <AlertIcon />
-        <AlertTitle>
-          {success ? 'Successful!' : 'Something went wrong'}
-        </AlertTitle>
-        <AlertDescription>
-          {error ? error : 'User successfully created'}
-        </AlertDescription>
-      </Alert>
+        <option value="member">Member</option>
+        <option value="lead">Lead</option>
+        <option value="codirector">Co-Director</option>
+        <option value="director">Director</option>
+        <option value="super">Admin</option>
+      </Select>
 
-      <form onSubmit={formik.handleSubmit}>
-        <Input
-          id="id"
-          isRequired
-          marginY={5}
-          name="id"
-          onChange={formik.handleChange}
-          placeholder="Enter the student id"
-          value={formik.values.id}
-          variant="outline"
-        />
-
-        <Input
-          id="email"
-          isRequired
-          marginBottom={5}
-          name="email"
-          type="email"
-          onChange={formik.handleChange}
-          placeholder="Enter a email"
-          value={formik.values.email}
-          variant="outline"
-        />
-
-        <Input
-          id="password"
-          isRequired
-          marginBottom={5}
-          name="password"
-          type="password"
-          onChange={formik.handleChange}
-          placeholder="Enter a password"
-          value={formik.values.password}
-          variant="outline"
-        />
-
-        <Select
-          marginBottom={5}
-          isRequired
-          onChange={(e) => {
-            e.preventDefault()
-            formik.values.level = e.target.value
-          }}
-          placeholder="Select the level"
-        >
-          <option value="member">Member</option>
-          <option value="lead">Lead</option>
-          <option value="codirector">Co-Director</option>
-          <option value="director">Director</option>
-          <option value="super">Admin</option>
-        </Select>
-
-        <Button isLoading={formik.isSubmitting} type="submit">
-          Create User
-        </Button>
-      </form>
-    </Container>
+      <Button bg="gray.300" isLoading={formik.isSubmitting} type="submit">
+        Create User
+      </Button>
+    </form>
   )
 }
 

@@ -124,6 +124,7 @@ interface NavItemProps extends FlexProps {
 const NavButton = ({ icon, children, ...rest }: NavItemProps) => {
   return (
     <Button
+      marginBottom={4}
       style={{ textDecoration: 'none', width: '100%' }}
       _focus={{ boxShadow: 'none' }}
     >
@@ -211,7 +212,9 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
                       : ''}
                   </Text>
                   <Text fontSize="xs" color="gray.600">
-                    {session && session.level ? session.level as string : 'member'}
+                    {session && session.level
+                      ? (session.level as string)
+                      : 'member'}
                   </Text>
                 </VStack>
                 <Box display={{ base: 'none', md: 'flex' }}>
@@ -230,7 +233,9 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
               <MenuItem
                 onClick={(e) => {
                   e.preventDefault()
-                  signOut()
+                  signOut({
+                    callbackUrl: '/',
+                  })
                 }}
               >
                 Sign out
