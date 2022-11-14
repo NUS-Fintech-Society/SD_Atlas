@@ -12,7 +12,7 @@ import {
   Container,
   Input,
 } from '@chakra-ui/react'
-import SidebarWithHeaders from '../../components/admin/CSV/AdminSidebar'
+import SidebarWithHeaders from '../../components/admin/AdminSidebar'
 
 interface FormValue {
   current: string

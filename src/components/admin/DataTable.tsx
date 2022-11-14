@@ -5,7 +5,9 @@ import {
   useReactTable,
   getCoreRowModel,
 } from '@tanstack/react-table'
-import { AddUsersType } from '../../../pages/admin/upload-multiple-users'
+import type { AddUsersType } from '~/store/types/admin.type'
+import { useSelector } from 'react-redux'
+import { RootState } from '~/store/store'
 
 const columnHelper = createColumnHelper<AddUsersType>()
 const columns: ColumnDef<AddUsersType>[] = [
@@ -28,7 +30,10 @@ const columns: ColumnDef<AddUsersType>[] = [
   }),
 ]
 
-const DataTable = ({ data }: { data: AddUsersType[] }) => {
+const DataTable = () => {
+  const data = useSelector<RootState, AddUsersType[]>(
+    (state) => state.dashboard
+  )
   const table = useReactTable({
     data,
     columns,
