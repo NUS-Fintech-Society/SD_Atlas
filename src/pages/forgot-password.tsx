@@ -12,7 +12,7 @@ import {
   Spacer,
 } from '@chakra-ui/react'
 import { BsArrowLeftShort } from 'react-icons/bs'
-import styles from '~/index.module.css'
+import styles from './index.module.css'
 
 import Head from 'next/head'
 import ChakraNextLink from '~/components/ChakraNextLink'

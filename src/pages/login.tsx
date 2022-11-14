@@ -16,7 +16,7 @@ import {
   useDisclosure,
   CloseButton,
 } from '@chakra-ui/react'
-import styles from '~/index.module.css'
+import styles from './index.module.css'
 
 import { useState } from 'react'
 import Head from 'next/head'
