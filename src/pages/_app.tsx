@@ -9,6 +9,7 @@ import type { AppRouter } from '../server/router'
 import type { Session } from 'next-auth'
 import { ChakraProvider, extendTheme, type ThemeConfig } from '@chakra-ui/react'
 import '../styles/globals.css'
+import NavBar from '~/components/common/navbar'
 
 export const theme: ThemeConfig = extendTheme({
   colors: {
