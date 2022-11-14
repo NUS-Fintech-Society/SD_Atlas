@@ -1,8 +1,10 @@
 import { configureStore } from '@reduxjs/toolkit'
+import adminNavbarReducer from './admin/navbar'
 import dashboardReducer from './admin/dashboard'
 
 const store = configureStore({
   reducer: {
+    adminNavbar: adminNavbarReducer,
     dashboard: dashboardReducer,
   },
 })

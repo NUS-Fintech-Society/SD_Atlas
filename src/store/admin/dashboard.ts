@@ -2,7 +2,6 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { RootState } from '../store'
 import type { AddUsersType, CSVType } from '../types/admin.type'
 import { ParseResult } from 'papaparse'
-
 const initialState: AddUsersType[] = []
 
 export const dashboardSlice = createSlice({
@@ -30,10 +29,10 @@ export const dashboardSlice = createSlice({
           phone: item['Phone Number'],
           race: item['Race '] || '',
           roles: item['Appointed Role '] || '',
-          shirt: item['Shirt size'],
-          student_id: item['Student ID (AXXXXXXXX)'],
-          telegram: item['Telegram Handle(@xxx)'],
-          year: item['Year of Study'],
+          shirt: item['Shirt size'] || '',
+          student_id: item['Student ID (AXXXXXXXX)'] || '',
+          telegram: item['Telegram Handle(@xxx)'] || '',
+          year: item['Year of Study'] || '',
         }
       })
 

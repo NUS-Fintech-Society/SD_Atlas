@@ -1,10 +1,9 @@
 import type { NextPage } from 'next'
-import { Input } from '@chakra-ui/react'
+import { Input, VStack, HStack } from '@chakra-ui/react'
 import { parse, ParseResult } from 'papaparse'
 import { trpc } from '~/utils/trpc'
 import { Button } from '@chakra-ui/react'
 import DataTable from '~/components/admin/DataTable'
-import SidebarWithHeader from '~/components/admin/AdminSidebar'
 import { add } from '~/store/admin/dashboard'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '~/store/store'
@@ -43,13 +42,15 @@ const DashboardPage: NextPage = () => {
   }
 
   return (
-    <SidebarWithHeader>
+    <VStack>
       {data.length ? <DataTable /> : null}
-      <Input accept=".csv" onChange={handleFile} type="file" />
-      <Button isLoading={isLoading} onClick={clickHandler}>
-        Submit File
-      </Button>
-    </SidebarWithHeader>
+      <HStack>
+        <input accept=".csv" onChange={handleFile} type="file" />
+        <Button isLoading={isLoading} onClick={clickHandler}>
+          Submit File
+        </Button>
+      </HStack>
+    </VStack>
   )
 }
 
