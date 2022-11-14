@@ -174,11 +174,9 @@ const dashboardRouter = createRouter()
           }
         })
 
-        console.log(users)
-
-        // await ctx.prisma.user.createMany({
-        //   data: users,
-        // })
+        await ctx.prisma.user.createMany({
+          data: users,
+        })
       } catch (e) {
         throw new TRPCError({
           code: 'INTERNAL_SERVER_ERROR',

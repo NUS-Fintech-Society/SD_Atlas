@@ -1,5 +1,5 @@
 import type { NextPage } from 'next'
-import { Input, VStack, HStack } from '@chakra-ui/react'
+import { useToast, VStack, HStack } from '@chakra-ui/react'
 import { parse, ParseResult } from 'papaparse'
 import { trpc } from '~/utils/trpc'
 import { Button } from '@chakra-ui/react'
@@ -11,6 +11,7 @@ import { AddUsersType, CSVType } from '~/store/types/admin.type'
 import { MouseEvent } from 'react'
 
 const DashboardPage: NextPage = () => {
+  const toast = useToast()
   const data = useSelector<RootState, AddUsersType[]>(
     (state) => state.dashboard
   )
@@ -29,15 +30,28 @@ const DashboardPage: NextPage = () => {
     }
   }
 
-  const clickHandler = (
+  const clickHandler = async (
     e: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>
   ) => {
     try {
       e.preventDefault()
       if (!data.length) return
-      mutateAsync(data)
+      await mutateAsync(data)
+      toast({
+        title: 'Successfully Added!',
+        description: 'You have successfully added all the users',
+        status: 'success',
+        duration: 9000,
+        isClosable: true,
+      })
     } catch (e) {
-      console.error((e as Error).message)
+      toast({
+        title: 'Something went wrong',
+        description: (e as Error).message,
+        status: 'error',
+        duration: 9000,
+        isClosable: true,
+      })
     }
   }
 
