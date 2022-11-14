@@ -1,6 +1,6 @@
 import type { NextPage } from 'next'
 import Image from 'next/image'
-import AdminPage from '../components/admin/Screen'
+import AdminPage from '~/components/admin/Screen'
 import { signIn, useSession } from 'next-auth/react'
 
 const Home: NextPage = () => {
