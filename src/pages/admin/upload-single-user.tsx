@@ -1,4 +1,4 @@
-import { trpc } from '../../../utils/trpc'
+import { trpc } from '../../utils/trpc'
 import { useFormik } from 'formik'
 import { Button, Container, Input, Select, useToast } from '@chakra-ui/react'
 

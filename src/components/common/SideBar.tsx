@@ -43,9 +43,14 @@ interface LinkItemProps {
 // For super users only
 const LinkItems: Array<LinkItemProps> = [
   {
-    name: 'Home',
+    name: 'Create multiple users',
     icon: FiHome,
-    href: '/admin/dashboard',
+    href: '/admin/upload-multiple-users',
+  },
+  {
+    name: 'Create one user',
+    icon: FiHome,
+    href: '/admin/upload-single-user',
   },
 ]
 

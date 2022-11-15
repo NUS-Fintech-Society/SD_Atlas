@@ -64,7 +64,7 @@ const Login = () => {
   // Push the user to the home page after the user is authenticated
   if (session) {
     if (session.level === 'super') {
-      router.push('/admin/users')
+      router.push('/admin/upload-multiple-users')
     } else {
       router.push('/user')
     }
