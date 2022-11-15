@@ -9,10 +9,10 @@ import {
   VStack,
   Icon,
   useColorModeValue,
+  Link,
   Drawer,
   DrawerContent,
   Text,
-  Button,
   useDisclosure,
   BoxProps,
   FlexProps,
@@ -22,25 +22,30 @@ import {
   MenuItem,
   MenuList,
 } from '@chakra-ui/react'
-import { FiMenu, FiBell, FiChevronDown, FiUser, FiUsers } from 'react-icons/fi'
+import {
+  FiHome,
+  FiTrendingUp,
+  FiMenu,
+  FiBell,
+  FiChevronDown,
+} from 'react-icons/fi'
 import { IconType } from 'react-icons'
 import { ReactText } from 'react'
-import { useSession, signOut } from 'next-auth/react'
-import { useDispatch } from 'react-redux'
-import { changeIndex } from '~/store/admin/navbar'
+import { signOut } from 'next-auth/react'
+import { useSession } from 'next-auth/react'
 
 interface LinkItemProps {
   name: string
   icon: IconType
+  href: string
 }
+
+// For super users only
 const LinkItems: Array<LinkItemProps> = [
   {
     name: 'Upload multiple users',
-    icon: FiUsers,
-  },
-  {
-    name: 'Upload single user',
-    icon: FiUser,
+    icon: FiHome,
+    href: '/admin/upload-multiple-users',
   },
 ]
 
@@ -50,30 +55,39 @@ export default function SidebarWithHeader({
   children: ReactNode
 }) {
   const { isOpen, onOpen, onClose } = useDisclosure()
+  const { data: session } = useSession()
+
   return (
     <Box minH="100vh" bg={useColorModeValue('gray.100', 'gray.900')}>
-      <SidebarContent
-        onClose={() => onClose}
-        display={{ base: 'none', md: 'block' }}
-      />
-      <Drawer
-        autoFocus={false}
-        isOpen={isOpen}
-        placement="left"
-        onClose={onClose}
-        returnFocusOnClose={false}
-        onOverlayClick={onClose}
-        size="full"
-      >
-        <DrawerContent>
-          <SidebarContent onClose={onClose} />
-        </DrawerContent>
-      </Drawer>
-      {/* mobilenav */}
-      <MobileNav onOpen={onOpen} />
-      <Box ml={{ base: 0, md: 60 }} p="4">
-        {children}
-      </Box>
+      {session ? (
+        <>
+          <SidebarContent
+            onClose={() => onClose}
+            display={{ base: 'none', md: 'block' }}
+          />
+
+          <Drawer
+            autoFocus={false}
+            isOpen={isOpen}
+            placement="left"
+            onClose={onClose}
+            returnFocusOnClose={false}
+            onOverlayClick={onClose}
+            size="full"
+          >
+            <DrawerContent>
+              <SidebarContent onClose={onClose} />
+            </DrawerContent>
+          </Drawer>
+          {/* mobilenav */}
+          <MobileNav onOpen={onOpen} />
+          <Box ml={{ base: 0, md: 60 }} p="4">
+            {children}
+          </Box>
+        </>
+      ) : (
+        children
+      )}
     </Box>
   )
 }
@@ -83,7 +97,6 @@ interface SidebarProps extends BoxProps {
 }
 
 const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
-  const dispatch = useDispatch()
   return (
     <Box
       transition="3s ease"
@@ -101,17 +114,10 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
         </Text>
         <CloseButton display={{ base: 'flex', md: 'none' }} onClick={onClose} />
       </Flex>
-      {LinkItems.map((link, index) => (
-        <NavButton
-          icon={link.icon}
-          key={link.name}
-          onClick={(e) => {
-            e.preventDefault()
-            dispatch(changeIndex(index))
-          }}
-        >
+      {LinkItems.map((link) => (
+        <NavItem key={link.name} icon={link.icon} href={link.href}>
           {link.name}
-        </NavButton>
+        </NavItem>
       ))}
     </Box>
   )
@@ -120,15 +126,28 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
 interface NavItemProps extends FlexProps {
   icon: IconType
   children: ReactText
+  href: string
 }
-const NavButton = ({ icon, children, ...rest }: NavItemProps) => {
+const NavItem = ({ href, icon, children, ...rest }: NavItemProps) => {
   return (
-    <Button
-      marginBottom={4}
-      style={{ textDecoration: 'none', width: '100%' }}
+    <Link
+      href={href}
+      style={{ textDecoration: 'none' }}
       _focus={{ boxShadow: 'none' }}
     >
-      <Flex align="center" p="4" role="group" cursor="pointer" {...rest}>
+      <Flex
+        align="center"
+        p="4"
+        mx="4"
+        borderRadius="lg"
+        role="group"
+        cursor="pointer"
+        _hover={{
+          bg: 'cyan.400',
+          color: 'white',
+        }}
+        {...rest}
+      >
         {icon && (
           <Icon
             mr="4"
@@ -141,7 +160,7 @@ const NavButton = ({ icon, children, ...rest }: NavItemProps) => {
         )}
         {children}
       </Flex>
-    </Button>
+    </Link>
   )
 }
 
@@ -149,7 +168,6 @@ interface MobileProps extends FlexProps {
   onOpen: () => void
 }
 const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
-  const { data: session } = useSession()
   return (
     <Flex
       ml={{ base: 0, md: 60 }}
@@ -206,15 +224,9 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
                   spacing="1px"
                   ml="2"
                 >
-                  <Text fontSize="sm">
-                    {session && session.user && session.user.name
-                      ? session.user.name
-                      : ''}
-                  </Text>
+                  <Text fontSize="sm">Justina Clark</Text>
                   <Text fontSize="xs" color="gray.600">
-                    {session && session.level
-                      ? (session.level as string)
-                      : 'member'}
+                    Admin
                   </Text>
                 </VStack>
                 <Box display={{ base: 'none', md: 'flex' }}>
@@ -233,9 +245,7 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
               <MenuItem
                 onClick={(e) => {
                   e.preventDefault()
-                  signOut({
-                    callbackUrl: '/',
-                  })
+                  signOut()
                 }}
               >
                 Sign out

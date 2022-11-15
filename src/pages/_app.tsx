@@ -11,6 +11,7 @@ import { ChakraProvider, extendTheme, type ThemeConfig } from '@chakra-ui/react'
 import { Provider } from 'react-redux'
 import store from '~/store/store'
 import '../styles/globals.css'
+import SidebarWithHeader from '~/components/common/SideBar'
 
 export const theme: ThemeConfig = extendTheme({
   colors: {
@@ -65,7 +66,9 @@ const MyApp: AppType<{ session: Session | null }> = ({
     <Provider store={store}>
       <ChakraProvider theme={theme}>
         <SessionProvider session={session}>
-          <Component {...pageProps} />
+          {<SidebarWithHeader>
+            <Component {...pageProps} />
+          </SidebarWithHeader>}
         </SessionProvider>
       </ChakraProvider>
     </Provider>
