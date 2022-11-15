@@ -32,7 +32,7 @@ const initialValues: FormValue = {
 
 const Login = () => {
   const router = useRouter()
-  const { data: session } = useSession()
+  const { data: session, status } = useSession()
   const [show, setShow] = useState(false)
   const toast = useToast()
   const handleShowPassword = () => setShow(!show)
@@ -59,10 +59,12 @@ const Login = () => {
     },
   })
 
+  if (status === 'loading') return <h1>Loading</h1>
+
   // Push the user to the home page after the user is authenticated
   if (session) {
     if (session.level === 'super') {
-      router.push('/admin')
+      router.push('/admin/users')
     } else {
       router.push('/user')
     }
