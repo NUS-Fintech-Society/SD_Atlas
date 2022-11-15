@@ -12,19 +12,19 @@ import {
   Spacer,
 } from '@chakra-ui/react'
 import { BsArrowLeftShort } from 'react-icons/bs'
-import styles from './index.module.css'
+import styles from '../index.module.css'
 
 import Head from 'next/head'
 import ChakraNextLink from '~/components/ChakraNextLink'
 
 import { useRouter } from 'next/router'
-import { useSession } from 'next-auth/react'
+// import { useSession } from 'next-auth/react'
 
 const ForgotPasswordPage = () => {
   const router = useRouter()
-  const session = useSession()
+  // const session = useSession()
 
-  if (session.status === 'authenticated') router.push('/profile')
+  // if (session.status === 'authenticated') router.push('/profile')
 
   return (
     <>
@@ -46,7 +46,7 @@ const ForgotPasswordPage = () => {
           >
             <Flex flexDirection="column" alignItems="start">
               <Flex mb={8} w="100%" alignItems="center" justifyContent="center">
-                <ChakraNextLink href="/login" flex={1}>
+                <ChakraNextLink href="/auth/login" flex={1}>
                   <Icon as={BsArrowLeftShort} boxSize={12} />
                 </ChakraNextLink>
                 <Heading as="h1" size="2xl" textAlign="center">
