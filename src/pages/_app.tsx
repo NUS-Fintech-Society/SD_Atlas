@@ -66,9 +66,9 @@ const MyApp: AppType<{ session: Session | null }> = ({
     <Provider store={store}>
       <ChakraProvider theme={theme}>
         <SessionProvider session={session}>
-          {<SidebarWithHeader>
+          <SidebarWithHeader>
             <Component {...pageProps} />
-          </SidebarWithHeader>}
+          </SidebarWithHeader>
         </SessionProvider>
       </ChakraProvider>
     </Provider>

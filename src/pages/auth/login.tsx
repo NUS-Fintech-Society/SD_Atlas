@@ -61,8 +61,11 @@ const Login = () => {
 
   // Push the user to the home page after the user is authenticated
   if (session) {
-    if (session.level === 'super') router.push('/admin')
-    return <h1>Please fill up a page here</h1>
+    if (session.level === 'super') {
+      router.push('/admin')
+    } else {
+      router.push('/user')
+    }
   }
 
   // If the user is not authenticated and is on this page, show the sign in form

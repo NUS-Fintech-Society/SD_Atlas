@@ -43,9 +43,18 @@ interface LinkItemProps {
 // For super users only
 const LinkItems: Array<LinkItemProps> = [
   {
-    name: 'Upload multiple users',
+    name: 'Home',
     icon: FiHome,
-    href: '/admin/upload-multiple-users',
+    href: '/admin/dashboard',
+  },
+]
+
+// For members only
+const MemberLinkItems: Array<LinkItemProps> = [
+  {
+    name: 'Home',
+    icon: FiHome,
+    href: '/user/dashboard',
   },
 ]
 
@@ -97,6 +106,7 @@ interface SidebarProps extends BoxProps {
 }
 
 const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
+  const { data: session } = useSession()
   return (
     <Box
       transition="3s ease"
@@ -114,11 +124,17 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
         </Text>
         <CloseButton display={{ base: 'flex', md: 'none' }} onClick={onClose} />
       </Flex>
-      {LinkItems.map((link) => (
-        <NavItem key={link.name} icon={link.icon} href={link.href}>
-          {link.name}
-        </NavItem>
-      ))}
+      {session && session.level === 'super'
+        ? LinkItems.map((link) => (
+            <NavItem key={link.name} icon={link.icon} href={link.href}>
+              {link.name}
+            </NavItem>
+          ))
+        : MemberLinkItems.map((link) => (
+            <NavItem key={link.name} icon={link.icon} href={link.href}>
+              {link.name}
+            </NavItem>
+          ))}
     </Box>
   )
 }
@@ -168,6 +184,7 @@ interface MobileProps extends FlexProps {
   onOpen: () => void
 }
 const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
+  const { data: session } = useSession()
   return (
     <Flex
       ml={{ base: 0, md: 60 }}
@@ -226,7 +243,9 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
                 >
                   <Text fontSize="sm">Justina Clark</Text>
                   <Text fontSize="xs" color="gray.600">
-                    Admin
+                    {session && session.level
+                      ? (session.level as string)
+                      : 'Member'}
                   </Text>
                 </VStack>
                 <Box display={{ base: 'none', md: 'flex' }}>
@@ -245,7 +264,9 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
               <MenuItem
                 onClick={(e) => {
                   e.preventDefault()
-                  signOut()
+                  signOut({
+                    callbackUrl: '/auth/login',
+                  })
                 }}
               >
                 Sign out
