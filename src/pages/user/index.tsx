@@ -1,6 +1,9 @@
 import dynamic from 'next/dynamic'
 const ProjectTable = dynamic(() => import('~/components/user/ProjectTable'))
 const Header = dynamic(() => import('~/components/user/Header'))
+const AnnouncementTable = dynamic(
+  () => import('~/components/user/Announcement')
+)
 import type { NextPage, NextApiRequest, NextApiResponse } from 'next'
 import { VStack } from '@chakra-ui/react'
 import { useSession } from 'next-auth/react'
@@ -15,6 +18,7 @@ const HomePage: NextPage = () => {
   return (
     <VStack>
       <Header name={session?.user?.name} />
+      <AnnouncementTable />
       <ProjectTable />
     </VStack>
   )

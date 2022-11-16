@@ -1,5 +1,4 @@
 import {
-  Button,
   Table,
   Thead,
   Tbody,
@@ -8,8 +7,10 @@ import {
   Td,
   TableContainer,
   Heading,
+  Card,
+  CardBody,
+  CardHeader,
 } from '@chakra-ui/react'
-import Link from 'next/link'
 import { trpc } from '~/utils/trpc'
 
 const ProjectTable = () => {
@@ -17,8 +18,6 @@ const ProjectTable = () => {
 
   // Used to render the projects
   const render = () => {
-    if (isLoading) return <h1>Loading...</h1>
-
     return data?.projects.map((project) => (
       <Tr key={project.project_id}>
         <Td>{project.name}</Td>
@@ -29,25 +28,27 @@ const ProjectTable = () => {
 
   return (
     <>
-      <Heading>Projects</Heading>
-      {data && data.projects && data.projects.length ? (
-        <TableContainer>
-          <Table variant="simple">
-            <Thead>
-              <Tr>
-                <Th>Project Name</Th>
-                <Th>Project Lead</Th>
-              </Tr>
-            </Thead>
-            <Tbody>{render()}</Tbody>
-          </Table>
-        </TableContainer>
+      {isLoading ? (
+        <h1>Loading...</h1>
       ) : (
-        <>
-          <Link href="/projects">
-            <Button>Join a project</Button>
-          </Link>
-        </>
+        <Card>
+          <CardHeader>
+            <Heading>Projects</Heading>
+          </CardHeader>
+          <CardBody>
+            <TableContainer>
+              <Table variant="simple">
+                <Thead>
+                  <Tr>
+                    <Th>Project Name</Th>
+                    <Th>Project Lead</Th>
+                  </Tr>
+                </Thead>
+                <Tbody>{render()}</Tbody>
+              </Table>
+            </TableContainer>
+          </CardBody>
+        </Card>
       )}
     </>
   )

@@ -8,7 +8,7 @@ datasource db {
 }
 
 model Projects {
-  created_date Int
+  created_date DateTime
   description  String
   difficulty   Int
   rating       Int
@@ -34,8 +34,8 @@ model Announcements {
   created_by      User         @relation(fields: [userId], references: [id])
   image           String?
   title           String
-  updated_date    BigInt
-  uploaded_date   BigInt
+  updated_date    DateTime
+  uploaded_date   DateTime
   department_id   String?
   Departments     Departments? @relation(fields: [department_id], references: [department_id])
   userId          String
@@ -44,7 +44,7 @@ model Announcements {
 model User {
   attendance     Int?            @default(0)
   batch          String?
-  date_of_birth  String?
+  date_of_birth  DateTime?
   department     String?
   diet           String?
   discord        String?

@@ -2,11 +2,10 @@ import { createProtectedRouter } from '../../context'
 import { TRPCError } from '@trpc/server'
 import { z } from 'zod'
 import { randomUUID } from 'crypto'
-import { now } from 'moment'
+import moment from 'moment'
 
-const AnnouncementRouter = createProtectedRouter().mutation(
-  'create-announcement',
-  {
+const AnnouncementRouter = createProtectedRouter()
+  .mutation('create-announcement', {
     input: z.object({
       content: z.string(),
       title: z.string(),
@@ -29,8 +28,8 @@ const AnnouncementRouter = createProtectedRouter().mutation(
             announcement_id: randomUUID(),
             content: input.content,
             title: input.title,
-            updated_date: now(),
-            uploaded_date: now(),
+            updated_date: moment().toDate(),
+            uploaded_date: moment().toDate(),
             userId: ctx.session.user.id,
           },
         })
@@ -41,7 +40,27 @@ const AnnouncementRouter = createProtectedRouter().mutation(
         })
       }
     },
-  }
-)
+  })
+  .query('getAllAnnouncements', {
+    resolve: async ({ ctx }) => {
+      try {
+        const announcements = await ctx.prisma.announcements.findMany({
+          include: {
+            created_by: {
+              select: { name: true },
+            },
+          },
+        })
+
+        console.log(announcements)
+        return announcements
+      } catch (e) {
+        throw new TRPCError({
+          code: 'INTERNAL_SERVER_ERROR',
+          message: (e as Error).message,
+        })
+      }
+    },
+  })
 
 export default AnnouncementRouter

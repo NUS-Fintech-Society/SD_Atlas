@@ -42,6 +42,7 @@ const UserForm = () => {
           })
           return
         }
+        values.email = values.email + '@u.nus.edu'
         await mutateAsync(values)
         toast({
           title: 'Successfully updated!',
@@ -81,7 +82,6 @@ const UserForm = () => {
           isRequired
           marginBottom={5}
           name="email"
-          type="email"
           onChange={formik.handleChange}
           placeholder="Enter a email"
           value={formik.values.email}
