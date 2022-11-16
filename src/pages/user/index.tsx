@@ -1,8 +1,9 @@
+import dynamic from 'next/dynamic'
+const ProjectTable = dynamic(() => import('~/components/user/ProjectTable'))
+const Header = dynamic(() => import('~/components/user/Header'))
 import type { NextPage, NextApiRequest, NextApiResponse } from 'next'
 import { VStack } from '@chakra-ui/react'
-import Header from '~/components/user/Header'
 import { useSession } from 'next-auth/react'
-import ProjectTable from '~/components/user/ProjectTable'
 import { authOptions } from 'pages/api/auth/[...nextauth]'
 import { unstable_getServerSession } from 'next-auth/next'
 
