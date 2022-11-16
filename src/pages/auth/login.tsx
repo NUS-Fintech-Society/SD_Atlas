@@ -12,13 +12,14 @@ import {
   useToast,
 } from '@chakra-ui/react'
 import styles from '../index.module.css'
-
 import { useState } from 'react'
 import Head from 'next/head'
 import ChakraNextLink from '~/components/ChakraNextLink'
 import { useFormik } from 'formik'
 import { useRouter } from 'next/router'
 import { useSession, signIn } from 'next-auth/react'
+import { authOptions } from 'pages/api/auth/[...nextauth]'
+import { unstable_getServerSession } from 'next-auth/next'
 
 type FormValue = {
   email: string

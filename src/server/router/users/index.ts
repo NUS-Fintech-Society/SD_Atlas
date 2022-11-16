@@ -7,10 +7,17 @@ const UserRouter = createProtectedRouter().query('getProjects', {
     try {
       const data = await ctx.prisma.user.findUnique({
         where: { id: ctx.session.user.id },
-        include: { projects: true },
+        include: {
+          projects: {
+            select: {
+              project_id: true,
+              name: true,
+              team_lead: true,
+            },
+          },
+        },
       })
 
-      console.log(data)
       return data
     } catch (e) {
       throw new TRPCError({

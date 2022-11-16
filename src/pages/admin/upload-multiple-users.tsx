@@ -1,5 +1,5 @@
 import type { NextPage } from 'next'
-import { useToast, VStack, HStack } from '@chakra-ui/react'
+import { useToast, VStack, Input, Stack } from '@chakra-ui/react'
 import { parse, ParseResult } from 'papaparse'
 import { trpc } from '~/utils/trpc'
 import { Button } from '@chakra-ui/react'
@@ -61,12 +61,17 @@ const DashboardPage: NextPage = () => {
   return (
     <VStack>
       {data.length ? <DataTable /> : null}
-      <HStack>
-        <input accept=".csv" onChange={handleFile} type="file" />
-        <Button isLoading={isLoading} onClick={clickHandler}>
+      <Stack direction={['row', 'column']}>
+        <Input accept=".csv" onChange={handleFile} type="file" />
+        <Button
+          bg="pink.200"
+          disabled={!data.length}
+          isLoading={isLoading}
+          onClick={clickHandler}
+        >
           Submit File
         </Button>
-      </HStack>
+      </Stack>
     </VStack>
   )
 }

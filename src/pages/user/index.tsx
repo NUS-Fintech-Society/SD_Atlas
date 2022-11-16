@@ -1,26 +1,58 @@
 import type { NextPage } from 'next'
-import { Text, VStack } from '@chakra-ui/react'
+import { VStack } from '@chakra-ui/react'
+import Header from '~/components/user/Header'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/router'
-import { trpc } from '~/utils/trpc'
+import ProjectTable from '~/components/user/ProjectTable'
+import { authOptions } from 'pages/api/auth/[...nextauth]'
+import { unstable_getServerSession } from 'next-auth/next'
 
 const HomePage: NextPage = () => {
   const { data: session, status } = useSession({ required: true })
   const router = useRouter()
-  const { isLoading, data } = trpc.useQuery(['user.getProjects'])
 
   if (status === 'loading') return <h1>Loading...</h1>
   if (session && session.level === 'super') router.push('/admin')
 
   return (
     <VStack>
-      <Heading name={session?.user?.name} />
+      <Header name={session?.user?.name} />
+      <ProjectTable />
     </VStack>
   )
 }
 
-const Heading = ({ name }: { name?: string | null }) => {
-  return <Text fontSize="4xl">Welcome back, {name || 'Annonymous User'}!</Text>
-}
-
 export default HomePage
+
+// This is used to protect this route.
+export async function getServerSideProps(context) {
+  const session = await unstable_getServerSession(
+    context.req,
+    context.res,
+    authOptions
+  )
+
+  if (!session) {
+    return {
+      redirect: {
+        destination: '/',
+        permanent: false,
+      },
+    }
+  }
+
+  if (session.level === 'super') {
+    return {
+      redirect: {
+        destination: '/admin',
+        permanent: false,
+      },
+    }
+  }
+
+  return {
+    props: {
+      session,
+    },
+  }
+}

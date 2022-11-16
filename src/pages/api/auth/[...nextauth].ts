@@ -10,8 +10,9 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     // We need this to ensure that the client knows when to log in
     async session({ session, token }) {
-      if (session && session.user && token && token.sub) {
-        session.user.id = token.sub
+      if (session && session.user && token) {
+        session.user.id = token.sub || ''
+        session.user.image = token.picture
       }
 
       if (token) {
@@ -23,6 +24,7 @@ export const authOptions: NextAuthOptions = {
     async jwt({ token, user }) {
       if (user) {
         token.level = user.level
+        token.picture = user.image
       }
       return token
     },
@@ -63,6 +65,7 @@ export const authOptions: NextAuthOptions = {
           name: account.name,
           email: account.email,
           level: account.level,
+          image: account.image || '',
         }
       },
     }),
