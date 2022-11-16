@@ -2,6 +2,8 @@ import { createRouter } from './context'
 import { z } from 'zod'
 import { TRPCError } from '@trpc/server'
 import { compare, hash } from 'bcryptjs'
+import { User } from '@prisma/client'
+import { randomBytes } from 'crypto'
 
 const dashboardRouter = createRouter()
   .mutation('create-user', {
@@ -106,6 +108,78 @@ const dashboardRouter = createRouter()
       } catch (e) {
         throw new TRPCError({
           code: 'BAD_REQUEST',
+          message: (e as Error).message,
+        })
+      }
+    },
+  })
+  .mutation('add-multiple-users', {
+    input: z.array(
+      z.object({
+        date_of_birth: z.string(),
+        diet: z.string(),
+        department: z.string(),
+        discord: z.string(),
+        faculty: z.string(),
+        gender: z.string(),
+        hobbies: z.string(),
+        linkedin: z.string(),
+        major: z.string(),
+        name: z.string(),
+        nus_email: z.string(),
+        personal_email: z.string(),
+        phone: z.string(),
+        race: z.string(),
+        roles: z.string(),
+        shirt: z.string(),
+        student_id: z.string(),
+        telegram: z.string(),
+        year: z.string(),
+      })
+    ),
+    resolve: async ({ ctx, input }) => {
+      try {
+        console.log(input)
+        const password = randomBytes(8).toString('hex')
+        const hashedPassword = await hash(password, 10)
+
+        const users: User[] = input.map((user) => {
+          return {
+            attendance: 0,
+            batch: 'AY22/23',
+            department: user.department,
+            date_of_birth: user.date_of_birth,
+            diet: user.diet,
+            discord: user.discord,
+            faculty: user.faculty,
+            gender: user.gender,
+            hashedPassword,
+            hobbies: user.hobbies,
+            image: null,
+            level: 'member',
+            linkedin: user.linkedin,
+            major: user.major,
+            id: user.student_id,
+            name: user.name,
+            email: user.nus_email,
+            personal_email: user.personal_email,
+            phone: user.phone,
+            race: user.race,
+            roles: user.roles,
+            shirt: user.shirt,
+            telegram: user.telegram,
+            total_events: 0,
+            wallet: null,
+            year: user.year,
+          }
+        })
+
+        await ctx.prisma.user.createMany({
+          data: users,
+        })
+      } catch (e) {
+        throw new TRPCError({
+          code: 'INTERNAL_SERVER_ERROR',
           message: (e as Error).message,
         })
       }
