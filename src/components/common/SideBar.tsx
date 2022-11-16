@@ -22,13 +22,7 @@ import {
   MenuItem,
   MenuList,
 } from '@chakra-ui/react'
-import {
-  FiHome,
-  FiTrendingUp,
-  FiMenu,
-  FiBell,
-  FiChevronDown,
-} from 'react-icons/fi'
+import { FiHome, FiMenu, FiBell, FiChevronDown } from 'react-icons/fi'
 import { IconType } from 'react-icons'
 import { ReactText } from 'react'
 import { signOut } from 'next-auth/react'

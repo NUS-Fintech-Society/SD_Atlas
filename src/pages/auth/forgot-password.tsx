@@ -17,15 +17,7 @@ import styles from '../index.module.css'
 import Head from 'next/head'
 import ChakraNextLink from '~/components/ChakraNextLink'
 
-import { useRouter } from 'next/router'
-// import { useSession } from 'next-auth/react'
-
 const ForgotPasswordPage = () => {
-  const router = useRouter()
-  // const session = useSession()
-
-  // if (session.status === 'authenticated') router.push('/profile')
-
   return (
     <>
       <Head>
