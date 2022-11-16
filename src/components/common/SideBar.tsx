@@ -246,7 +246,11 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
                   spacing="1px"
                   ml="2"
                 >
-                  <Text fontSize="sm">Justina Clark</Text>
+                  <Text fontSize="sm">
+                    {session && session.user && session.user.name
+                      ? session.user.name
+                      : ''}
+                  </Text>
                   <Text fontSize="xs" color="gray.600">
                     {session && session.level
                       ? (session.level as string)

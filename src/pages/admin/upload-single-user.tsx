@@ -1,6 +1,9 @@
 import { trpc } from '../../utils/trpc'
+import { NextApiRequest, NextApiResponse } from 'next'
 import { useFormik } from 'formik'
-import { Button, Container, Input, Select, useToast } from '@chakra-ui/react'
+import { Button, Input, Select, useToast } from '@chakra-ui/react'
+import { authOptions } from 'pages/api/auth/[...nextauth]'
+import { unstable_getServerSession } from 'next-auth/next'
 
 interface FormValues {
   id: string
@@ -104,3 +107,38 @@ const UserForm = () => {
 }
 
 export default UserForm
+
+export async function getServerSideProps(context: {
+  req: NextApiRequest
+  res: NextApiResponse
+}) {
+  const session = await unstable_getServerSession(
+    context.req,
+    context.res,
+    authOptions
+  )
+
+  if (!session) {
+    return {
+      redirect: {
+        destination: '/',
+        permanent: false,
+      },
+    }
+  }
+
+  if (session.level !== 'super') {
+    return {
+      redirect: {
+        destination: '/user',
+        permanent: false,
+      },
+    }
+  }
+
+  return {
+    props: {
+      session,
+    },
+  }
+}

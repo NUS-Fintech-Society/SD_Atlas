@@ -1,11 +1,11 @@
-import { createRouter } from './context'
+import { createProtectedRouter } from '../context'
 import { z } from 'zod'
 import { TRPCError } from '@trpc/server'
 import { compare, hash } from 'bcryptjs'
 import { User } from '@prisma/client'
 import { randomBytes } from 'crypto'
 
-const dashboardRouter = createRouter()
+const dashboardRouter = createProtectedRouter()
   .mutation('create-user', {
     input: z.object({
       id: z.string(),
@@ -14,17 +14,12 @@ const dashboardRouter = createRouter()
       level: z.string(),
     }),
     resolve: async ({ ctx, input }) => {
-      // If there is no contex or session, there is an issue.
-      if (!ctx || !ctx.session) {
-        throw new TRPCError({
-          code: 'BAD_REQUEST',
-          message:
-            'Something went wrong. Please contact the software developer team immediately',
-        })
-      }
+      const personMakingRequest = await ctx.prisma.user.findUnique({
+        where: { id: ctx.session.user.id },
+      })
 
       // If the user is just a normal member, he should not be able to create a new account
-      if (ctx.session.level === 'member') {
+      if (!personMakingRequest || personMakingRequest.level === 'member') {
         throw new TRPCError({
           code: 'UNAUTHORIZED',
           message: 'User is not authorized to create a new account',

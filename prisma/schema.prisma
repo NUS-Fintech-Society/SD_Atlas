@@ -7,53 +7,17 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Example {
-  id String @id @default(cuid())
-}
-
-model Account {
-  id                String  @id @default(cuid())
-  userId            String
-  type              String
-  provider          String
-  providerAccountId String
-  refresh_token     String?
-  access_token      String?
-  expires_at        Int?
-  token_type        String?
-  scope             String?
-  id_token          String?
-  session_state     String?
-  email             String
-  hashedPassword    String
-  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@unique([provider, providerAccountId])
-}
-
-model Session {
-  id           String   @id @default(cuid())
-  sessionToken String   @unique
-  userId       String
-  expires      DateTime
-  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-}
-
-model VerificationToken {
-  identifier String
-  token      String   @unique
-  expires    DateTime
-
-  @@unique([identifier, token])
-}
-
 model Projects {
-  created_date             Int
-  department               String
-  description              String
-  project_id               Int          @id
-  departmentsDepartment_id String?
-  Departments              Departments? @relation(fields: [departmentsDepartment_id], references: [department_id])
+  created_date Int
+  description  String
+  difficulty   Int
+  rating       Int
+  departments  String?
+  Departments  Departments? @relation(fields: [departments], references: [department_id])
+  project_id   Int          @id
+  name         String
+  User         User[]
+  team_lead    String
 }
 
 model Departments {
@@ -76,18 +40,18 @@ model Announcements {
 }
 
 model User {
-  attendance     Int?    @default(0)
+  attendance     Int?       @default(0)
   batch          String?
   date_of_birth  String?
   department     String?
   diet           String?
   discord        String?
-  email          String  @unique
+  email          String     @unique
   faculty        String?
   gender         String?
   hashedPassword String
   hobbies        String?
-  id             String  @id @unique
+  id             String     @id @unique
   image          String?
   level          String
   linkedin       String?
@@ -99,10 +63,8 @@ model User {
   roles          String?
   shirt          String?
   telegram       String?
-  total_events   Int?    @default(0)
+  total_events   Int?       @default(0)
   wallet         String?
   year           String?
-
-  Account Account[]
-  Session Session[]
+  projects       Projects[]
 }

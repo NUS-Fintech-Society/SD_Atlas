@@ -1,5 +1,5 @@
-import type { NextPage } from 'next'
-import { useToast, VStack, HStack } from '@chakra-ui/react'
+import type { NextApiRequest, NextApiResponse, NextPage } from 'next'
+import { useToast, VStack, Input, Stack } from '@chakra-ui/react'
 import { parse, ParseResult } from 'papaparse'
 import { trpc } from '~/utils/trpc'
 import { Button } from '@chakra-ui/react'
@@ -9,12 +9,15 @@ import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '~/store/store'
 import { AddUsersType, CSVType } from '~/store/types/admin.type'
 import { MouseEvent } from 'react'
+import { authOptions } from 'pages/api/auth/[...nextauth]'
+import { unstable_getServerSession } from 'next-auth/next'
 
 const DashboardPage: NextPage = () => {
   const toast = useToast()
   const data = useSelector<RootState, AddUsersType[]>(
     (state) => state.dashboard
   )
+
   const dispatch = useDispatch()
   const { isLoading, mutateAsync } = trpc.useMutation([
     'member.add-multiple-users',
@@ -58,14 +61,55 @@ const DashboardPage: NextPage = () => {
   return (
     <VStack>
       {data.length ? <DataTable /> : null}
-      <HStack>
-        <input accept=".csv" onChange={handleFile} type="file" />
-        <Button isLoading={isLoading} onClick={clickHandler}>
+      <Stack direction={['row', 'column']}>
+        <Input accept=".csv" onChange={handleFile} type="file" />
+        <Button
+          bg="pink.200"
+          disabled={!data.length}
+          isLoading={isLoading}
+          onClick={clickHandler}
+        >
           Submit File
         </Button>
-      </HStack>
+      </Stack>
     </VStack>
   )
 }
 
 export default DashboardPage
+
+// This is used to protect this route.
+export async function getServerSideProps(context: {
+  req: NextApiRequest
+  res: NextApiResponse
+}) {
+  const session = await unstable_getServerSession(
+    context.req,
+    context.res,
+    authOptions
+  )
+
+  if (!session) {
+    return {
+      redirect: {
+        destination: '/',
+        permanent: false,
+      },
+    }
+  }
+
+  if (session.level !== 'super') {
+    return {
+      redirect: {
+        destination: '/user',
+        permanent: false,
+      },
+    }
+  }
+
+  return {
+    props: {
+      session,
+    },
+  }
+}
