@@ -9,12 +9,15 @@ import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '~/store/store'
 import { AddUsersType, CSVType } from '~/store/types/admin.type'
 import { MouseEvent } from 'react'
+import { authOptions } from 'pages/api/auth/[...nextauth]'
+import { unstable_getServerSession } from 'next-auth/next'
 
 const DashboardPage: NextPage = () => {
   const toast = useToast()
   const data = useSelector<RootState, AddUsersType[]>(
     (state) => state.dashboard
   )
+
   const dispatch = useDispatch()
   const { isLoading, mutateAsync } = trpc.useMutation([
     'member.add-multiple-users',
@@ -69,3 +72,36 @@ const DashboardPage: NextPage = () => {
 }
 
 export default DashboardPage
+
+// This is used to protect this route.
+export async function getServerSideProps(context) {
+  const session = await unstable_getServerSession(
+    context.req,
+    context.res,
+    authOptions
+  )
+
+  if (!session) {
+    return {
+      redirect: {
+        destination: '/',
+        permanent: false,
+      },
+    }
+  }
+
+  if (session.level !== 'super') {
+    return {
+      redirect: {
+        destination: '/user',
+        permanent: false,
+      },
+    }
+  }
+
+  return {
+    props: {
+      session,
+    },
+  }
+}

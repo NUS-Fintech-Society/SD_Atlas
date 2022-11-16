@@ -8,12 +8,13 @@ datasource db {
 }
 
 model Projects {
-  created_date             Int
-  department               String
-  description              String
-  project_id               Int          @id
-  departmentsDepartment_id String?
-  Departments              Departments? @relation(fields: [departmentsDepartment_id], references: [department_id])
+  created_date Int
+  department   String
+  description  String
+  project_id   Int          @id
+  departments  String?
+  Departments  Departments? @relation(fields: [departments], references: [department_id])
+  User         User[]
 }
 
 model Departments {
@@ -36,18 +37,18 @@ model Announcements {
 }
 
 model User {
-  attendance     Int?    @default(0)
+  attendance     Int?       @default(0)
   batch          String?
   date_of_birth  String?
   department     String?
   diet           String?
   discord        String?
-  email          String  @unique
+  email          String     @unique
   faculty        String?
   gender         String?
   hashedPassword String
   hobbies        String?
-  id             String  @id @unique
+  id             String     @id @unique
   image          String?
   level          String
   linkedin       String?
@@ -59,7 +60,8 @@ model User {
   roles          String?
   shirt          String?
   telegram       String?
-  total_events   Int?    @default(0)
+  total_events   Int?       @default(0)
   wallet         String?
   year           String?
+  projects       Projects[]
 }

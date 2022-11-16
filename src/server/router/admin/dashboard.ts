@@ -1,4 +1,4 @@
-import { createProtectedRouter } from './context'
+import { createProtectedRouter } from '../context'
 import { z } from 'zod'
 import { TRPCError } from '@trpc/server'
 import { compare, hash } from 'bcryptjs'
