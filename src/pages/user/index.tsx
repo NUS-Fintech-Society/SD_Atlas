@@ -2,17 +2,14 @@ import type { NextPage } from 'next'
 import { VStack } from '@chakra-ui/react'
 import Header from '~/components/user/Header'
 import { useSession } from 'next-auth/react'
-import { useRouter } from 'next/router'
 import ProjectTable from '~/components/user/ProjectTable'
 import { authOptions } from 'pages/api/auth/[...nextauth]'
 import { unstable_getServerSession } from 'next-auth/next'
 
 const HomePage: NextPage = () => {
   const { data: session, status } = useSession({ required: true })
-  const router = useRouter()
 
   if (status === 'loading') return <h1>Loading...</h1>
-  if (session && session.level === 'super') router.push('/admin')
 
   return (
     <VStack>
