@@ -10,10 +10,12 @@ datasource db {
 model Projects {
   created_date Int
   description  String
-  project_id   Int          @id
-  name         String
+  difficulty   Int
+  rating       Int
   departments  String?
   Departments  Departments? @relation(fields: [departments], references: [department_id])
+  project_id   Int          @id
+  name         String
   User         User[]
   team_lead    String
 }

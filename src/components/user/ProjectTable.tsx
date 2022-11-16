@@ -13,7 +13,7 @@ import Link from 'next/link'
 import { trpc } from '~/utils/trpc'
 
 const ProjectTable = () => {
-  const { isLoading, data } = trpc.useQuery(['user.getProjects'])
+  const { isLoading, data } = trpc.useQuery(['user.getUserProjects'])
 
   // Used to render the projects
   const render = () => {

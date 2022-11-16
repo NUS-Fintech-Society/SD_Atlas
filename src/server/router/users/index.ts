@@ -1,8 +1,7 @@
 import { createProtectedRouter } from '../context'
-import { z } from 'zod'
 import { TRPCError } from '@trpc/server'
 
-const UserRouter = createProtectedRouter().query('getProjects', {
+const UserRouter = createProtectedRouter().query('getUserProjects', {
   resolve: async ({ ctx }) => {
     try {
       const data = await ctx.prisma.user.findUnique({
