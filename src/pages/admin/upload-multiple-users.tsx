@@ -1,4 +1,4 @@
-import type { NextPage } from 'next'
+import type { NextApiRequest, NextApiResponse, NextPage } from 'next'
 import { useToast, VStack, Input, Stack } from '@chakra-ui/react'
 import { parse, ParseResult } from 'papaparse'
 import { trpc } from '~/utils/trpc'
@@ -79,7 +79,10 @@ const DashboardPage: NextPage = () => {
 export default DashboardPage
 
 // This is used to protect this route.
-export async function getServerSideProps(context) {
+export async function getServerSideProps(context: {
+  req: NextApiRequest
+  res: NextApiResponse
+}) {
   const session = await unstable_getServerSession(
     context.req,
     context.res,

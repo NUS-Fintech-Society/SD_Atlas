@@ -1,4 +1,4 @@
-import type { NextPage } from 'next'
+import type { NextPage, NextApiRequest, NextApiResponse } from 'next'
 import { VStack } from '@chakra-ui/react'
 import Header from '~/components/user/Header'
 import { useSession } from 'next-auth/react'
@@ -22,7 +22,10 @@ const HomePage: NextPage = () => {
 export default HomePage
 
 // This is used to protect this route.
-export async function getServerSideProps(context) {
+export async function getServerSideProps(context: {
+  req: NextApiRequest
+  res: NextApiResponse
+}) {
   const session = await unstable_getServerSession(
     context.req,
     context.res,
