@@ -2,7 +2,8 @@
 import { createRouter } from './context'
 import superjson from 'superjson'
 import { profileRouter } from './member_profile'
-import dashboardRouter from './admin/dashboard'
+import dashboardRouter from './admin/dashboard/dashboard'
+import AnnouncementRouter from './admin/announcement'
 import UserRouter from './users'
 
 export const appRouter = createRouter()
@@ -10,6 +11,7 @@ export const appRouter = createRouter()
   .merge('member-profile.', profileRouter)
   .merge('member.', dashboardRouter)
   .merge('user.', UserRouter)
+  .merge('announcement.', AnnouncementRouter)
 
 // export type definition of API
 export type AppRouter = typeof appRouter
