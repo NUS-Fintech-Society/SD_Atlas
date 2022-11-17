@@ -28,6 +28,7 @@ import {
   FiBell,
   FiChevronDown,
   FiActivity,
+  FiUsers,
 } from 'react-icons/fi'
 import { IconType } from 'react-icons'
 import { ReactText } from 'react'
@@ -43,19 +44,14 @@ interface LinkItemProps {
 // For super users only
 const LinkItems: Array<LinkItemProps> = [
   {
-    name: 'Create multiple users',
-    icon: FiHome,
-    href: '/admin/upload-multiple-users',
+    name: 'Manage Users',
+    icon: FiUsers,
+    href: '/admin/users',
   },
   {
-    name: 'Create one user',
-    icon: FiHome,
-    href: '/admin/upload-single-user',
-  },
-  {
-    name: 'Create Announcement',
+    name: 'Manage Announcements',
     icon: FiActivity,
-    href: '/admin/create-announcement',
+    href: '/admin/announcements',
   },
 ]
 

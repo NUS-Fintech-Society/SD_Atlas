@@ -6,12 +6,12 @@ import {
   Th,
   Td,
   TableContainer,
-  Card,
-  CardHeader,
-  CardBody,
-  Heading,
 } from '@chakra-ui/react'
+import dynamic from 'next/dynamic'
 import { trpc } from '~/utils/trpc'
+const LoadingComponent = dynamic(
+  () => import('~/components/common/LoadingComponent')
+)
 
 const AnnouncementTable = () => {
   const { isLoading, data } = trpc.useQuery([
@@ -35,7 +35,7 @@ const AnnouncementTable = () => {
   return (
     <>
       {isLoading ? (
-        <h1>Loading...</h1>
+        <LoadingComponent text="Retrieving Announcements Now" />
       ) : (
         <TableContainer maxWidth="90vw">
           <Table variant="simple">
