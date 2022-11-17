@@ -8,7 +8,7 @@ datasource db {
 }
 
 model Projects {
-  created_date Int
+  created_date DateTime
   description  String
   difficulty   Int
   rating       Int
@@ -22,36 +22,38 @@ model Projects {
 
 model Departments {
   department_id String          @id
+  name          String
   roles         String[]
   announcements Announcements[]
   projects      Projects[]
 }
 
 model Announcements {
-  announcement_id          Int          @id
-  content                  String
-  created_by               String
-  image                    String
-  title                    String
-  updated_date             Int
-  uploaded_date            Int
-  departmentsDepartment_id String?
-  Departments              Departments? @relation(fields: [departmentsDepartment_id], references: [department_id])
+  announcement_id String       @id
+  content         String
+  created_by      User         @relation(fields: [userId], references: [id])
+  image           String?
+  title           String
+  updated_date    DateTime
+  uploaded_date   DateTime
+  department_id   String?
+  Departments     Departments? @relation(fields: [department_id], references: [department_id])
+  userId          String
 }
 
 model User {
-  attendance     Int?       @default(0)
+  attendance     Int?            @default(0)
   batch          String?
-  date_of_birth  String?
+  date_of_birth  DateTime?
   department     String?
   diet           String?
   discord        String?
-  email          String     @unique
+  email          String          @unique
   faculty        String?
   gender         String?
   hashedPassword String
   hobbies        String?
-  id             String     @id @unique
+  id             String          @id @unique
   image          String?
   level          String
   linkedin       String?
@@ -63,8 +65,9 @@ model User {
   roles          String?
   shirt          String?
   telegram       String?
-  total_events   Int?       @default(0)
+  total_events   Int?            @default(0)
   wallet         String?
   year           String?
   projects       Projects[]
+  Announcements  Announcements[]
 }

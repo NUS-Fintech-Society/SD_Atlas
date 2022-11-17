@@ -1,9 +1,10 @@
-import { createProtectedRouter } from '../context'
+import { createProtectedRouter } from '../../context'
 import { z } from 'zod'
 import { TRPCError } from '@trpc/server'
-import { compare, hash } from 'bcryptjs'
+import { hash } from 'bcryptjs'
 import { User } from '@prisma/client'
 import { randomBytes } from 'crypto'
+import moment from 'moment'
 
 const dashboardRouter = createProtectedRouter()
   .mutation('create-user', {
@@ -55,59 +56,6 @@ const dashboardRouter = createProtectedRouter()
       }
     },
   })
-  .mutation('change-password', {
-    input: z.object({
-      current: z.string(),
-      updated: z.string(),
-    }),
-    resolve: async ({ ctx, input }) => {
-      try {
-        const { current, updated } = input
-
-        if (!ctx || !ctx.session || !ctx.session.user) {
-          throw new TRPCError({
-            code: 'UNAUTHORIZED',
-            message: 'Please contact the software developer team in charge',
-          })
-        }
-
-        const foundUser = await ctx.prisma.user.findUnique({
-          where: { email: ctx.session.user.email as string },
-        })
-
-        if (!foundUser) {
-          throw new TRPCError({
-            code: 'UNAUTHORIZED',
-            message: 'Account does not exist.',
-          })
-        }
-
-        const success = await compare(current, foundUser.hashedPassword)
-        if (!success) {
-          throw new TRPCError({
-            code: 'UNAUTHORIZED',
-            message: 'Incorrect password',
-          })
-        }
-
-        const hashedPassword = await hash(updated, 10)
-
-        await ctx.prisma.user.update({
-          where: {
-            email: ctx.session.user.email as string,
-          },
-          data: {
-            hashedPassword,
-          },
-        })
-      } catch (e) {
-        throw new TRPCError({
-          code: 'BAD_REQUEST',
-          message: (e as Error).message,
-        })
-      }
-    },
-  })
   .mutation('add-multiple-users', {
     input: z.array(
       z.object({
@@ -134,7 +82,6 @@ const dashboardRouter = createProtectedRouter()
     ),
     resolve: async ({ ctx, input }) => {
       try {
-        console.log(input)
         const password = randomBytes(8).toString('hex')
         const hashedPassword = await hash(password, 10)
 
@@ -143,7 +90,7 @@ const dashboardRouter = createProtectedRouter()
             attendance: 0,
             batch: 'AY22/23',
             department: user.department,
-            date_of_birth: user.date_of_birth,
+            date_of_birth: moment().toDate(),
             diet: user.diet,
             discord: user.discord,
             faculty: user.faculty,
@@ -172,6 +119,30 @@ const dashboardRouter = createProtectedRouter()
         await ctx.prisma.user.createMany({
           data: users,
         })
+      } catch (e) {
+        throw new TRPCError({
+          code: 'INTERNAL_SERVER_ERROR',
+          message: (e as Error).message,
+        })
+      }
+    },
+  })
+  .query('getAllUsers', {
+    async resolve({ ctx }) {
+      try {
+        const users = await ctx.prisma.user.findMany({
+          select: {
+            department: true,
+            discord: true,
+            email: true,
+            id: true,
+            name: true,
+            telegram: true,
+          },
+        })
+
+        console.log(users)
+        return users
       } catch (e) {
         throw new TRPCError({
           code: 'INTERNAL_SERVER_ERROR',

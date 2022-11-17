@@ -1,6 +1,16 @@
 import { trpc } from '../../../utils/trpc'
+import { NextApiRequest, NextApiResponse } from 'next'
 import { useFormik } from 'formik'
-import { Button, Input, Select, useToast } from '@chakra-ui/react'
+import {
+  Button,
+  Input,
+  Select,
+  useToast,
+  InputGroup,
+  InputRightAddon,
+} from '@chakra-ui/react'
+import { authOptions } from 'pages/api/auth/[...nextauth]'
+import { unstable_getServerSession } from 'next-auth/next'
 
 interface FormValues {
   id: string
@@ -23,6 +33,16 @@ const UserForm = () => {
     initialValues,
     onSubmit: async (values) => {
       try {
+        if (values.email.endsWith('@u.nus.edu')) {
+          toast({
+            title: 'Incorrect email format',
+            description: 'Remove the domain',
+            status: 'error',
+            duration: 3000,
+          })
+          return
+        }
+        values.email = values.email + '@u.nus.edu'
         await mutateAsync(values)
         toast({
           title: 'Successfully updated!',
@@ -56,17 +76,19 @@ const UserForm = () => {
         variant="outline"
       />
 
-      <Input
-        id="email"
-        isRequired
-        marginBottom={5}
-        name="email"
-        type="email"
-        onChange={formik.handleChange}
-        placeholder="Enter a email"
-        value={formik.values.email}
-        variant="outline"
-      />
+      <InputGroup>
+        <Input
+          id="email"
+          isRequired
+          marginBottom={5}
+          name="email"
+          onChange={formik.handleChange}
+          placeholder="Enter a email"
+          value={formik.values.email}
+          variant="outline"
+        />
+        <InputRightAddon> @u.nus.edu </InputRightAddon>
+      </InputGroup>
 
       <Input
         id="password"
@@ -104,3 +126,38 @@ const UserForm = () => {
 }
 
 export default UserForm
+
+export async function getServerSideProps(context: {
+  req: NextApiRequest
+  res: NextApiResponse
+}) {
+  const session = await unstable_getServerSession(
+    context.req,
+    context.res,
+    authOptions
+  )
+
+  if (!session) {
+    return {
+      redirect: {
+        destination: '/',
+        permanent: false,
+      },
+    }
+  }
+
+  if (session.level !== 'super') {
+    return {
+      redirect: {
+        destination: '/user',
+        permanent: false,
+      },
+    }
+  }
+
+  return {
+    props: {
+      session,
+    },
+  }
+}

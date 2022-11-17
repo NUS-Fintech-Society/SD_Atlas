@@ -22,7 +22,14 @@ import {
   MenuItem,
   MenuList,
 } from '@chakra-ui/react'
-import { FiHome, FiMenu, FiBell, FiChevronDown } from 'react-icons/fi'
+import {
+  FiHome,
+  FiMenu,
+  FiBell,
+  FiChevronDown,
+  FiActivity,
+  FiUsers,
+} from 'react-icons/fi'
 import { IconType } from 'react-icons'
 import { ReactText } from 'react'
 import { signOut } from 'next-auth/react'
@@ -37,14 +44,14 @@ interface LinkItemProps {
 // For super users only
 const LinkItems: Array<LinkItemProps> = [
   {
-    name: 'Create multiple users',
-    icon: FiHome,
-    href: '/admin/upload-multiple-users',
+    name: 'Manage Users',
+    icon: FiUsers,
+    href: '/admin/users',
   },
   {
-    name: 'Create one user',
-    icon: FiHome,
-    href: '/admin/upload-single-user',
+    name: 'Manage Announcements',
+    icon: FiActivity,
+    href: '/admin/announcements',
   },
 ]
 
