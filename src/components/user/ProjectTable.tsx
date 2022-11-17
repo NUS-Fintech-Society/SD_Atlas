@@ -6,10 +6,6 @@ import {
   Th,
   Td,
   TableContainer,
-  Heading,
-  Card,
-  CardBody,
-  CardHeader,
 } from '@chakra-ui/react'
 import { trpc } from '~/utils/trpc'
 
@@ -31,24 +27,17 @@ const ProjectTable = () => {
       {isLoading ? (
         <h1>Loading...</h1>
       ) : (
-        <Card>
-          <CardHeader>
-            <Heading>Projects</Heading>
-          </CardHeader>
-          <CardBody>
-            <TableContainer>
-              <Table variant="simple">
-                <Thead>
-                  <Tr>
-                    <Th>Project Name</Th>
-                    <Th>Project Lead</Th>
-                  </Tr>
-                </Thead>
-                <Tbody>{render()}</Tbody>
-              </Table>
-            </TableContainer>
-          </CardBody>
-        </Card>
+        <TableContainer>
+          <Table variant="simple">
+            <Thead>
+              <Tr>
+                <Th>Project Name</Th>
+                <Th>Project Lead</Th>
+              </Tr>
+            </Thead>
+            <Tbody>{render()}</Tbody>
+          </Table>
+        </TableContainer>
       )}
     </>
   )

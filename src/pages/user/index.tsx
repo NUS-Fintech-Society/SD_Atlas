@@ -1,5 +1,4 @@
 import dynamic from 'next/dynamic'
-const ProjectTable = dynamic(() => import('~/components/user/ProjectTable'))
 const Header = dynamic(() => import('~/components/user/Header'))
 const AnnouncementTable = dynamic(
   () => import('~/components/user/Announcement')
@@ -19,7 +18,6 @@ const HomePage: NextPage = () => {
     <VStack>
       <Header name={session?.user?.name} />
       <AnnouncementTable />
-      <ProjectTable />
     </VStack>
   )
 }

@@ -37,26 +37,19 @@ const AnnouncementTable = () => {
       {isLoading ? (
         <h1>Loading...</h1>
       ) : (
-        <Card align="center">
-          <CardHeader>
-            <Heading>Announcements</Heading>
-          </CardHeader>
-          <CardBody>
-            <TableContainer>
-              <Table variant="simple">
-                <Thead>
-                  <Tr>
-                    <Th>Title</Th>
-                    <Th>Content</Th>
-                    <Th>Last Updated On</Th>
-                    <Th>Created By</Th>
-                  </Tr>
-                </Thead>
-                <Tbody>{render()}</Tbody>
-              </Table>
-            </TableContainer>
-          </CardBody>
-        </Card>
+        <TableContainer maxWidth="90vw">
+          <Table variant="simple">
+            <Thead>
+              <Tr>
+                <Th>Title</Th>
+                <Th>Content</Th>
+                <Th>Last Updated On</Th>
+                <Th>Created By</Th>
+              </Tr>
+            </Thead>
+            <Tbody>{render()}</Tbody>
+          </Table>
+        </TableContainer>
       )}
     </>
   )
