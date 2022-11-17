@@ -1,8 +1,7 @@
 import type { NextPage, NextApiRequest, NextApiResponse } from 'next'
 import { authOptions } from '~/pages/api/auth/[...nextauth]'
 import { unstable_getServerSession } from 'next-auth'
-import { trpc } from '~/utils/trpc'
-import { Button, Stack } from '@chakra-ui/react'
+import { Button, HStack, VStack, Spacer } from '@chakra-ui/react'
 import Link from 'next/link'
 import dynamic from 'next/dynamic'
 const UserTable = dynamic(() => import('~/components/admin/user/UserTable'))
@@ -46,17 +45,21 @@ export async function getServerSideProps(context: {
 const UserHomePage: NextPage = () => {
   return (
     <>
-      <Stack align="center" direction={['column', 'row', 'row']}>
+      <VStack margin="auto">
         <UserTable />
-        <Button>
-          <Link href="/admin/users/upload-multiple-users">
-            Upload Multiple Users
-          </Link>
-        </Button>
-        <Button>
-          <Link href="/admin/users/upload-single-user">Create a user</Link>
-        </Button>
-      </Stack>
+        <div className="h-5"></div>
+        <HStack>
+          <Button>
+            <Link href="/admin/users/upload-multiple-users">
+              Upload Multiple Users
+            </Link>
+          </Button>
+          <Spacer />
+          <Button>
+            <Link href="/admin/users/upload-single-user">Create a user</Link>
+          </Button>
+        </HStack>
+      </VStack>
     </>
   )
 }
