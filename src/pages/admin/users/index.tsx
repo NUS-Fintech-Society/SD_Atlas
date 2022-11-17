@@ -4,6 +4,8 @@ import { unstable_getServerSession } from 'next-auth'
 import { trpc } from '~/utils/trpc'
 import { Button, Stack } from '@chakra-ui/react'
 import Link from 'next/link'
+import dynamic from 'next/dynamic'
+const UserTable = dynamic(() => import('~/components/admin/user/UserTable'))
 
 // Only allows the admin users to access this page.
 export async function getServerSideProps(context: {
@@ -42,13 +44,10 @@ export async function getServerSideProps(context: {
 }
 
 const UserHomePage: NextPage = () => {
-  const { isLoading, data } = trpc.useQuery(['member.getAllUsers'])
-
-  if (isLoading) return <h1>Loading...</h1>
-  console.log(data)
   return (
     <>
       <Stack align="center" direction={['column', 'row', 'row']}>
+        <UserTable />
         <Button>
           <Link href="/admin/users/upload-multiple-users">
             Upload Multiple Users

@@ -21,6 +21,8 @@ import { useSession, signIn } from 'next-auth/react'
 import { authOptions } from 'pages/api/auth/[...nextauth]'
 import { unstable_getServerSession } from 'next-auth/next'
 import { NextApiRequest, NextApiResponse } from 'next'
+import dynamic from 'next/dynamic'
+const LoadingScreen = dynamic(() => import('~/components/common/LoadingScreen'))
 
 type FormValue = {
   email: string
@@ -62,7 +64,7 @@ const Login = () => {
     },
   })
 
-  if (status === 'loading') return <h1>Loading</h1>
+  if (status === 'loading') return <LoadingScreen />
 
   // If the user is not authenticated and is on this page, show the sign in form
   return (
