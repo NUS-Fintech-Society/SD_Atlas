@@ -1,13 +1,21 @@
-import { useRouter } from 'next/router'
 import { useSession } from 'next-auth/react'
+import { trpc } from '~/utils/trpc'
+import { Input } from '@chakra-ui/react'
+import type { NextPage } from 'next'
+import dynamic from 'next/dynamic'
+const LoadingScreen = dynamic(() => import('~/components/common/LoadingScreen'))
 
-const ProfilePage = () => {
-  const router = useRouter()
-  const session = useSession()
+const EditProfilePage: NextPage = () => {
+  const { status } = useSession({ required: true })
+  const { isLoading, data } = trpc.useQuery(['user.getUserInfo'])
 
-  if (session.status === 'unauthenticated') router.push('/login')
+  if (status === 'loading' || isLoading || !data) return <LoadingScreen />
 
-  return <>Welcome {session?.data?.user?.name}!</>
+  return (
+    <form>
+      <Input id="name" name="name" value={data.name as string} />
+    </form>
+  )
 }
 
-export default ProfilePage
+export default EditProfilePage
