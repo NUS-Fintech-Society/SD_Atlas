@@ -23,15 +23,16 @@ const UserTable = () => {
   // REGEX USED FOR SEARCHING
   const render = () => {
     if (conditions && data) {
-      // Filters out all the relevant data by name, id or department
       const returned = data?.filter((d) => {
+        const condition = conditions.toUpperCase()
+        const name = d.name ? d.name.toUpperCase() : ''
+        const id = d.id.toUpperCase()
+        const department = d.department ? d.department.toUpperCase() : ''
+
         return (
-          d.id.startsWith(conditions.toUpperCase()) ||
-          d.id.startsWith(conditions.toLowerCase()) ||
-          d.name?.startsWith(conditions.toUpperCase()) ||
-          d.name?.startsWith(conditions.toLowerCase()) ||
-          d.department?.startsWith(conditions.toUpperCase()) ||
-          d.department?.startsWith(conditions.toLowerCase())
+          id.startsWith(condition) ||
+          name.startsWith(condition) ||
+          department.startsWith(condition)
         )
       })
 
