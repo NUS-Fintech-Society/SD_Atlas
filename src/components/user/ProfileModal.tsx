@@ -1,11 +1,4 @@
-import {
-  ChangeEvent,
-  Dispatch,
-  SetStateAction,
-  useEffect,
-  useRef,
-  useState,
-} from 'react'
+import { ChangeEvent, Dispatch, SetStateAction, useRef, useState } from 'react'
 import { trpc } from '../../utils/trpc'
 import LoadingScreen from '~/components/LoadingGif'
 import {
@@ -56,7 +49,7 @@ const ProfilePage = ({
   )
 
   // IF THE DATA IS LOADING, RETURN THE LOADING SCREEN
-  if (isLoading || status === 'loading') return <LoadingScreen />
+  if (isLoading) return <LoadingScreen />
 
   // IF THERE IS SOMETHING WRONG WITH FETCHING THE USER, THROW AN ERROR
   if (!data || !data.user || isError) {
@@ -109,18 +102,16 @@ const ProfilePicture = ({
   studentId: string
   session: Session
 }) => {
-  const imageQuery = trpc.useQuery(
-    ['member-profile.getMemberImage', studentId],
-    {
-      refetchOnWindowFocus: false,
-    }
-  )
   const [image, setImage] = useState(defaultImage)
-  useEffect(() => {
-    if (imageQuery.data?.image) {
-      setImage(imageQuery.data.image as string)
-    }
-  }, [imageQuery])
+
+  trpc.useQuery(['member-profile.getMemberImage', studentId], {
+    refetchOnWindowFocus: false,
+    onSuccess(data) {
+      if (!data || !data.image) return
+      setImage(data.image)
+    },
+  })
+
   return (
     <Box className="flex flex-col items-center">
       <Box className="my-2">
@@ -153,41 +144,36 @@ const UploadImageBtn = ({
   const toast = useToast()
   // trigger a click event on the file input element when button is clicked
   const uploadRef = useRef<HTMLInputElement>(null)
-  const updateImageMutation = trpc.useMutation([
-    'member-profile.updateMemberImage',
-  ])
+  const { mutateAsync } = trpc.useMutation(['member-profile.updateMemberImage'])
   const onUpload = () => {
     uploadRef.current?.click()
   }
-  const handleFileSelected = async (
-    e: ChangeEvent<HTMLInputElement>
-  ): Promise<void> => {
-    try {
-      if (e.target.files) {
-        const file = e.target.files.item(0)
-        const reader = new FileReader()
-        reader.addEventListener('load', () => {
+  const handleFileSelected = (e: ChangeEvent<HTMLInputElement>): void => {
+    if (e.target.files) {
+      const file = e.target.files.item(0)
+      const reader = new FileReader()
+      reader.addEventListener('load', async () => {
+        try {
           const imageDataURI = reader.result as string
-          setImage(imageDataURI)
           const image = imageDataURI as string
-          updateImageMutation.mutate({ studentId, image })
-        })
-        reader.readAsDataURL(file as Blob)
-      }
-
-      toast({
-        duration: 3000,
-        description: 'Image successfully uploaded.',
-        title: 'Success',
-        status: 'success',
+          await mutateAsync({ studentId, image })
+          toast({
+            duration: 3000,
+            description: 'Image successfully uploaded.',
+            title: 'Success',
+            status: 'success',
+          })
+          setImage(imageDataURI)
+        } catch (e) {
+          toast({
+            duration: 3000,
+            description: (e as Error).message,
+            status: 'error',
+            title: 'Something went wrong',
+          })
+        }
       })
-    } catch (e) {
-      toast({
-        duration: 3000,
-        description: (e as Error).message,
-        status: 'error',
-        title: 'Something went wrong',
-      })
+      reader.readAsDataURL(file as Blob)
     }
   }
   return (
