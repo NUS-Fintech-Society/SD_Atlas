@@ -24,4 +24,13 @@ export default defineNextConfig({
     locales: ['en'],
     defaultLocale: 'en',
   },
+  async redirects() {
+    return [
+      {
+        source: '/',
+        destination: '/auth/login',
+        permanent: true,
+      },
+    ]
+  },
 })

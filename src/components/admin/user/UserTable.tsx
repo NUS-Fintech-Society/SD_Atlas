@@ -52,8 +52,13 @@ const UserTable = () => {
     <div className="mt-5">
       {render() && render()?.length ? (
         <>
-          <TableContainer className="border-black">
-            <Table align="center" variant="striped" colorScheme="teal">
+          <TableContainer>
+            <Table
+              align="center"
+              variant="striped"
+              colorScheme="teal"
+              size="sm"
+            >
               <Thead>
                 <Tr>
                   <Th>Student ID</Th>

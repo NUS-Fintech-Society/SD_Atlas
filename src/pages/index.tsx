@@ -1,4 +1,4 @@
-import BottomNavBar from '~/components/mobile/BottomNavBar'
+import BottomNavBar from '~/components/mobile/UserBottomNavBar'
 import LoadingScreen from '~/components/LoadingGif'
 import { useSession } from 'next-auth/react'
 

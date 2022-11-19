@@ -5,6 +5,7 @@ import { Button, HStack, VStack, Spacer } from '@chakra-ui/react'
 import Link from 'next/link'
 import dynamic from 'next/dynamic'
 const UserTable = dynamic(() => import('~/components/admin/user/UserTable'))
+import BottomNavBar from '~/components/mobile/UserBottomNavBar'
 
 // Only allows the admin users to access this page.
 export async function getServerSideProps(context: {
@@ -60,6 +61,7 @@ const UserHomePage: NextPage = () => {
           </Button>
         </HStack>
       </VStack>
+      <BottomNavBar />
     </>
   )
 }
