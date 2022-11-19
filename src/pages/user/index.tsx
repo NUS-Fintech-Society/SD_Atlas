@@ -3,7 +3,7 @@ const Header = dynamic(() => import('~/components/user/Header'))
 const AnnouncementTable = dynamic(
   () => import('~/components/user/Announcement')
 )
-const Loader = dynamic(() => import('~/components/common/LoadingScreen'))
+import LoadingScreen from '~/components/LoadingGif'
 import type { NextPage, NextApiRequest, NextApiResponse } from 'next'
 import { VStack } from '@chakra-ui/react'
 import { useSession } from 'next-auth/react'
@@ -13,7 +13,7 @@ import { unstable_getServerSession } from 'next-auth/next'
 const HomePage: NextPage = () => {
   const { data: session, status } = useSession({ required: true })
 
-  if (status === 'loading') return <Loader />
+  if (status === 'loading') return <LoadingScreen />
 
   return (
     <VStack>

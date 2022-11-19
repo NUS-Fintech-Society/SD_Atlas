@@ -44,12 +44,12 @@ interface LinkItemProps {
 // For super users only
 const LinkItems: Array<LinkItemProps> = [
   {
-    name: 'Manage Users',
+    name: 'Users',
     icon: FiUsers,
-    href: '/admin/users',
+    href: '/admin',
   },
   {
-    name: 'Manage Announcements',
+    name: 'Announcements',
     icon: FiActivity,
     href: '/admin/announcements',
   },
@@ -70,39 +70,35 @@ export default function SidebarWithHeader({
   children: ReactNode
 }) {
   const { isOpen, onOpen, onClose } = useDisclosure()
-  const { data: session } = useSession()
 
   return (
-    <Box minH="100vh" bg={useColorModeValue('gray.100', 'gray.900')}>
-      {session ? (
-        <>
-          <SidebarContent
-            onClose={() => onClose}
-            display={{ base: 'none', md: 'block' }}
-          />
+    <Box
+      minH="100vh"
+      bg={useColorModeValue('light.primary.primary', 'dark.primary.primary')}
+    >
+      <SidebarContent
+        onClose={onClose}
+        display={{ base: 'none', md: 'block' }}
+      />
 
-          <Drawer
-            autoFocus={false}
-            isOpen={isOpen}
-            placement="left"
-            onClose={onClose}
-            returnFocusOnClose={false}
-            onOverlayClick={onClose}
-            size="full"
-          >
-            <DrawerContent>
-              <SidebarContent onClose={onClose} />
-            </DrawerContent>
-          </Drawer>
-          {/* mobilenav */}
-          <MobileNav onOpen={onOpen} />
-          <Box ml={{ base: 0, md: 60 }} p="4">
-            {children}
-          </Box>
-        </>
-      ) : (
-        children
-      )}
+      <Drawer
+        autoFocus={false}
+        isOpen={isOpen}
+        placement="left"
+        onClose={onClose}
+        returnFocusOnClose={false}
+        onOverlayClick={onClose}
+        size="full"
+      >
+        <DrawerContent>
+          <SidebarContent onClose={onClose} />
+        </DrawerContent>
+      </Drawer>
+      {/* mobilenav */}
+      <MobileNav onOpen={onOpen} />
+      <Box ml={{ base: 0, md: 60 }} p="4">
+        {children}
+      </Box>
     </Box>
   )
 }

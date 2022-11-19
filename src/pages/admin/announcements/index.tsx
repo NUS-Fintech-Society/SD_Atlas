@@ -2,9 +2,16 @@ import type { NextPage, NextApiRequest, NextApiResponse } from 'next'
 import { useFormik } from 'formik'
 import { authOptions } from 'pages/api/auth/[...nextauth]'
 import { unstable_getServerSession } from 'next-auth/next'
-import { VStack, useToast } from '@chakra-ui/react'
 import { trpc } from '~/utils/trpc'
-import { Button, Input, Textarea, Heading, Text } from '@chakra-ui/react'
+import {
+  Button,
+  Input,
+  Textarea,
+  Heading,
+  Text,
+  useToast,
+} from '@chakra-ui/react'
+import SidebarWithHeader from '~/components/mobile/Sidebar'
 
 const CreateAnnouncementPage: NextPage = () => {
   const { isLoading, mutateAsync } = trpc.useMutation(
@@ -33,40 +40,42 @@ const CreateAnnouncementPage: NextPage = () => {
     },
   })
   return (
-    <VStack>
-      <Heading>Create An Announcement</Heading>
+    <SidebarWithHeader>
+      <div className="flex flex-col w-5/6 m-auto justify-evenly">
+        <Heading>Create An Announcement</Heading>
 
-      <Text variant="xl">
-        Simply create an announcement now and let everyone know! Fill in the
-        title and content and click submit
-      </Text>
+        <Text variant="xl">
+          Simply create an announcement now and let everyone know! Fill in the
+          title and content and click submit
+        </Text>
 
-      <form onSubmit={handleSubmit}>
-        <Input
-          id="title"
-          marginBottom={10}
-          name="title"
-          value={values.title}
-          onChange={handleChange}
-          placeholder="Enter a title"
-          required
-        />
+        <form onSubmit={handleSubmit}>
+          <Input
+            id="title"
+            marginBottom={10}
+            name="title"
+            value={values.title}
+            onChange={handleChange}
+            placeholder="Enter a title"
+            required
+          />
 
-        <Textarea
-          id="content"
-          marginBottom={10}
-          maxLength={500}
-          name="content"
-          value={values.content}
-          onChange={handleChange}
-          placeholder="Enter a content"
-          required
-        />
-        <Button bg="gray.400" isLoading={isLoading} type="submit">
-          Create Announcement
-        </Button>
-      </form>
-    </VStack>
+          <Textarea
+            id="content"
+            marginBottom={10}
+            maxLength={500}
+            name="content"
+            value={values.content}
+            onChange={handleChange}
+            placeholder="Enter a content"
+            required
+          />
+          <Button bg="gray.400" isLoading={isLoading} type="submit">
+            Create Announcement
+          </Button>
+        </form>
+      </div>
+    </SidebarWithHeader>
   )
 }
 

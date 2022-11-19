@@ -11,6 +11,8 @@ import {
 } from '@chakra-ui/react'
 import { authOptions } from 'pages/api/auth/[...nextauth]'
 import { unstable_getServerSession } from 'next-auth/next'
+import { useRouter } from 'next/router'
+import SidebarWithHeaders from '~/components/mobile/Sidebar'
 
 interface FormValues {
   id: string
@@ -19,15 +21,17 @@ interface FormValues {
   password: string
 }
 
+const initialValues: FormValues = {
+  id: '',
+  level: '',
+  email: '',
+  password: '',
+}
+
 const UserForm = () => {
+  const router = useRouter()
   const { mutateAsync } = trpc.useMutation('member.create-user')
   const toast = useToast()
-  const initialValues: FormValues = {
-    id: '',
-    level: '',
-    email: '',
-    password: '',
-  }
 
   const formik = useFormik({
     initialValues,
@@ -64,64 +68,81 @@ const UserForm = () => {
   })
 
   return (
-    <form onSubmit={formik.handleSubmit}>
-      <Input
-        id="id"
-        isRequired
-        marginY={5}
-        name="id"
-        onChange={formik.handleChange}
-        placeholder="Enter the student id"
-        value={formik.values.id}
-        variant="outline"
-      />
-
-      <InputGroup>
+    <SidebarWithHeaders>
+      <form onSubmit={formik.handleSubmit}>
         <Input
-          id="email"
+          id="id"
           isRequired
-          marginBottom={5}
-          name="email"
+          marginY={5}
+          name="id"
           onChange={formik.handleChange}
-          placeholder="Enter a email"
-          value={formik.values.email}
+          placeholder="Enter the student id"
+          value={formik.values.id}
           variant="outline"
         />
-        <InputRightAddon> @u.nus.edu </InputRightAddon>
-      </InputGroup>
 
-      <Input
-        id="password"
-        isRequired
-        marginBottom={5}
-        name="password"
-        type="password"
-        onChange={formik.handleChange}
-        placeholder="Enter a password"
-        value={formik.values.password}
-        variant="outline"
-      />
+        <InputGroup>
+          <Input
+            id="email"
+            isRequired
+            marginBottom={5}
+            name="email"
+            onChange={formik.handleChange}
+            placeholder="Enter a email"
+            value={formik.values.email}
+            variant="outline"
+          />
+          <InputRightAddon> @u.nus.edu </InputRightAddon>
+        </InputGroup>
 
-      <Select
-        marginBottom={5}
-        isRequired
-        onChange={(e) => {
-          e.preventDefault()
-          formik.values.level = e.target.value
-        }}
-        placeholder="Select the level"
-      >
-        <option value="member">Member</option>
-        <option value="lead">Lead</option>
-        <option value="codirector">Co-Director</option>
-        <option value="director">Director</option>
-        <option value="super">Admin</option>
-      </Select>
+        <Input
+          id="password"
+          isRequired
+          marginBottom={5}
+          name="password"
+          type="password"
+          onChange={formik.handleChange}
+          placeholder="Enter a password"
+          value={formik.values.password}
+          variant="outline"
+        />
 
-      <Button bg="gray.300" isLoading={formik.isSubmitting} type="submit">
-        Create User
-      </Button>
-    </form>
+        <Select
+          marginBottom={5}
+          isRequired
+          onChange={(e) => {
+            e.preventDefault()
+            formik.values.level = e.target.value
+          }}
+          placeholder="Select the level"
+        >
+          <option value="member">Member</option>
+          <option value="lead">Lead</option>
+          <option value="codirector">Co-Director</option>
+          <option value="director">Director</option>
+          <option value="super">Admin</option>
+        </Select>
+
+        <div className="flex">
+          <Button
+            bg="light.secondary.primary"
+            className="text-white mr-5"
+            onClick={() => router.back()}
+          >
+            Return
+          </Button>
+
+          <Button
+            bg="light.secondary.primary"
+            className="text-white"
+            isLoading={formik.isSubmitting}
+            type="submit"
+          >
+            Create User
+          </Button>
+        </div>
+      </form>
+    </SidebarWithHeaders>
   )
 }
 

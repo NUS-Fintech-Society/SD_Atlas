@@ -17,6 +17,7 @@ export const profileRouter = createRouter()
             batch: true,
             year: true,
             faculty: true,
+            image: true,
             telegram: true,
             discord: true,
             email: true,

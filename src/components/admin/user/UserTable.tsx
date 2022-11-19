@@ -1,7 +1,6 @@
-import dynamic from 'next/dynamic'
 import { trpc } from '~/utils/trpc'
 import {
-  Input,
+  Button,
   TableContainer,
   Table,
   Thead,
@@ -10,96 +9,77 @@ import {
   Td,
   Text,
   Tbody,
+  useDisclosure,
 } from '@chakra-ui/react'
-const LoadingComponent = dynamic(
-  () => import('~/components/common/LoadingComponent')
-)
+import LoadingScreen from '~/components/LoadingGif'
+import ProfileInfoModal from '~/components/user/ProfileModal'
 import { useState } from 'react'
+import { Session } from 'next-auth'
 
-const UserTable = () => {
+// TODO: ABLE TO SEND EMAIL TO A USER NEXT TIME
+const UserTable = ({ session }: { session: Session }) => {
   const { isLoading, data } = trpc.useQuery(['member.getAllUsers'])
-  const [conditions, setConditions] = useState('')
+  const [selected, setSelected] = useState('')
+  const { isOpen, onOpen, onClose } = useDisclosure()
 
-  // REGEX USED FOR SEARCHING
-  const render = () => {
-    if (conditions && data) {
-      const returned = data?.filter((d) => {
-        const condition = conditions.toUpperCase()
-        const name = d.name ? d.name.toUpperCase() : ''
-        const id = d.id.toUpperCase()
-        const department = d.department ? d.department.toUpperCase() : ''
+  if (isLoading) return <LoadingScreen />
 
-        return (
-          id.startsWith(condition) ||
-          name.startsWith(condition) ||
-          department.startsWith(condition)
-        )
-      })
-
-      return returned.map((data) => {
-        return (
-          <Tr key={data.id}>
-            <Td>{data.id}</Td>
-            <Td>{data.name}</Td>
-            <Td>{data.discord}</Td>
-            <Td>{data.telegram}</Td>
-            <Td>{data.department}</Td>
-          </Tr>
-        )
-      })
-    }
-
-    return data?.map((data) => {
-      return (
-        <Tr key={data.id}>
-          <Td>{data.id}</Td>
-          <Td>{data.name}</Td>
-          <Td>{data.discord}</Td>
-          <Td>{data.telegram}</Td>
-          <Td>{data.department}</Td>
-        </Tr>
-      )
-    })
-  }
-
-  if (isLoading) return <LoadingComponent text="Fetching the users now" />
+  const render = data?.map((data) => (
+    <Tr key={data.id}>
+      <Td>
+        <Button
+          variant="link"
+          colorScheme="black"
+          onClick={(e) => {
+            e.preventDefault()
+            setSelected(data.id)
+            onOpen()
+          }}
+        >
+          {data.id}
+        </Button>
+      </Td>
+      <Td>{data.name}</Td>
+      <Td>{data.telegram}</Td>
+      <Td>{data.department}</Td>
+    </Tr>
+  ))
 
   return (
-    <>
-      <Text fontSize="m" fontWeight="bold">
-        You may search for the user based on the name, department and id.
-      </Text>
-      <div className="h-3"></div>
-      <Input
-        maxWidth="90%"
-        placeholder="Enter your search query"
-        onChange={(e) => {
-          e.preventDefault()
-          setConditions(e.target.value)
-        }}
-      />
-      <div className="h-5"></div>
-      {render() && render()?.length ? (
-        <TableContainer className="border-black">
-          <Table align="center" variant="striped" colorScheme="teal">
-            <Thead>
-              <Tr>
-                <Th>Student ID</Th>
-                <Th>Name</Th>
-                <Th>Discord</Th>
-                <Th>Telegram</Th>
-                <Th>Department</Th>
-              </Tr>
-            </Thead>
-            <Tbody>{render()}</Tbody>
-          </Table>
-        </TableContainer>
+    <div className="mt-5">
+      {render && render?.length ? (
+        <>
+          <TableContainer className="border-4 border-black">
+            <Table
+              align="center"
+              variant="striped"
+              colorScheme="teal"
+              size="sm"
+            >
+              <Thead>
+                <Tr>
+                  <Th>Student ID</Th>
+                  <Th>Name</Th>
+                  <Th>Telegram</Th>
+                  <Th>Department</Th>
+                </Tr>
+              </Thead>
+              <Tbody>{render}</Tbody>
+            </Table>
+          </TableContainer>
+          <ProfileInfoModal
+            session={session}
+            isOpen={isOpen}
+            onClose={onClose}
+            studentId={selected}
+          />
+        </>
       ) : (
         <Text fontSize="xl" fontWeight="bold">
           No users found
         </Text>
       )}
-    </>
+    </div>
   )
 }
 
