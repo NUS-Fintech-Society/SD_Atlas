@@ -46,17 +46,17 @@ type TabButtonProps = {
 const TabConfig: TabButtonProps[] = [
   {
     href: '/',
-    src: '/home.svg',
+    src: '/mobile/home.svg',
     title: 'Home',
   },
   {
     href: '/event',
-    src: '/event.svg',
+    src: '/mobile/event.svg',
     title: 'Event',
   },
   {
     href: '/profile',
-    src: '/profile.svg',
+    src: '/mobile/profile.svg',
     title: 'Profile',
   },
 ]

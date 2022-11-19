@@ -60,7 +60,7 @@ const Login = () => {
         })
         return
       }
-      router.push('/user')
+      router.push('/')
     },
   })
 
