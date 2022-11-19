@@ -24,6 +24,7 @@ import {
   Tbody,
   Td,
   Tr,
+  useToast,
 } from '@chakra-ui/react'
 import {
   Modal,
@@ -134,6 +135,7 @@ const UploadImageBtn = ({
   setImage: Dispatch<SetStateAction<string>>
   studentId: string
 }) => {
+  const toast = useToast()
   // trigger a click event on the file input element when button is clicked
   const uploadRef = useRef<HTMLInputElement>(null)
   const updateImageMutation = trpc.useMutation([
@@ -142,17 +144,35 @@ const UploadImageBtn = ({
   const onUpload = () => {
     uploadRef.current?.click()
   }
-  const handleFileSelected = (e: ChangeEvent<HTMLInputElement>): void => {
-    if (e.target.files) {
-      const file = e.target.files.item(0)
-      const reader = new FileReader()
-      reader.addEventListener('load', () => {
-        const imageDataURI = reader.result as string
-        setImage(imageDataURI)
-        const image = imageDataURI as string
-        updateImageMutation.mutate({ studentId, image })
+  const handleFileSelected = async (
+    e: ChangeEvent<HTMLInputElement>
+  ): Promise<void> => {
+    try {
+      if (e.target.files) {
+        const file = e.target.files.item(0)
+        const reader = new FileReader()
+        reader.addEventListener('load', () => {
+          const imageDataURI = reader.result as string
+          setImage(imageDataURI)
+          const image = imageDataURI as string
+          updateImageMutation.mutate({ studentId, image })
+        })
+        reader.readAsDataURL(file as Blob)
+      }
+
+      toast({
+        duration: 3000,
+        description: 'Image successfully uploaded.',
+        title: 'Success',
+        status: 'success',
       })
-      reader.readAsDataURL(file as Blob)
+    } catch (e) {
+      toast({
+        duration: 3000,
+        description: (e as Error).message,
+        status: 'error',
+        title: 'Something went wrong',
+      })
     }
   }
   return (
@@ -180,7 +200,8 @@ const DeleteImageBtn = ({
   setImage: Dispatch<SetStateAction<string>>
   studentId: string
 }) => {
-  const deleteImageMutation = trpc.useMutation(
+  const toast = useToast()
+  const { mutateAsync } = trpc.useMutation(
     ['member-profile.deleteMemberImage'],
     {
       onSuccess: () => {
@@ -188,9 +209,27 @@ const DeleteImageBtn = ({
       },
     }
   )
-  const handleDelete = () => {
-    deleteImageMutation.mutate(studentId)
+
+  // DELETE IMAGE LOGIC
+  const handleDelete = async () => {
+    try {
+      await mutateAsync(studentId)
+      toast({
+        duration: 3000,
+        description: 'Image successfully deleted.',
+        title: 'Success',
+        status: 'success',
+      })
+    } catch (e) {
+      toast({
+        duration: 3000,
+        description: (e as Error).message,
+        status: 'error',
+        title: 'Something went wrong',
+      })
+    }
   }
+
   return (
     <Button variant={'ghost'} size={'xs'} onClick={handleDelete}>
       <IconContext.Provider value={{ size: '24px' }}>
