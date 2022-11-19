@@ -14,45 +14,42 @@ import {
 import LoadingScreen from '~/components/LoadingGif'
 import ProfileInfoModal from '~/components/user/ProfileModal'
 import { useState } from 'react'
+import { Session } from 'next-auth'
 
-const UserTable = () => {
+const UserTable = ({ session }: { session: Session }) => {
   const { isLoading, data } = trpc.useQuery(['member.getAllUsers'])
   const [selected, setSelected] = useState('')
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   if (isLoading) return <LoadingScreen />
 
-  const render = () => {
-    return data?.map((data) => {
-      return (
-        <Tr key={data.id}>
-          <Td>
-            <Button
-              variant="link"
-              colorScheme="blackAlpha"
-              onClick={(e) => {
-                e.preventDefault()
-                setSelected(data.id)
-                onOpen()
-              }}
-            >
-              {data.id}
-            </Button>
-          </Td>
-          <Td>{data.name}</Td>
-          <Td>{data.discord}</Td>
-          <Td>{data.telegram}</Td>
-          <Td>{data.department}</Td>
-        </Tr>
-      )
-    })
-  }
+  const render = data?.map((data) => (
+    <Tr key={data.id}>
+      <Td>
+        <Button
+          variant="link"
+          colorScheme="blackAlpha"
+          onClick={(e) => {
+            e.preventDefault()
+            setSelected(data.id)
+            onOpen()
+          }}
+        >
+          {data.id}
+        </Button>
+      </Td>
+      <Td>{data.name}</Td>
+      <Td>{data.discord}</Td>
+      <Td>{data.telegram}</Td>
+      <Td>{data.department}</Td>
+    </Tr>
+  ))
 
   return (
     <div className="mt-5">
-      {render() && render()?.length ? (
+      {render && render?.length ? (
         <>
-          <TableContainer>
+          <TableContainer className="border-4 border-black">
             <Table
               align="center"
               variant="striped"
@@ -68,10 +65,11 @@ const UserTable = () => {
                   <Th>Department</Th>
                 </Tr>
               </Thead>
-              <Tbody>{render()}</Tbody>
+              <Tbody>{render}</Tbody>
             </Table>
           </TableContainer>
           <ProfileInfoModal
+            session={session}
             isOpen={isOpen}
             onClose={onClose}
             studentId={selected}

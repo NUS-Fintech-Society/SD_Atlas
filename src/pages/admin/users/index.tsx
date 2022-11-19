@@ -1,69 +1,41 @@
-import type { NextPage, NextApiRequest, NextApiResponse } from 'next'
-import { authOptions } from '~/pages/api/auth/[...nextauth]'
-import { unstable_getServerSession } from 'next-auth'
-import { Button, HStack, VStack, Spacer } from '@chakra-ui/react'
+import { Button } from '@chakra-ui/react'
 import Link from 'next/link'
-import dynamic from 'next/dynamic'
-const UserTable = dynamic(() => import('~/components/admin/user/UserTable'))
+import UserTable from '~/components/admin/user/UserTable'
 import BottomNavBar from '~/components/mobile/UserBottomNavBar'
+import SidebarWithHeader from '~/components/mobile/Sidebar'
+import { useSession } from 'next-auth/react'
+import LoadingScreen from '~/components/LoadingGif'
+import { useRouter } from 'next/router'
 
-// Only allows the admin users to access this page.
-export async function getServerSideProps(context: {
-  req: NextApiRequest
-  res: NextApiResponse
-}) {
-  const session = await unstable_getServerSession(
-    context.req,
-    context.res,
-    authOptions
-  )
+export default function AdminUserPage() {
+  const { data: session, status } = useSession({ required: true })
+  const router = useRouter()
+  if (status === 'loading') return <LoadingScreen />
+  if (session.level !== 'super') router.push('/users')
 
-  if (!session) {
-    return {
-      redirect: {
-        destination: '/',
-        permanent: false,
-      },
-    }
-  }
-
-  if (session.level !== 'super') {
-    return {
-      redirect: {
-        destination: '/user',
-        permanent: false,
-      },
-    }
-  }
-
-  return {
-    props: {
-      session,
-    },
-  }
-}
-
-const UserHomePage: NextPage = () => {
   return (
-    <>
-      <VStack margin="auto">
-        <UserTable />
-        <div className="h-5"></div>
-        <HStack>
-          <Button>
-            <Link href="/admin/users/upload-multiple-users">
-              Upload Multiple Users
-            </Link>
-          </Button>
-          <Spacer />
-          <Button>
-            <Link href="/admin/users/upload-single-user">Create a user</Link>
-          </Button>
-        </HStack>
-      </VStack>
+    <SidebarWithHeader>
+      <div className="w-5/6 mx-auto flex flex-col">
+        <UserTable session={session} />
+        <Buttons />
+      </div>
       <BottomNavBar />
-    </>
+    </SidebarWithHeader>
   )
 }
 
-export default UserHomePage
+const Buttons = () => {
+  return (
+    <div className="flex mt-5 justify-between">
+      <Button bg="light.secondary.primary" className="text-white">
+        <Link href="/admin/users/upload-multiple-users">
+          Upload Multiple Users
+        </Link>
+      </Button>
+
+      <Button bg="light.secondary.primary" className="text-white">
+        <Link href="/admin/users/upload-single-user">Create a user</Link>
+      </Button>
+    </div>
+  )
+}

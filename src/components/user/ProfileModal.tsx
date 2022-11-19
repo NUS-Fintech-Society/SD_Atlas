@@ -36,10 +36,17 @@ import {
   ModalOverlay,
 } from '@chakra-ui/modal'
 import Image from 'next/image'
+import { Session } from 'next-auth'
 
 const defaultImage = '/150.png'
 
-const ProfilePage = ({ studentId }: { studentId: string }) => {
+const ProfilePage = ({
+  studentId,
+  session,
+}: {
+  studentId: string
+  session: Session
+}) => {
   // TRPC USEQUERY HOOK: SET REFETCH TO FALSE TO CACHE THE DATA
   const { data, isLoading, isError } = trpc.useQuery(
     ['member-profile.getMemberProfile', studentId],
@@ -49,7 +56,7 @@ const ProfilePage = ({ studentId }: { studentId: string }) => {
   )
 
   // IF THE DATA IS LOADING, RETURN THE LOADING SCREEN
-  if (isLoading) return <LoadingScreen />
+  if (isLoading || status === 'loading') return <LoadingScreen />
 
   // IF THERE IS SOMETHING WRONG WITH FETCHING THE USER, THROW AN ERROR
   if (!data || !data.user || isError) {
@@ -60,7 +67,7 @@ const ProfilePage = ({ studentId }: { studentId: string }) => {
     <div className="flex flex-wrap justify-between gap-6 mt-4">
       <ProfileInfo {...data.user} />
       <div className="flex flex-col">
-        <ProfilePicture studentId={studentId} />
+        <ProfilePicture studentId={studentId} session={session} />
         <ProfileContactInfo {...data.user} />
       </div>
     </div>
@@ -95,7 +102,13 @@ const ProfileContactInfo = (props: {
   )
 }
 
-const ProfilePicture = ({ studentId }: { studentId: string }) => {
+const ProfilePicture = ({
+  studentId,
+  session,
+}: {
+  studentId: string
+  session: Session
+}) => {
   const imageQuery = trpc.useQuery(
     ['member-profile.getMemberImage', studentId],
     {
@@ -117,11 +130,13 @@ const ProfilePicture = ({ studentId }: { studentId: string }) => {
           height={150}
           width={150}
           unoptimized={true} // needed for use with objectURLs
-        ></Image>
-        <Box className="flex justify-end">
-          <UploadImageBtn setImage={setImage} studentId={studentId} />
-          <DeleteImageBtn setImage={setImage} studentId={studentId} />
-        </Box>
+        />
+        {session.user?.id === studentId ? (
+          <Box className="flex justify-end">
+            <UploadImageBtn setImage={setImage} studentId={studentId} />
+            <DeleteImageBtn setImage={setImage} studentId={studentId} />
+          </Box>
+        ) : null}
       </Box>
     </Box>
   )
@@ -283,10 +298,12 @@ const ProfileInfo = (props: ProfilePageType) => {
   )
 }
 const ProfileInfoModal = ({
+  session,
   studentId,
   onClose,
   isOpen,
 }: {
+  session: Session
   studentId: string
   onClose: () => void
   isOpen: boolean
@@ -297,6 +314,7 @@ const ProfileInfoModal = ({
         isOpen={isOpen}
         onClose={onClose}
         studentId={studentId}
+        session={session}
       />
     </div>
   )
@@ -306,10 +324,12 @@ const PersonalInformationModal = ({
   isOpen,
   onClose,
   studentId,
+  session,
 }: {
   isOpen: boolean
   onClose: () => void
   studentId: string
+  session: Session
 }) => {
   return (
     <Modal size="xl" isOpen={isOpen} onClose={onClose} isCentered>
@@ -320,7 +340,7 @@ const PersonalInformationModal = ({
         </ModalHeader>
         <ModalCloseButton color="white" />
         <ModalBody>
-          <ProfilePage studentId={studentId} />
+          <ProfilePage studentId={studentId} session={session} />
         </ModalBody>
         <ModalFooter />
       </ModalContent>
