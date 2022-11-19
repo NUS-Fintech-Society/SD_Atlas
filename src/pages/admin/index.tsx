@@ -1,7 +1,7 @@
 import Buttons from '~/components/admin/user/Buttons'
 import UserTable from '~/components/admin/user/UserTable'
 import BottomNavBar from '~/components/mobile/UserBottomNavBar'
-import SidebarWithHeader from '~/components/mobile/Sidebar'
+import Navbar from '~/components/mobile/Navbar'
 import { useSession } from 'next-auth/react'
 import LoadingScreen from '~/components/LoadingGif'
 import { useRouter } from 'next/router'
@@ -13,12 +13,13 @@ export default function AdminUserPage() {
   if (session.level !== 'super') router.push('/users')
 
   return (
-    <SidebarWithHeader>
+    <>
+      <Navbar />
       <div className="w-5/6 mx-auto flex flex-col">
         <UserTable session={session} />
         <Buttons />
       </div>
       <BottomNavBar />
-    </SidebarWithHeader>
+    </>
   )
 }
