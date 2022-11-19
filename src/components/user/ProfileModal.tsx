@@ -24,7 +24,6 @@ import {
   Tbody,
   Td,
   Tr,
-  useDisclosure,
 } from '@chakra-ui/react'
 import {
   Modal,
@@ -44,7 +43,7 @@ const ProfilePage = ({ studentId }: { studentId: string }) => {
   const { data, isLoading, isError } = trpc.useQuery(
     ['member-profile.getMemberProfile', studentId],
     {
-      refetchOnWindowFocus: false,
+      refetchOnWindowFocus: true,
     }
   )
 
@@ -244,16 +243,21 @@ const ProfileInfo = (props: ProfilePageType) => {
     </Box>
   )
 }
-const ProfileInfoModal = () => {
-  const { isOpen, onOpen, onClose } = useDisclosure()
-
+const ProfileInfoModal = ({
+  studentId,
+  onClose,
+  isOpen,
+}: {
+  studentId: string
+  onClose: () => void
+  isOpen: boolean
+}) => {
   return (
     <div>
-      <Button onClick={onOpen}>View Profile</Button>
       <PersonalInformationModal
         isOpen={isOpen}
         onClose={onClose}
-        studentId={'A0239038B'}
+        studentId={studentId}
       />
     </div>
   )
@@ -285,8 +289,6 @@ const PersonalInformationModal = ({
   )
 }
 
-export default ProfileInfoModal
-
 type ProfilePageType = {
   name: string | null
   roles: string | null
@@ -297,3 +299,5 @@ type ProfilePageType = {
   major: string | null
   department: string | null
 }
+
+export default ProfileInfoModal

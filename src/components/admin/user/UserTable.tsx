@@ -1,6 +1,6 @@
 import { trpc } from '~/utils/trpc'
 import {
-  Input,
+  Button,
   TableContainer,
   Table,
   Thead,
@@ -9,47 +9,36 @@ import {
   Td,
   Text,
   Tbody,
+  useDisclosure,
 } from '@chakra-ui/react'
 import LoadingScreen from '~/components/LoadingGif'
+import ProfileInfoModal from '~/components/user/ProfileModal'
 import { useState } from 'react'
 
 const UserTable = () => {
   const { isLoading, data } = trpc.useQuery(['member.getAllUsers'])
-  const [conditions, setConditions] = useState('')
+  const [selected, setSelected] = useState('')
+  const { isOpen, onOpen, onClose } = useDisclosure()
 
-  // REGEX USED FOR SEARCHING
+  if (isLoading) return <LoadingScreen />
+
   const render = () => {
-    if (conditions && data) {
-      const returned = data?.filter((d) => {
-        const condition = conditions.toUpperCase()
-        const name = d.name ? d.name.toUpperCase() : ''
-        const id = d.id.toUpperCase()
-        const department = d.department ? d.department.toUpperCase() : ''
-
-        return (
-          id.startsWith(condition) ||
-          name.startsWith(condition) ||
-          department.startsWith(condition)
-        )
-      })
-
-      return returned.map((data) => {
-        return (
-          <Tr key={data.id}>
-            <Td>{data.id}</Td>
-            <Td>{data.name}</Td>
-            <Td>{data.discord}</Td>
-            <Td>{data.telegram}</Td>
-            <Td>{data.department}</Td>
-          </Tr>
-        )
-      })
-    }
-
     return data?.map((data) => {
       return (
         <Tr key={data.id}>
-          <Td>{data.id}</Td>
+          <Td>
+            <Button
+              variant="link"
+              colorScheme="blackAlpha"
+              onClick={(e) => {
+                e.preventDefault()
+                setSelected(data.id)
+                onOpen()
+              }}
+            >
+              {data.id}
+            </Button>
+          </Td>
           <Td>{data.name}</Td>
           <Td>{data.discord}</Td>
           <Td>{data.telegram}</Td>
@@ -59,44 +48,36 @@ const UserTable = () => {
     })
   }
 
-  if (isLoading) return <LoadingScreen />
-
   return (
-    <>
-      <Text fontSize="m" fontWeight="bold">
-        You may search for the user based on the name, department and id.
-      </Text>
-      <div className="h-3"></div>
-      <Input
-        maxWidth="90%"
-        placeholder="Enter your search query"
-        onChange={(e) => {
-          e.preventDefault()
-          setConditions(e.target.value)
-        }}
-      />
-      <div className="h-5"></div>
+    <div className="mt-5">
       {render() && render()?.length ? (
-        <TableContainer className="border-black">
-          <Table align="center" variant="striped" colorScheme="teal">
-            <Thead>
-              <Tr>
-                <Th>Student ID</Th>
-                <Th>Name</Th>
-                <Th>Discord</Th>
-                <Th>Telegram</Th>
-                <Th>Department</Th>
-              </Tr>
-            </Thead>
-            <Tbody>{render()}</Tbody>
-          </Table>
-        </TableContainer>
+        <>
+          <TableContainer className="border-black">
+            <Table align="center" variant="striped" colorScheme="teal">
+              <Thead>
+                <Tr>
+                  <Th>Student ID</Th>
+                  <Th>Name</Th>
+                  <Th>Discord</Th>
+                  <Th>Telegram</Th>
+                  <Th>Department</Th>
+                </Tr>
+              </Thead>
+              <Tbody>{render()}</Tbody>
+            </Table>
+          </TableContainer>
+          <ProfileInfoModal
+            isOpen={isOpen}
+            onClose={onClose}
+            studentId={selected}
+          />
+        </>
       ) : (
         <Text fontSize="xl" fontWeight="bold">
           No users found
         </Text>
       )}
-    </>
+    </div>
   )
 }
 
