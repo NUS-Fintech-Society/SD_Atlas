@@ -1,4 +1,3 @@
-import dynamic from 'next/dynamic'
 import { trpc } from '~/utils/trpc'
 import {
   Input,
@@ -11,9 +10,7 @@ import {
   Text,
   Tbody,
 } from '@chakra-ui/react'
-const LoadingComponent = dynamic(
-  () => import('~/components/common/LoadingComponent')
-)
+import LoadingScreen from '~/components/LoadingGif'
 import { useState } from 'react'
 
 const UserTable = () => {
@@ -62,7 +59,7 @@ const UserTable = () => {
     })
   }
 
-  if (isLoading) return <LoadingComponent text="Fetching the users now" />
+  if (isLoading) return <LoadingScreen />
 
   return (
     <>

@@ -1,5 +1,13 @@
-import { ChangeEvent, useEffect, useRef, useState } from 'react'
+import {
+  ChangeEvent,
+  Dispatch,
+  SetStateAction,
+  useEffect,
+  useRef,
+  useState,
+} from 'react'
 import { trpc } from '../../utils/trpc'
+import LoadingScreen from '~/components/LoadingGif'
 import {
   BsDiscord,
   BsEnvelopeFill,
@@ -10,9 +18,7 @@ import {
 import { IconContext } from 'react-icons'
 import {
   Box,
-  Spinner,
   Button,
-  Container,
   Table,
   TableContainer,
   Tbody,
@@ -31,38 +37,42 @@ import {
 } from '@chakra-ui/modal'
 import Image from 'next/image'
 
-const MOCK_STUDENT_ID = 'asd'
 const defaultImage = '/150.png'
 
 const ProfilePage = ({ studentId }: { studentId: string }) => {
-  const userQuery = trpc.useQuery(
+  // TRPC USEQUERY HOOK: SET REFETCH TO FALSE TO CACHE THE DATA
+  const { data, isLoading, isError } = trpc.useQuery(
     ['member-profile.getMemberProfile', studentId],
     {
       refetchOnWindowFocus: false,
     }
   )
-  if (!userQuery || !userQuery.data) {
-    return (
-      <Box className="flex justify-center">
-        <Spinner size="lg" />
-      </Box>
-    )
-  }
-  if (!userQuery.data.user) {
+
+  // IF THE DATA IS LOADING, RETURN THE LOADING SCREEN
+  if (isLoading) return <LoadingScreen />
+
+  // IF THERE IS SOMETHING WRONG WITH FETCHING THE USER, THROW AN ERROR
+  if (!data || !data.user || isError) {
     return <p className="text-3xl">Something is wrong</p>
   }
+
   return (
-    <Box className="flex flex-wrap justify-between gap-6 mt-4">
-      <ProfileInfo {...userQuery.data.user} />
-      <Box className="flex flex-col">
+    <div className="flex flex-wrap justify-between gap-6 mt-4">
+      <ProfileInfo {...data.user} />
+      <div className="flex flex-col">
         <ProfilePicture studentId={studentId} />
-        <ProfileContactInfo {...userQuery.data.user} />
-      </Box>
-    </Box>
+        <ProfileContactInfo {...data.user} />
+      </div>
+    </div>
   )
 }
 
-const ProfileContactInfo = (props: any) => {
+const ProfileContactInfo = (props: {
+  telegram: string | null
+  discord: string | null
+  personal_email: string | null
+  email: string
+}) => {
   return (
     <Box className="flex flex-col gap-1">
       <Box className="flex items-center gap-1">
@@ -102,6 +112,7 @@ const ProfilePicture = ({ studentId }: { studentId: string }) => {
     <Box className="flex flex-col items-center">
       <Box className="my-2">
         <Image
+          alt="profile-pic"
           src={image}
           height={150}
           width={150}
@@ -121,7 +132,7 @@ const UploadImageBtn = ({
   setImage,
   studentId,
 }: {
-  setImage: any
+  setImage: Dispatch<SetStateAction<string>>
   studentId: string
 }) => {
   // trigger a click event on the file input element when button is clicked
@@ -137,7 +148,7 @@ const UploadImageBtn = ({
       const file = e.target.files.item(0)
       const reader = new FileReader()
       reader.addEventListener('load', () => {
-        const imageDataURI = reader.result
+        const imageDataURI = reader.result as string
         setImage(imageDataURI)
         const image = imageDataURI as string
         updateImageMutation.mutate({ studentId, image })
@@ -167,13 +178,13 @@ const DeleteImageBtn = ({
   setImage,
   studentId,
 }: {
-  setImage: any
+  setImage: Dispatch<SetStateAction<string>>
   studentId: string
 }) => {
   const deleteImageMutation = trpc.useMutation(
     ['member-profile.deleteMemberImage'],
     {
-      onSuccess: (data) => {
+      onSuccess: () => {
         setImage(defaultImage)
       },
     }
@@ -192,7 +203,7 @@ const DeleteImageBtn = ({
   )
 }
 
-const ProfileInfo = (props: any) => {
+const ProfileInfo = (props: ProfilePageType) => {
   return (
     <Box>
       <p className="text-3xl font-bold pl-4 mb-4">{props.name}</p>
@@ -235,24 +246,54 @@ const ProfileInfo = (props: any) => {
 }
 const ProfileInfoModal = () => {
   const { isOpen, onOpen, onClose } = useDisclosure()
+
   return (
-    <Container>
+    <div>
       <Button onClick={onOpen}>View Profile</Button>
-      <Modal size="xl" isOpen={isOpen} onClose={onClose} isCentered>
-        <ModalOverlay />
-        <ModalContent backgroundColor="white" borderRadius="lg">
-          <ModalHeader borderTopRadius="lg" className="bg-blue-600">
-            <p className="pl-4 text-white">Personal Information</p>
-          </ModalHeader>
-          <ModalCloseButton color="white" />
-          <ModalBody>
-            <ProfilePage studentId={MOCK_STUDENT_ID} />
-          </ModalBody>
-          <ModalFooter></ModalFooter>
-        </ModalContent>
-      </Modal>
-    </Container>
+      <PersonalInformationModal
+        isOpen={isOpen}
+        onClose={onClose}
+        studentId={'A0239038B'}
+      />
+    </div>
+  )
+}
+
+const PersonalInformationModal = ({
+  isOpen,
+  onClose,
+  studentId,
+}: {
+  isOpen: boolean
+  onClose: () => void
+  studentId: string
+}) => {
+  return (
+    <Modal size="xl" isOpen={isOpen} onClose={onClose} isCentered>
+      <ModalOverlay />
+      <ModalContent backgroundColor="white" borderRadius="lg">
+        <ModalHeader borderTopRadius="lg" className="bg-blue-600">
+          <p className="pl-4 text-white">Personal Information</p>
+        </ModalHeader>
+        <ModalCloseButton color="white" />
+        <ModalBody>
+          <ProfilePage studentId={studentId} />
+        </ModalBody>
+        <ModalFooter />
+      </ModalContent>
+    </Modal>
   )
 }
 
 export default ProfileInfoModal
+
+type ProfilePageType = {
+  name: string | null
+  roles: string | null
+  gender: string | null
+  batch: string | null
+  year: string | null
+  faculty: string | null
+  major: string | null
+  department: string | null
+}

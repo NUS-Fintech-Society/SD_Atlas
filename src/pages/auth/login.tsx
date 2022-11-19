@@ -21,8 +21,7 @@ import { useSession, signIn } from 'next-auth/react'
 import { authOptions } from 'pages/api/auth/[...nextauth]'
 import { unstable_getServerSession } from 'next-auth/next'
 import { NextApiRequest, NextApiResponse } from 'next'
-import dynamic from 'next/dynamic'
-const LoadingScreen = dynamic(() => import('~/components/common/LoadingScreen'))
+import LoadingScreen from '~/components/LoadingGif'
 
 type FormValue = {
   email: string
