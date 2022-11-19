@@ -13,6 +13,7 @@ import { authOptions } from 'pages/api/auth/[...nextauth]'
 import { unstable_getServerSession } from 'next-auth/next'
 import { useRouter } from 'next/router'
 import SidebarWithHeaders from '~/components/mobile/Sidebar'
+import BottomNavBar from '~/components/mobile/UserBottomNavBar'
 
 interface FormValues {
   id: string
@@ -142,6 +143,7 @@ const UserForm = () => {
           </Button>
         </div>
       </form>
+      <BottomNavBar />
     </SidebarWithHeaders>
   )
 }
