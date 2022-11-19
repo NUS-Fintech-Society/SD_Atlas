@@ -1,7 +1,6 @@
 import Buttons from '~/components/admin/user/Buttons'
 import UserTable from '~/components/admin/user/UserTable'
-import BottomNavBar from '~/components/mobile/UserBottomNavBar'
-import Navbar from '~/components/mobile/Navbar'
+import Screen from '~/components/mobile/Screen'
 import { useSession } from 'next-auth/react'
 import LoadingScreen from '~/components/LoadingGif'
 import { useRouter } from 'next/router'
@@ -14,12 +13,12 @@ export default function AdminUserPage() {
 
   return (
     <>
-      <Navbar />
-      <div className="w-5/6 mx-auto flex flex-col">
-        <UserTable session={session} />
-        <Buttons />
-      </div>
-      <BottomNavBar />
+      <Screen>
+        <div className="w-5/6 mx-auto flex flex-col">
+          <UserTable session={session} />
+          <Buttons />
+        </div>
+      </Screen>
     </>
   )
 }

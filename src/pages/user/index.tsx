@@ -9,6 +9,7 @@ import { VStack } from '@chakra-ui/react'
 import { useSession } from 'next-auth/react'
 import { authOptions } from 'pages/api/auth/[...nextauth]'
 import { unstable_getServerSession } from 'next-auth/next'
+import Screen from '~/components/mobile/Screen'
 
 const HomePage: NextPage = () => {
   const { data: session, status } = useSession({ required: true })
@@ -16,10 +17,12 @@ const HomePage: NextPage = () => {
   if (status === 'loading') return <LoadingScreen />
 
   return (
-    <VStack>
-      <Header name={session?.user?.name} />
-      <AnnouncementTable />
-    </VStack>
+    <Screen>
+      <VStack>
+        <Header name={session?.user?.name} />
+        <AnnouncementTable />
+      </VStack>
+    </Screen>
   )
 }
 

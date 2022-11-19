@@ -11,8 +11,7 @@ import {
   Text,
   useToast,
 } from '@chakra-ui/react'
-import SidebarWithHeader from '~/components/mobile/Sidebar'
-import BottomNavBar from '~/components/mobile/UserBottomNavBar'
+import Screen from '~/components/mobile/Screen'
 
 const CreateAnnouncementPage: NextPage = () => {
   const { isLoading, mutateAsync } = trpc.useMutation(
@@ -41,7 +40,7 @@ const CreateAnnouncementPage: NextPage = () => {
     },
   })
   return (
-    <SidebarWithHeader>
+    <Screen>
       <div className="flex flex-col w-5/6 m-auto justify-evenly">
         <Heading>Create An Announcement</Heading>
 
@@ -76,8 +75,7 @@ const CreateAnnouncementPage: NextPage = () => {
           </Button>
         </form>
       </div>
-      <BottomNavBar />
-    </SidebarWithHeader>
+    </Screen>
   )
 }
 

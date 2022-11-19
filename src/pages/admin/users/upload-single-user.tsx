@@ -12,8 +12,7 @@ import {
 import { authOptions } from 'pages/api/auth/[...nextauth]'
 import { unstable_getServerSession } from 'next-auth/next'
 import { useRouter } from 'next/router'
-import SidebarWithHeaders from '~/components/mobile/Sidebar'
-import BottomNavBar from '~/components/mobile/UserBottomNavBar'
+import Screen from '~/components/mobile/Screen'
 
 interface FormValues {
   id: string
@@ -69,7 +68,7 @@ const UserForm = () => {
   })
 
   return (
-    <SidebarWithHeaders>
+    <Screen>
       <form onSubmit={formik.handleSubmit}>
         <Input
           id="id"
@@ -143,8 +142,7 @@ const UserForm = () => {
           </Button>
         </div>
       </form>
-      <BottomNavBar />
-    </SidebarWithHeaders>
+    </Screen>
   )
 }
 
