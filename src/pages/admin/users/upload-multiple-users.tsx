@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse, NextPage } from 'next'
-import { useToast, VStack, Input, Stack, Button } from '@chakra-ui/react'
+import { useToast, Stack, Button } from '@chakra-ui/react'
 import { parse, ParseResult } from 'papaparse'
 import { trpc } from '~/utils/trpc'
 import DataTable from '~/components/admin/user/DataTable'
@@ -9,9 +9,12 @@ import { RootState } from '~/store/store'
 import { AddUsersType, CSVType } from '~/store/types/admin.type'
 import { MouseEvent } from 'react'
 import { authOptions } from 'pages/api/auth/[...nextauth]'
+import SidebarWithHeader from '~/components/mobile/Sidebar'
+import { useRouter } from 'next/router'
 import { unstable_getServerSession } from 'next-auth/next'
 
 const DashboardPage: NextPage = () => {
+  const router = useRouter()
   const toast = useToast()
   const data = useSelector<RootState, AddUsersType[]>(
     (state) => state.dashboard
@@ -58,20 +61,34 @@ const DashboardPage: NextPage = () => {
   }
 
   return (
-    <VStack>
-      {data.length ? <DataTable /> : null}
-      <Stack direction={['row', 'column']}>
-        <Input accept=".csv" onChange={handleFile} type="file" />
-        <Button
-          bg="pink.200"
-          disabled={!data.length}
-          isLoading={isLoading}
-          onClick={clickHandler}
-        >
-          Submit File
-        </Button>
-      </Stack>
-    </VStack>
+    <SidebarWithHeader>
+      <div className="flex w-5/6 mx-auto flex-col">
+        {data.length ? <DataTable /> : null}
+        <Stack direction={['row', 'column']}>
+          <input accept=".csv" onChange={handleFile} type="file" />
+          <div className="flex flex-row">
+            <Button
+              bg="light.secondary.primary"
+              className="text-white mr-5"
+              disabled={!data.length}
+              isLoading={isLoading}
+              onClick={() => router.back()}
+            >
+              Return
+            </Button>
+            <Button
+              bg="light.secondary.primary"
+              className="text-white"
+              disabled={!data.length}
+              isLoading={isLoading}
+              onClick={clickHandler}
+            >
+              Submit File
+            </Button>
+          </div>
+        </Stack>
+      </div>
+    </SidebarWithHeader>
   )
 }
 
