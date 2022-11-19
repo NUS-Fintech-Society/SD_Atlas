@@ -12,6 +12,7 @@ import { authOptions } from 'pages/api/auth/[...nextauth]'
 import SidebarWithHeader from '~/components/mobile/Sidebar'
 import { useRouter } from 'next/router'
 import { unstable_getServerSession } from 'next-auth/next'
+import BottomNavBar from '~/components/mobile/UserBottomNavBar'
 
 const DashboardPage: NextPage = () => {
   const router = useRouter()
@@ -87,6 +88,7 @@ const DashboardPage: NextPage = () => {
           </div>
         </Stack>
       </div>
+      <BottomNavBar />
     </SidebarWithHeader>
   )
 }

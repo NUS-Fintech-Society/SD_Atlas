@@ -12,6 +12,7 @@ import {
   useToast,
 } from '@chakra-ui/react'
 import SidebarWithHeader from '~/components/mobile/Sidebar'
+import BottomNavBar from '~/components/mobile/UserBottomNavBar'
 
 const CreateAnnouncementPage: NextPage = () => {
   const { isLoading, mutateAsync } = trpc.useMutation(
@@ -75,6 +76,7 @@ const CreateAnnouncementPage: NextPage = () => {
           </Button>
         </form>
       </div>
+      <BottomNavBar />
     </SidebarWithHeader>
   )
 }
