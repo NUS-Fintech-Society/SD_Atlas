@@ -16,6 +16,7 @@ import ProfileInfoModal from '~/components/user/ProfileModal'
 import { useState } from 'react'
 import { Session } from 'next-auth'
 
+// TODO: ABLE TO SEND EMAIL TO A USER NEXT TIME
 const UserTable = ({ session }: { session: Session }) => {
   const { isLoading, data } = trpc.useQuery(['member.getAllUsers'])
   const [selected, setSelected] = useState('')
@@ -28,7 +29,7 @@ const UserTable = ({ session }: { session: Session }) => {
       <Td>
         <Button
           variant="link"
-          colorScheme="blackAlpha"
+          colorScheme="black"
           onClick={(e) => {
             e.preventDefault()
             setSelected(data.id)
@@ -39,7 +40,6 @@ const UserTable = ({ session }: { session: Session }) => {
         </Button>
       </Td>
       <Td>{data.name}</Td>
-      <Td>{data.discord}</Td>
       <Td>{data.telegram}</Td>
       <Td>{data.department}</Td>
     </Tr>
@@ -60,7 +60,6 @@ const UserTable = ({ session }: { session: Session }) => {
                 <Tr>
                   <Th>Student ID</Th>
                   <Th>Name</Th>
-                  <Th>Discord</Th>
                   <Th>Telegram</Th>
                   <Th>Department</Th>
                 </Tr>

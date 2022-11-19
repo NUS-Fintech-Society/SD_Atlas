@@ -44,12 +44,12 @@ interface LinkItemProps {
 // For super users only
 const LinkItems: Array<LinkItemProps> = [
   {
-    name: 'Manage Users',
+    name: 'Users',
     icon: FiUsers,
-    href: '/admin/users',
+    href: '/admin',
   },
   {
-    name: 'Manage Announcements',
+    name: 'Announcements',
     icon: FiActivity,
     href: '/admin/announcements',
   },
