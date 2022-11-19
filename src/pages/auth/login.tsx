@@ -64,6 +64,7 @@ const Login = () => {
   })
 
   if (status === 'loading') return <LoadingScreen />
+  if (status === 'authenticated') router.push('/')
 
   // If the user is not authenticated and is on this page, show the sign in form
   return (
