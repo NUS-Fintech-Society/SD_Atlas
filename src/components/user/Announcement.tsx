@@ -3,6 +3,7 @@ import {
   Thead,
   Tbody,
   Tr,
+  Text,
   Th,
   Td,
   TableContainer,
@@ -16,40 +17,31 @@ const AnnouncementTable = () => {
   ])
 
   // Used to render the projects
-  const render = () => {
-    return data?.map((announcement) => {
-      return (
-        <Tr key={announcement.announcement_id}>
-          <Td>{announcement.title}</Td>
-          <Td>{announcement.content}</Td>
-          <Td>{announcement.updated_date.toLocaleString()}</Td>
-          <Td>{announcement.created_by.name || 'Admin User'}</Td>
-        </Tr>
-      )
-    })
-  }
+  const render = data?.map((announcement) => (
+    <div
+      className="max-w-sm rounded overflow-scroll shadow-lg border-4 border-black"
+      key={announcement.announcement_id}
+    >
+      <div className="px-6 py-4 max-h-60 ">
+        <div className="font-bold text-xl mb-2">{announcement.title}</div>
+        <p>
+          <strong>Posted By:</strong>{' '}
+          {announcement.created_by.name || 'An admin user '}
+        </p>
+        <p>
+          <strong>Date of post:</strong>{' '}
+          {announcement.updated_date.toLocaleString()}
+        </p>
+        <br />
+        <p className="text-gray-700 text-base text-ellipsis">
+          {announcement.content}
+        </p>
+      </div>
+      <div className="px-6 pt-4 pb-2"></div>
+    </div>
+  ))
 
-  return (
-    <>
-      {isLoading ? (
-        <LoadingScreen />
-      ) : (
-        <TableContainer maxWidth="90vw">
-          <Table variant="simple">
-            <Thead>
-              <Tr>
-                <Th>Title</Th>
-                <Th>Content</Th>
-                <Th>Last Updated On</Th>
-                <Th>Created By</Th>
-              </Tr>
-            </Thead>
-            <Tbody>{render()}</Tbody>
-          </Table>
-        </TableContainer>
-      )}
-    </>
-  )
+  return <>{isLoading ? <LoadingScreen /> : render}</>
 }
 
 export default AnnouncementTable

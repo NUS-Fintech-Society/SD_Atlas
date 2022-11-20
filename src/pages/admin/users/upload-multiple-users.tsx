@@ -9,10 +9,9 @@ import { RootState } from '~/store/store'
 import { AddUsersType, CSVType } from '~/store/types/admin.type'
 import { MouseEvent } from 'react'
 import { authOptions } from 'pages/api/auth/[...nextauth]'
-import SidebarWithHeader from '~/components/mobile/Sidebar'
 import { useRouter } from 'next/router'
 import { unstable_getServerSession } from 'next-auth/next'
-import BottomNavBar from '~/components/mobile/UserBottomNavBar'
+import Screen from '~/components/mobile/Screen'
 
 const DashboardPage: NextPage = () => {
   const router = useRouter()
@@ -62,8 +61,8 @@ const DashboardPage: NextPage = () => {
   }
 
   return (
-    <SidebarWithHeader>
-      <div className="flex w-5/6 mx-auto flex-col">
+    <Screen>
+      <div className="flex flex-col">
         {data.length ? <DataTable /> : null}
         <Stack direction={['row', 'column']}>
           <input accept=".csv" onChange={handleFile} type="file" />
@@ -88,8 +87,7 @@ const DashboardPage: NextPage = () => {
           </div>
         </Stack>
       </div>
-      <BottomNavBar />
-    </SidebarWithHeader>
+    </Screen>
   )
 }
 

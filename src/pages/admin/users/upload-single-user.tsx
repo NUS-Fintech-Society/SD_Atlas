@@ -12,8 +12,7 @@ import {
 import { authOptions } from 'pages/api/auth/[...nextauth]'
 import { unstable_getServerSession } from 'next-auth/next'
 import { useRouter } from 'next/router'
-import SidebarWithHeaders from '~/components/mobile/Sidebar'
-import BottomNavBar from '~/components/mobile/UserBottomNavBar'
+import Screen from '~/components/mobile/Screen'
 
 interface FormValues {
   id: string
@@ -69,7 +68,7 @@ const UserForm = () => {
   })
 
   return (
-    <SidebarWithHeaders>
+    <Screen>
       <form onSubmit={formik.handleSubmit}>
         <Input
           id="id"
@@ -98,12 +97,11 @@ const UserForm = () => {
 
         <Input
           id="password"
-          isRequired
           marginBottom={5}
           name="password"
           type="password"
           onChange={formik.handleChange}
-          placeholder="Enter a password"
+          placeholder="Enter a password. If no password is provided, a random one will be generated"
           value={formik.values.password}
           variant="outline"
         />
@@ -143,8 +141,7 @@ const UserForm = () => {
           </Button>
         </div>
       </form>
-      <BottomNavBar />
-    </SidebarWithHeaders>
+    </Screen>
   )
 }
 
