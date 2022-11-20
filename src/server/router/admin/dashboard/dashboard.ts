@@ -3,7 +3,7 @@ import { z } from 'zod'
 import { TRPCError } from '@trpc/server'
 import { hash } from 'bcryptjs'
 import { User } from '@prisma/client'
-import { randomBytes, randomUUID } from 'crypto'
+import { randomBytes } from 'crypto'
 import moment from 'moment'
 import nodemailer from 'nodemailer'
 import { env } from '~/env/server.mjs'
@@ -114,7 +114,7 @@ const dashboardRouter = createProtectedRouter()
     ),
     resolve: async ({ ctx, input }) => {
       try {
-        const password = randomBytes(10).toString('hex')
+        const password = randomBytes(8).toString('hex')
         const hashedPassword = await hash(password, 10)
 
         const users: User[] = input.map((user) => {
@@ -146,6 +146,36 @@ const dashboardRouter = createProtectedRouter()
             wallet: null,
             year: user.year,
           }
+        })
+
+        users.forEach(async (user) => {
+          const transporter = nodemailer.createTransport({
+            service: 'gmail',
+            auth: {
+              user: env.GMAIL,
+              pass: env.GMAIL_PASSWORD,
+            },
+          })
+
+          await transporter.sendMail({
+            from: env.GMAIL,
+            to: user.email,
+            subject: 'New Account Creation',
+            html: `
+            Hi User,
+            <br />
+            <p> We welcome you to Fintech Society. We hope you enjoy your
+            time here. In order to get you onboard, please login with 
+            the following password and change it immediately. </p>
+            <br />
+            <a href="${env.NEXTAUTH_URL}">HRMS Website</a>
+            <br />
+            The password is <strong>${password}</strong>
+            <br />
+            Thank You. <br /> 
+            Fintech HR
+            `,
+          })
         })
 
         await ctx.prisma.user.createMany({

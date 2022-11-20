@@ -70,7 +70,6 @@ const DashboardPage: NextPage = () => {
             <Button
               bg="light.secondary.primary"
               className="text-white mr-5"
-              isLoading={isLoading}
               onClick={() => router.back()}
             >
               Return
