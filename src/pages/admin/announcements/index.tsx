@@ -41,7 +41,7 @@ const CreateAnnouncementPage: NextPage = () => {
   })
   return (
     <Screen>
-      <div className="flex flex-col w-5/6 m-auto justify-evenly">
+      <div className="flex flex-col justify-evenly">
         <Heading>Create An Announcement</Heading>
 
         <Text variant="xl">

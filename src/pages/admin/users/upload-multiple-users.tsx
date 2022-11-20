@@ -62,7 +62,7 @@ const DashboardPage: NextPage = () => {
 
   return (
     <Screen>
-      <div className="flex w-5/6 mx-auto flex-col">
+      <div className="flex flex-col">
         {data.length ? <DataTable /> : null}
         <Stack direction={['row', 'column']}>
           <input accept=".csv" onChange={handleFile} type="file" />

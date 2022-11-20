@@ -5,7 +5,7 @@ const Screen = ({ children }: { children: JSX.Element[] | JSX.Element }) => {
   return (
     <>
       <Navbar />
-      {children}
+      <div className="w-5/6 mx-auto">{children}</div>
       <BottomNavBar />
     </>
   )

@@ -97,12 +97,11 @@ const UserForm = () => {
 
         <Input
           id="password"
-          isRequired
           marginBottom={5}
           name="password"
           type="password"
           onChange={formik.handleChange}
-          placeholder="Enter a password"
+          placeholder="Enter a password. If no password is provided, a random one will be generated"
           value={formik.values.password}
           variant="outline"
         />

@@ -14,7 +14,7 @@ export default function AdminUserPage() {
   return (
     <>
       <Screen>
-        <div className="w-5/6 mx-auto flex flex-col">
+        <div className="flex flex-col">
           <UserTable session={session} />
           <Buttons />
         </div>
