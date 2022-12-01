@@ -1,3 +1,5 @@
+import { BiFilterAlt } from 'react-icons/bi'
+import { BsChevronUp, BsChevronDown, BsArrowDownUp } from 'react-icons/bs'
 import {
   ColumnDef,
   createColumnHelper,
@@ -190,7 +192,7 @@ export function DataTable<Data extends object>({
                       isNumeric={meta?.isNumeric}
                       className="border-x-2 border-[#97AEFF]"
                     >
-                      <div className="flex">
+                      <div className="flex items-center">
                         {header.column.getCanFilter() ? (
                           <MultiSelectColumnFilter
                             column={header.column}
@@ -201,25 +203,23 @@ export function DataTable<Data extends object>({
                           header.column.columnDef.header,
                           header.getContext()
                         )}
-                        {
-                        header.column.getCanSort() ? (
-                        <chakra.span
-                          onClick={header.column.getToggleSortingHandler()}
-                          pl="4"
-                          className="hover:cursor-pointer"
-                        >
-                          {header.column.getIsSorted() ? (
-                            header.column.getIsSorted() === 'desc' ? (
-                              <p>👆🏻</p>
+                        {header.column.getCanSort() ? (
+                          <chakra.span
+                            onClick={header.column.getToggleSortingHandler()}
+                            pl="4"
+                            className="hover:cursor-pointer"
+                          >
+                            {header.column.getIsSorted() ? (
+                              header.column.getIsSorted() === 'desc' ? (
+                                <BsChevronUp />
+                              ) : (
+                                <BsChevronDown />
+                              )
                             ) : (
-                              <p>👇🏻</p>
-                            )
-                          ) : (
-                            <p>🫥</p>
-                          )}
-                        </chakra.span>
-                        ) : null
-                        }
+                              <BsArrowDownUp />
+                            )}
+                          </chakra.span>
+                        ) : null}
                       </div>
                     </Th>
                   )
@@ -267,7 +267,6 @@ function MultiSelectColumnFilter({
   const filterValue = column.getFilterValue()
   const setFilter = column.setFilterValue
 
-  console.log(preFilteredRows)
   const options = React.useMemo(() => {
     const options = new Set()
     preFilteredRows.forEach((row) => {
@@ -278,7 +277,9 @@ function MultiSelectColumnFilter({
 
   return (
     <Menu>
-      <MenuButton as={Button}>V</MenuButton>
+      <MenuButton as={Button} variant="unstyled" size="sm">
+        <BiFilterAlt />
+      </MenuButton>
       <MenuList>
         <select
           multiple
