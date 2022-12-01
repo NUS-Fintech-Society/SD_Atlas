@@ -17,6 +17,9 @@ import {
   Th,
   Thead,
   Tr,
+  Menu,
+  MenuButton,
+  MenuList,
 } from '@chakra-ui/react'
 import React, { HTMLProps } from 'react'
 
@@ -85,33 +88,35 @@ function IndeterminateCheckbox({
 const columnHelper = createColumnHelper<Attendees>()
 
 export const columns = [
-  {
+  columnHelper.display({
     id: 'select',
     header: 'select',
     //TODO: make attendee object
-    cell: ({ row }) => (
-      <div>
-        <IndeterminateCheckbox
-          {...{
-            checked: row.getIsSelected(),
-            indeterminate: row.getIsSomeSelected(),
-            onChange: row.getToggleSelectedHandler(),
-          }}
-        />
-      </div>
+    cell: ({ row }: { row: any }) => (
+      <IndeterminateCheckbox
+        {...{
+          checked: row.getIsSelected(),
+          indeterminate: row.getIsSomeSelected(),
+          onChange: row.getToggleSelectedHandler(),
+        }}
+      />
     ),
-  },
+    enableColumnFilter: false,
+  }),
   columnHelper.accessor('department', {
     cell: (info) => info.getValue(),
     header: 'Department',
+    enableColumnFilter: true,
   }),
   columnHelper.accessor('role', {
     cell: (info) => info.getValue(),
     header: 'Role',
+    enableColumnFilter: true,
   }),
   columnHelper.accessor('name', {
     cell: (info) => info.getValue(),
     header: 'Name',
+    enableColumnFilter: true,
   }),
 ]
 
@@ -121,7 +126,6 @@ export type DataTableProps<Data extends object> = {
 }
 
 // ref https://github.com/chakra-ui/chakra-ui/discussions/4380
-//TODO: Make Clear selection, Select all button
 //TODO: Add filtering
 export function DataTable<Data extends object>({
   data,
@@ -187,11 +191,16 @@ export function DataTable<Data extends object>({
                       className="border-x-2 border-[#97AEFF]"
                     >
                       <div className="flex">
+                        {header.column.getCanFilter() ? (
+                          <MultiSelectColumnFilter
+                            column={header.column}
+                            table={table}
+                          />
+                        ) : null}
                         {flexRender(
                           header.column.columnDef.header,
                           header.getContext()
                         )}
-
                         <chakra.span
                           onClick={header.column.getToggleSortingHandler()}
                           pl="4"
@@ -239,5 +248,47 @@ export function DataTable<Data extends object>({
         </Table>
       </Box>
     </div>
+  )
+}
+
+function MultiSelectColumnFilter({
+  column,
+  table,
+}: {
+  column: any
+  table: any
+}) {
+  const preFilteredRows = table.getPreFilteredRowModel().rows
+  const id = column.id
+  const filterValue = column.getFilterValue()
+  const setFilter = column.setFilterValue
+
+  console.log(preFilteredRows)
+  const options = React.useMemo(() => {
+    const options = new Set()
+    preFilteredRows.forEach((row) => {
+      options.add(row.original[id])
+    })
+    return [...options.values()]
+  }, [id, preFilteredRows])
+
+  return (
+    <Menu>
+      <MenuButton as={Button}>V</MenuButton>
+      <MenuList>
+        <select
+          multiple
+          value={filterValue}
+          onChange={(e) => {
+            setFilter(e || undefined)
+          }}
+          className="bg-black w-full"
+        >
+          {options.map((val) => (
+            <option key={val}>{val}</option>
+          ))}
+        </select>
+      </MenuList>
+    </Menu>
   )
 }
