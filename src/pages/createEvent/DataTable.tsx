@@ -201,6 +201,8 @@ export function DataTable<Data extends object>({
                           header.column.columnDef.header,
                           header.getContext()
                         )}
+                        {
+                        header.column.getCanSort() ? (
                         <chakra.span
                           onClick={header.column.getToggleSortingHandler()}
                           pl="4"
@@ -216,6 +218,8 @@ export function DataTable<Data extends object>({
                             <p>🫥</p>
                           )}
                         </chakra.span>
+                        ) : null
+                        }
                       </div>
                     </Th>
                   )
