@@ -1,3 +1,4 @@
+import ReactSelect, { components } from 'react-select'
 import { BiFilterAlt } from 'react-icons/bi'
 import { BsChevronUp, BsChevronDown, BsArrowDownUp } from 'react-icons/bs'
 import {
@@ -8,6 +9,8 @@ import {
   getSortedRowModel,
   SortingState,
   useReactTable,
+  ColumnFiltersState,
+  getFilteredRowModel,
 } from '@tanstack/react-table'
 import {
   Button,
@@ -23,7 +26,7 @@ import {
   MenuButton,
   MenuList,
 } from '@chakra-ui/react'
-import React, { HTMLProps } from 'react'
+import React, { HTMLProps, useRef } from 'react'
 
 type Attendees = {
   department: string
@@ -86,6 +89,11 @@ function IndeterminateCheckbox({
     />
   )
 }
+const MultiSelectFilterFn: FilterFn<any> = (row, columnId, value) => {
+  if (value.length === 0) return true
+  const rowValue = row.getValue(columnId)
+  return rowValue !== undefined ? value.includes(rowValue) : true
+}
 
 const columnHelper = createColumnHelper<Attendees>()
 
@@ -109,16 +117,19 @@ export const columns = [
     cell: (info) => info.getValue(),
     header: 'Department',
     enableColumnFilter: true,
+    filterFn: MultiSelectFilterFn,
   }),
   columnHelper.accessor('role', {
     cell: (info) => info.getValue(),
     header: 'Role',
     enableColumnFilter: true,
+    filterFn: MultiSelectFilterFn,
   }),
   columnHelper.accessor('name', {
     cell: (info) => info.getValue(),
     header: 'Name',
     enableColumnFilter: true,
+    filterFn: 'equalsString',
   }),
 ]
 
@@ -135,21 +146,26 @@ export function DataTable<Data extends object>({
 }: DataTableProps<Data>) {
   const [rowSelection, setRowSelection] = React.useState({})
   const [sorting, setSorting] = React.useState<SortingState>([])
+  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
+    []
+  )
   const table = useReactTable({
     columns,
     data,
     getCoreRowModel: getCoreRowModel(),
     onSortingChange: setSorting,
     getSortedRowModel: getSortedRowModel(),
+    onColumnFiltersChange: setColumnFilters,
+    getFilteredRowModel: getFilteredRowModel(),
     state: {
       sorting,
       rowSelection,
+      columnFilters,
     },
     onRowSelectionChange: (e) => {
       setRowSelection(e)
-      console.log(rowSelection)
     },
-    debugTable: true,
+    debugColumns: true,
   })
   const clearSelection = () => {
     setRowSelection({})
@@ -176,7 +192,8 @@ export function DataTable<Data extends object>({
       </div>
       <Box
         overflowY="auto"
-        maxHeight="300px"
+        minHeight="300px"
+        maxHeight="400px"
         className="border-2 border-[#97AEFF]"
       >
         <Table variant="unstyled" className="border-collapse">
@@ -199,6 +216,13 @@ export function DataTable<Data extends object>({
                             table={table}
                           />
                         ) : null}
+                        <button
+                          onClick={() =>
+                            console.log(header.column.getFilterValue())
+                          }
+                        >
+                          get
+                        </button>
                         {flexRender(
                           header.column.columnDef.header,
                           header.getContext()
@@ -265,35 +289,57 @@ function MultiSelectColumnFilter({
   const preFilteredRows = table.getPreFilteredRowModel().rows
   const id = column.id
   const filterValue = column.getFilterValue()
-  const setFilter = column.setFilterValue
 
   const options = React.useMemo(() => {
     const options = new Set()
     preFilteredRows.forEach((row) => {
       options.add(row.original[id])
     })
-    return [...options.values()]
+    const arr = []
+    for (const key of options) {
+      arr.push({ value: key, label: key })
+    }
+    return arr
   }, [id, preFilteredRows])
 
+  const [selectedOptions, setSelectedOptions] = React.useState([])
+
   return (
-    <Menu>
-      <MenuButton as={Button} variant="unstyled" size="sm">
-        <BiFilterAlt />
-      </MenuButton>
-      <MenuList>
-        <select
-          multiple
-          value={filterValue}
-          onChange={(e) => {
-            setFilter(e || undefined)
-          }}
-          className="bg-black w-full"
-        >
-          {options.map((val) => (
-            <option key={val}>{val}</option>
-          ))}
-        </select>
-      </MenuList>
-    </Menu>
+    <div>
+      <ReactSelect
+        options={options}
+        isMulti
+        closeMenuOnSelect={false}
+        hideSelectedOptions={false}
+        components={{
+          Option,
+        }}
+        onChange={(options) => {
+          setSelectedOptions(options)
+          console.log(options)
+          if (Array.isArray(options)) {
+            column.setFilterValue(options.map((opt) => opt.value))
+          }
+        }}
+        value={selectedOptions}
+        className="text-black w-40"
+        isSearchable={false}
+      />
+    </div>
+  )
+}
+
+const Option = (props) => {
+  return (
+    <div>
+      <components.Option {...props}>
+        <input
+          type="checkbox"
+          checked={props.isSelected}
+          onChange={() => null}
+        />{' '}
+        <label>{props.label}</label>
+      </components.Option>
+    </div>
   )
 }
