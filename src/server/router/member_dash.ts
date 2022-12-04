@@ -27,14 +27,7 @@ export const dashRouter = createRouter()
                   },
                 select:{
                     name: true,
-                    gender: true,
                     batch: true,
-                    image: true,
-                    year: true,
-                    faculty: true,
-                    telegram: true,
-                    department: true,
-                    roles:true,
                 }
             })
         } catch (error) {
