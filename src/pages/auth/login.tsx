@@ -4,6 +4,7 @@ import { useState, FormEvent } from 'react'
 import toast, { Toaster } from 'react-hot-toast'
 import LoadingScreen from '~/components/LoadingGif'
 import Button from '~/components/utility/Button'
+import Container from '~/components/auth/Container'
 import Input from '~/components/utility/Input'
 import Head from 'next/head'
 import Link from 'next/link'
@@ -59,60 +60,54 @@ const LoginPage = () => {
         <title>Login</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <div className="flex items-center justify-center w-screen h-screen">
-        <div className="w-full min-h-screen p-4 flex flex-col items-center justify-center">
-          <div className="p-8 w-full max-w-3xl border rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-1000">
-            <form onSubmit={submitForm}>
-              <div className="flex flex-col items-start">
-                <h1 className="mb-2 text-center self-center font-bold text-5xl">
-                  Login
-                </h1>
+      <Container>
+        <form onSubmit={submitForm}>
+          <div className="flex flex-col items-start">
+            <h1 className="mb-2 text-center self-center font-bold text-5xl">
+              Login
+            </h1>
 
-                <label htmlFor="email" className="font-bold">
-                  NUS Email
-                </label>
-                <div className="flex flex-row w-full items-center mt-2">
-                  <Input
-                    className="rounded-l"
-                    name="email"
-                    required
-                    onChange={(e) => setEmail(e.target.value)}
-                    type="text"
-                    value={email}
-                  />
-                  <div className="flex p-2.5 bg-gray-200 rounded-r">
-                    @u.nus.edu
-                  </div>
-                </div>
+            <label htmlFor="email" className="font-bold">
+              NUS Email
+            </label>
+            <div className="flex flex-row w-full items-center mt-2">
+              <Input
+                className="rounded-l"
+                name="email"
+                required
+                onChange={(e) => setEmail(e.target.value)}
+                type="text"
+                value={email}
+              />
+              <div className="flex p-2.5 bg-gray-200 rounded-r">@u.nus.edu</div>
+            </div>
 
-                <label htmlFor="password" className="font-bold">
-                  Password
-                </label>
-                <Input
-                  className="rounded-md mt-2"
-                  name="password"
-                  required
-                  onChange={(e) => setPassword(e.target.value)}
-                  type="password"
-                  value={password}
-                />
+            <label htmlFor="password" className="font-bold">
+              Password
+            </label>
+            <Input
+              className="rounded-md mt-2"
+              name="password"
+              required
+              onChange={(e) => setPassword(e.target.value)}
+              type="password"
+              value={password}
+            />
 
-                <Link href="/auth/forgot-password">
-                  <div className="mt-4 underline">Forgot your password?</div>
-                </Link>
-                <Button
-                  className="mt-2 self-stretch shadow-md"
-                  disabled={!email || !password}
-                  isLoading={submitting}
-                  type="submit"
-                >
-                  Sign In
-                </Button>
-              </div>
-            </form>
+            <Link href="/auth/forgot-password">
+              <div className="mt-4 underline">Forgot your password?</div>
+            </Link>
+            <Button
+              className="mt-2 self-stretch shadow-md"
+              disabled={!email || !password}
+              isLoading={submitting}
+              type="submit"
+            >
+              Sign In
+            </Button>
           </div>
-        </div>
-      </div>
+        </form>
+      </Container>
       <Toaster />
     </>
   )
