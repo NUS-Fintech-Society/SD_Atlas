@@ -8,16 +8,16 @@ datasource db {
 }
 
 model Projects {
-  created_date DateTime
   description  String
   difficulty   Int
   rating       Int
   departments  String?
-  Departments  Departments? @relation(fields: [departments], references: [department_id])
   project_id   Int          @id
   name         String
-  User         User[]
   team_lead    String
+  created_date DateTime
+  Departments  Departments? @relation(fields: [departments], references: [department_id])
+  User         User[]       @relation("ProjectsToUser")
 }
 
 model Departments {
@@ -31,20 +31,19 @@ model Departments {
 model Announcements {
   announcement_id String       @id
   content         String
-  created_by      User         @relation(fields: [userId], references: [id])
   image           String?
   title           String
   updated_date    DateTime
   uploaded_date   DateTime
   department_id   String?
-  Departments     Departments? @relation(fields: [department_id], references: [department_id])
   userId          String
+  Departments     Departments? @relation(fields: [department_id], references: [department_id])
+  created_by      User         @relation(fields: [userId], references: [id])
 }
 
 model User {
   attendance     Int?            @default(0)
   batch          String?
-  date_of_birth  DateTime?
   department     String?
   diet           String?
   discord        String?
@@ -68,6 +67,7 @@ model User {
   total_events   Int?            @default(0)
   wallet         String?
   year           String?
-  projects       Projects[]
+  date_of_birth  DateTime?
   Announcements  Announcements[]
+  projects       Projects[]      @relation("ProjectsToUser")
 }

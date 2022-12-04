@@ -6,6 +6,7 @@ import { useRouter } from 'next/router'
 import LoadingScreen from '~/components/LoadingGif'
 import { useToast } from '@chakra-ui/react'
 import Screen from '~/components/mobile/Screen'
+import Button from '~/components/utility/Button'
 
 const CreateAnnouncementPage: NextPage = () => {
   type FormValues = {
@@ -27,7 +28,7 @@ const CreateAnnouncementPage: NextPage = () => {
     initialValues,
     onSubmit: async ({ content, title }) => {
       try {
-        // await mutateAsync({ content, title })
+        await mutateAsync({ content, title })
         toast({
           description: 'Announcement successfully created',
           duration: 3000,
@@ -82,13 +83,9 @@ const CreateAnnouncementPage: NextPage = () => {
             placeholder="Enter a content"
             required
           />
-          <button
-            className="bg-[#4587f2] text-white px-4 py-2 rounded-md hover:bg-[#4285F4]/10 hover:text-black shadow-md font-bold disabled:bg-gray-200 disabled:hover:bg-gray-200 disabled:hover:text-white"
-            disabled={!values.title || !values.content}
-            type="submit"
-          >
+          <Button disabled={!values.content || !values.title} type="submit">
             Create Announcement
-          </button>
+          </Button>
         </form>
       </div>
     </Screen>

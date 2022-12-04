@@ -30,12 +30,13 @@ specifiers:
   '@typescript-eslint/parser': ^5.45.0
   autoprefixer: ^10.4.13
   bcryptjs: ^2.4.3
+  clsx: ^1.2.1
   cross-env: ^7.0.3
+  dayjs: ^1.11.6
   eslint: 8.22.0
   eslint-config-next: 12.3.1
   formik: ^2.2.9
   framer-motion: ^7.6.18
-  moment: ^2.29.4
   next: 12.3.1
   next-auth: ^4.18.0
   nodemailer: ^6.8.0
@@ -72,9 +73,10 @@ dependencies:
   '@trpc/react': 9.27.4_2g6rn7sj2da6xgohvi4oglgmnq
   '@trpc/server': 9.27.4
   bcryptjs: 2.4.3
+  clsx: 1.2.1
+  dayjs: 1.11.6
   formik: 2.2.9_react@18.2.0
   framer-motion: 7.6.18_biqbaboplfbrettd7655fr4n2y
-  moment: 2.29.4
   next: 12.3.1_672uxklweod7ene3nqtsh262ca
   next-auth: 4.18.0_pvhs6umhoiyo7cgwjp6cvqsra4
   nodemailer: 6.8.0
@@ -2521,6 +2523,11 @@ packages:
     resolution: {integrity: sha512-IV3Ou0jSMzZrd3pZ48nLkT9DA7Ag1pnPzaiQhpW7c3RbcqqzvzzVu+L8gfqMp/8IM2MQtSiqaCxrrcfu8I8rMA==}
     dev: false
 
+  /clsx/1.2.1:
+    resolution: {integrity: sha512-EcR6r5a8bj6pu3ycsa/E/cKVGuTgZJZdsyUYHOksG/UHIiKfjxzRxYJpyVBwYaQeOvghal9fcc4PidlgzugAQg==}
+    engines: {node: '>=6'}
+    dev: false
+
   /color-convert/1.9.3:
     resolution: {integrity: sha512-QfAUtd+vFdAtFQcC8CCyYt1fYWxSqAiK2cSD6zDB8N3cpsEBAvRxp9zOGg6G/SHHJYAT88/az/IuDGALsNVbGg==}
     dependencies:
@@ -2631,6 +2638,10 @@ packages:
   /damerau-levenshtein/1.0.8:
     resolution: {integrity: sha512-sdQSFB7+llfUcQHUQO3+B8ERRj0Oa4w9POWMI/puGtuf7gFywGmkaLCElnudfTiKZV+NvHqL0ifzdrI8Ro7ESA==}
     dev: true
+
+  /dayjs/1.11.6:
+    resolution: {integrity: sha512-zZbY5giJAinCG+7AGaw0wIhNZ6J8AhWuSXKvuc1KAyMiRsvGQWqh4L+MomvhdAYjN+lqvVCMq1I41e3YHvXkyQ==}
+    dev: false
 
   /debug/2.6.9:
     resolution: {integrity: sha512-bC7ElrdJaJnPbAP+1EotYvqZsb3ecl5wi6Bfi6BJTUcNowp6cvspg0jXznRTKDjm/E7AdgFBVeAPVMNcKGsHMA==}
@@ -3705,10 +3716,6 @@ packages:
   /minimist/1.2.7:
     resolution: {integrity: sha512-bzfL1YUZsP41gmu/qjrEk0Q6i2ix/cVeAhbCbqH9u3zYutS1cLg00qhrD0M2MVdCcx4Sc0UpP2eBWo9rotpq6g==}
     dev: true
-
-  /moment/2.29.4:
-    resolution: {integrity: sha512-5LC9SOxjSc2HF6vO2CyuTDNivEdoz2IvyJJGj6X8DJ0eFyfszE0QiEd+iXmBvUP3WHxSjFH/vIsA0EN00cgr8w==}
-    dev: false
 
   /mrmime/1.0.1:
     resolution: {integrity: sha512-hzzEagAgDyoU1Q6yg5uI+AorQgdvMCur3FcKf7NhMKWsaYg+RnbTyHRa/9IlLF9rf455MOCtcqqrQQ83pPP7Uw==}

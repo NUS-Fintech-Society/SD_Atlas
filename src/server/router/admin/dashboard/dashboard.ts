@@ -4,7 +4,7 @@ import { TRPCError } from '@trpc/server'
 import { hash } from 'bcryptjs'
 import { User } from '@prisma/client'
 import { randomBytes } from 'crypto'
-import moment from 'moment'
+import dayjs from 'dayjs'
 import nodemailer from 'nodemailer'
 import { env } from '~/env/server.mjs'
 
@@ -122,7 +122,7 @@ const dashboardRouter = createProtectedRouter()
             attendance: 0,
             batch: 'AY22/23',
             department: user.department,
-            date_of_birth: moment().toDate(),
+            date_of_birth: dayjs().toDate(),
             diet: user.diet,
             discord: user.discord,
             faculty: user.faculty,
@@ -203,7 +203,6 @@ const dashboardRouter = createProtectedRouter()
           },
         })
 
-        console.log(users)
         return users
       } catch (e) {
         throw new TRPCError({

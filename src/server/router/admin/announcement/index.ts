@@ -2,7 +2,7 @@ import { createProtectedRouter } from '../../context'
 import { TRPCError } from '@trpc/server'
 import { z } from 'zod'
 import { randomUUID } from 'crypto'
-import moment from 'moment'
+import dayjs from 'dayjs'
 
 const AnnouncementRouter = createProtectedRouter()
   .mutation('create-announcement', {
@@ -28,8 +28,8 @@ const AnnouncementRouter = createProtectedRouter()
             announcement_id: randomUUID(),
             content: input.content,
             title: input.title,
-            updated_date: moment().toDate(),
-            uploaded_date: moment().toDate(),
+            updated_date: dayjs().toDate(),
+            uploaded_date: dayjs().toDate(),
             userId: ctx.session.user.id,
           },
         })
