@@ -46,11 +46,13 @@ specifiers:
   prisma: ^4.7.1
   react: 18.2.0
   react-dom: 18.2.0
+  react-hot-toast: ^2.4.0
   react-icons: ^4.7.1
   react-query: 3.39.2
   react-redux: ^8.0.5
   redux: ^4.2.0
   superjson: ^1.11.0
+  tailwind-merge: ^1.8.0
   tailwindcss: ^3.2.4
   typescript: 4.7.4
   zod: ^3.19.1
@@ -83,11 +85,13 @@ dependencies:
   papaparse: 5.3.2
   react: 18.2.0
   react-dom: 18.2.0_react@18.2.0
+  react-hot-toast: 2.4.0_biqbaboplfbrettd7655fr4n2y
   react-icons: 4.7.1_react@18.2.0
   react-query: 3.39.2_biqbaboplfbrettd7655fr4n2y
   react-redux: 8.0.5_jcbkrypqxz3emsprsw5dchskju
   redux: 4.2.0
   superjson: 1.11.0
+  tailwind-merge: 1.8.0
   zod: 3.19.1
 
 devDependencies:
@@ -3348,6 +3352,12 @@ packages:
       slash: 3.0.0
     dev: true
 
+  /goober/2.1.11:
+    resolution: {integrity: sha512-5SS2lmxbhqH0u9ABEWq7WPU69a4i2pYcHeCxqaNq6Cw3mnrF0ghWNM4tEGid4dKy8XNIAUbuThuozDHHKJVh3A==}
+    peerDependencies:
+      csstype: ^3.0.10
+    dev: false
+
   /grapheme-splitter/1.0.4:
     resolution: {integrity: sha512-bzh50DW9kTPM00T8y4o8vQg89Di9oLJVLW/KaOGIXJWP/iqCN6WKYkbNOF04vFLJhwcpYUh9ydh/+5vpOqV4YQ==}
     dev: true
@@ -4203,6 +4213,20 @@ packages:
       use-sidecar: 1.1.2_luyos4mouogwq6z3wafb3re4ce
     dev: false
 
+  /react-hot-toast/2.4.0_biqbaboplfbrettd7655fr4n2y:
+    resolution: {integrity: sha512-qnnVbXropKuwUpriVVosgo8QrB+IaPJCpL8oBI6Ov84uvHZ5QQcTp2qg6ku2wNfgJl6rlQXJIQU5q+5lmPOutA==}
+    engines: {node: '>=10'}
+    peerDependencies:
+      react: '>=16'
+      react-dom: '>=16'
+    dependencies:
+      goober: 2.1.11
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
+    transitivePeerDependencies:
+      - csstype
+    dev: false
+
   /react-icons/4.7.1_react@18.2.0:
     resolution: {integrity: sha512-yHd3oKGMgm7zxo3EA7H2n7vxSoiGmHk5t6Ou4bXsfcgWyhfDKMpyKfhHR6Bjnn63c+YXBLBPUql9H4wPJM6sXw==}
     peerDependencies:
@@ -4595,6 +4619,10 @@ packages:
   /supports-preserve-symlinks-flag/1.0.0:
     resolution: {integrity: sha512-ot0WnXS9fgdkgIcePe6RHNk1WA8+muPa6cSjeR3V8K27q9BB1rTE3R1p7Hv0z1ZyAc8s6Vvv8DIyWf681MAt0w==}
     engines: {node: '>= 0.4'}
+
+  /tailwind-merge/1.8.0:
+    resolution: {integrity: sha512-tER/2SbYRdfPYg6m4pDWZSlbymLTmDi+dx4iCsJmgmz4UDGzgnVelOvBe3GNtGCw9Bmc4MiObfJJbKeVL+KnMQ==}
+    dev: false
 
   /tailwindcss/3.2.4_postcss@8.4.19:
     resolution: {integrity: sha512-AhwtHCKMtR71JgeYDaswmZXhPcW9iuI9Sp2LvZPo9upDZ7231ZJ7eA9RaURbhpXGVlrjX4cFNlB4ieTetEb7hQ==}

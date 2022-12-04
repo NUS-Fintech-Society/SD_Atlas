@@ -83,7 +83,11 @@ const CreateAnnouncementPage: NextPage = () => {
             placeholder="Enter a content"
             required
           />
-          <Button disabled={!values.content || !values.title} type="submit">
+          <Button
+            disabled={!values.content || !values.title}
+            isLoading={isLoading}
+            type="submit"
+          >
             Create Announcement
           </Button>
         </form>
