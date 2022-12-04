@@ -4,6 +4,7 @@ import { useState, FormEvent } from 'react'
 import toast, { Toaster } from 'react-hot-toast'
 import LoadingScreen from '~/components/LoadingGif'
 import Button from '~/components/utility/Button'
+import Input from '~/components/utility/Input'
 import Head from 'next/head'
 import Link from 'next/link'
 
@@ -71,11 +72,10 @@ const LoginPage = () => {
                   NUS Email
                 </label>
                 <div className="flex flex-row w-full items-center mt-2">
-                  <input
-                    className="w-full pl-4 py-2 outline outline-gray-200 rounded-l"
-                    id="email"
-                    required
+                  <Input
+                    className="rounded-l"
                     name="email"
+                    required
                     onChange={(e) => setEmail(e.target.value)}
                     type="text"
                     value={email}
@@ -88,11 +88,10 @@ const LoginPage = () => {
                 <label htmlFor="password" className="font-bold">
                   Password
                 </label>
-                <input
-                  className="w-full pl-4 py-2 outline outline-gray-200 rounded-md mt-2"
-                  id="password"
-                  required
+                <Input
+                  className="rounded-md mt-2"
                   name="password"
+                  required
                   onChange={(e) => setPassword(e.target.value)}
                   type="password"
                   value={password}
