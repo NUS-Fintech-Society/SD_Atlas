@@ -16,14 +16,14 @@ export const authOptions: NextAuthOptions = {
       }
 
       if (token) {
-        session.level = token.level
+        session.level = token.level as string
       }
       return session
     },
 
     async jwt({ token, user }) {
       if (user) {
-        token.level = user.level
+        token.level = (user as User).level
         token.picture = user.image
       }
       return token

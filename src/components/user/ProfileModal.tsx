@@ -17,9 +17,6 @@ import {
   Tbody,
   Td,
   Tr,
-  useToast,
-} from '@chakra-ui/react'
-import {
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -27,7 +24,8 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
-} from '@chakra-ui/modal'
+  useToast,
+} from '@chakra-ui/react'
 import Image from 'next/image'
 import { Session } from 'next-auth'
 

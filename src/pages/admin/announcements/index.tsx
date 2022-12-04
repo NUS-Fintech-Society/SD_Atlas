@@ -1,28 +1,33 @@
-import type { NextPage, NextApiRequest, NextApiResponse } from 'next'
+import type { NextPage } from 'next'
 import { useFormik } from 'formik'
-import { authOptions } from 'pages/api/auth/[...nextauth]'
-import { unstable_getServerSession } from 'next-auth/next'
 import { trpc } from '~/utils/trpc'
-import {
-  Button,
-  Input,
-  Textarea,
-  Heading,
-  Text,
-  useToast,
-} from '@chakra-ui/react'
+import { useSession } from 'next-auth/react'
+import { useRouter } from 'next/router'
+import LoadingScreen from '~/components/LoadingGif'
+import { useToast } from '@chakra-ui/react'
 import Screen from '~/components/mobile/Screen'
 
 const CreateAnnouncementPage: NextPage = () => {
-  const { isLoading, mutateAsync } = trpc.useMutation(
-    'announcement.create-announcement'
-  )
+  type FormValues = {
+    department: string
+    content: string
+    title: string
+  }
+
+  const initialValues: FormValues = {
+    content: '',
+    department: '',
+    title: '',
+  }
+
+  const { data: session, status } = useSession({ required: true })
+  const router = useRouter()
   const toast = useToast()
   const { values, handleChange, handleSubmit } = useFormik({
     initialValues,
     onSubmit: async ({ content, title }) => {
       try {
-        await mutateAsync({ content, title })
+        // await mutateAsync({ content, title })
         toast({
           description: 'Announcement successfully created',
           duration: 3000,
@@ -39,20 +44,27 @@ const CreateAnnouncementPage: NextPage = () => {
       }
     },
   })
+  const { isLoading, mutateAsync } = trpc.useMutation(
+    'announcement.create-announcement'
+  )
+
+  if (status === 'loading') return <LoadingScreen />
+  if (session.level !== 'super') router.push('/user')
+
   return (
     <Screen>
       <div className="flex flex-col justify-evenly">
-        <Heading>Create An Announcement</Heading>
+        <h1 className="font-bold text-3xl my-2">Create Announcement</h1>
 
-        <Text variant="xl">
+        <p className="my-2">
           Simply create an announcement now and let everyone know! Fill in the
           title and content and click submit
-        </Text>
+        </p>
 
         <form onSubmit={handleSubmit}>
-          <Input
+          <input
+            className="mb-3 px-2 py-1 focus:outline-blue-500 min-w-full border-gray-300 border border-solid rounded-lg"
             id="title"
-            marginBottom={10}
             name="title"
             value={values.title}
             onChange={handleChange}
@@ -60,9 +72,9 @@ const CreateAnnouncementPage: NextPage = () => {
             required
           />
 
-          <Textarea
+          <textarea
             id="content"
-            marginBottom={10}
+            className="px-2 py-1 mb-3 focus:outline-blue-500 min-w-full border-gray-300 border border-solid rounded-lg"
             maxLength={500}
             name="content"
             value={values.content}
@@ -70,9 +82,13 @@ const CreateAnnouncementPage: NextPage = () => {
             placeholder="Enter a content"
             required
           />
-          <Button bg="gray.400" isLoading={isLoading} type="submit">
+          <button
+            className="bg-[#4587f2] text-white px-4 py-2 rounded-md hover:bg-[#4285F4]/10 hover:text-black shadow-md font-bold disabled:bg-gray-200 disabled:hover:bg-gray-200 disabled:hover:text-white"
+            disabled={!values.title || !values.content}
+            type="submit"
+          >
             Create Announcement
-          </Button>
+          </button>
         </form>
       </div>
     </Screen>
@@ -80,51 +96,3 @@ const CreateAnnouncementPage: NextPage = () => {
 }
 
 export default CreateAnnouncementPage
-
-// Route Protection Logic
-export async function getServerSideProps(context: {
-  req: NextApiRequest
-  res: NextApiResponse
-}) {
-  const session = await unstable_getServerSession(
-    context.req,
-    context.res,
-    authOptions
-  )
-
-  if (!session) {
-    return {
-      redirect: {
-        destination: '/',
-        permanent: false,
-      },
-    }
-  }
-
-  if (session.level !== 'super') {
-    return {
-      redirect: {
-        destination: '/user',
-        permanent: false,
-      },
-    }
-  }
-
-  return {
-    props: {
-      session,
-    },
-  }
-}
-
-type FormValues = {
-  department: string
-  content: string
-  title: string
-}
-
-const initialValues: FormValues = {
-  content: '',
-  department: '',
-  title: '',
-}

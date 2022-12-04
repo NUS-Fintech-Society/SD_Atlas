@@ -18,9 +18,6 @@ import ChakraNextLink from '~/components/ChakraNextLink'
 import { useFormik } from 'formik'
 import { useRouter } from 'next/router'
 import { useSession, signIn } from 'next-auth/react'
-import { authOptions } from 'pages/api/auth/[...nextauth]'
-import { unstable_getServerSession } from 'next-auth/next'
-import { NextApiRequest, NextApiResponse } from 'next'
 import LoadingScreen from '~/components/LoadingGif'
 
 type FormValue = {
@@ -59,12 +56,14 @@ const Login = () => {
         })
         return
       }
-      router.push('/')
     },
   })
 
   if (status === 'loading') return <LoadingScreen />
-  if (status === 'authenticated') router.push('/')
+  if (status === 'authenticated') {
+    if (session.level === 'admin') router.push('/admin')
+    router.push('/user')
+  }
 
   // If the user is not authenticated and is on this page, show the sign in form
   return (
@@ -157,36 +156,3 @@ const Login = () => {
 }
 
 export default Login
-
-export async function getServerSideProps(context: {
-  req: NextApiRequest
-  res: NextApiResponse
-}) {
-  const session = await unstable_getServerSession(
-    context.req,
-    context.res,
-    authOptions
-  )
-
-  if (session && session.level !== 'super') {
-    return {
-      redirect: {
-        destination: '/user',
-        permanent: false,
-      },
-    }
-  } else if (session && session.level === 'super') {
-    return {
-      redirect: {
-        destination: '/admin',
-        permanent: false,
-      },
-    }
-  }
-
-  return {
-    props: {
-      session,
-    },
-  }
-}

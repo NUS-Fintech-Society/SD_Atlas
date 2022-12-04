@@ -1,13 +1,3 @@
-import {
-  Table,
-  Thead,
-  Tbody,
-  Tr,
-  Text,
-  Th,
-  Td,
-  TableContainer,
-} from '@chakra-ui/react'
 import { trpc } from '~/utils/trpc'
 import LoadingScreen from '../LoadingGif'
 
