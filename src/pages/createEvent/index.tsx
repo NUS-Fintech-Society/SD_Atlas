@@ -96,6 +96,7 @@ const EventPage = () => {
                   setEventName("")
                   setEventDate("")
                   setEventDepart([])
+                  alert('A new event is successfully created!')
                 }}>
                 Create Event
               </Button>
