@@ -24,8 +24,8 @@ model Departments {
   department_id String          @id
   name          String
   roles         String[]
-  announcements Announcements[]
-  projects      Projects[]
+  Announcements Announcements[]
+  Projects      Projects[]
 }
 
 model Announcements {
@@ -43,7 +43,7 @@ model Announcements {
 
 model User {
   attendance     Int?            @default(0)
-  batch          String?
+  batch          String
   date_of_birth  DateTime?
   department     String?
   diet           String?
@@ -58,11 +58,11 @@ model User {
   level          String
   linkedin       String?
   major          String?
-  name           String?
+  name           String
   phone          String?
   personal_email String?
   race           String?
-  roles          String?
+  roles          String
   shirt          String?
   telegram       String?
   total_events   Int?            @default(0)
