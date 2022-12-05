@@ -7,96 +7,76 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Example {
-  id String @id @default(cuid())
-}
-
-model Account {
-  id                String  @id @default(cuid())
-  userId            String
-  type              String
-  provider          String
-  providerAccountId String
-  refresh_token     String?
-  access_token      String?
-  expires_at        Int?
-  token_type        String?
-  scope             String?
-  id_token          String?
-  session_state     String?
-  email             String
-  hashedPassword    String
-  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@unique([provider, providerAccountId])
-}
-
-model Session {
-  id           String   @id @default(cuid())
-  sessionToken String   @unique
-  userId       String
-  expires      DateTime
-  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-}
-
-model VerificationToken {
-  identifier String
-  token      String   @unique
-  expires    DateTime
-
-  @@unique([identifier, token])
-}
-
 model Projects {
-  created_date             Int
-  department               String
-  description              String
-  project_id               Int          @id
-  departmentsDepartment_id String?
-  Departments              Departments? @relation(fields: [departmentsDepartment_id], references: [department_id])
+  description  String
+  difficulty   Int
+  rating       Int
+  departments  String?
+  project_id   Int          @id
+  name         String
+  team_lead    String
+  created_date DateTime
+  Departments  Departments? @relation(fields: [departments], references: [department_id])
+  User         User[]
 }
 
 model Departments {
   department_id String          @id
+  name          String
   roles         String[]
-  announcements Announcements[]
-  projects      Projects[]
+  Announcements Announcements[]
+  Projects      Projects[]
 }
 
 model Announcements {
-  announcement_id          Int          @id
-  content                  String
-  created_by               String
-  image                    String
-  title                    String
-  updated_date             Int
-  uploaded_date            Int
-  departmentsDepartment_id String?
-  Departments              Departments? @relation(fields: [departmentsDepartment_id], references: [department_id])
+  announcement_id String       @id
+  content         String
+  image           String?
+  title           String
+  updated_date    DateTime
+  uploaded_date   DateTime
+  department_id   String?
+  userId          String
+  Departments     Departments? @relation(fields: [department_id], references: [department_id])
+  User            User         @relation(fields: [userId], references: [id])
 }
 
 model User {
-  attendance     Int        @default(0)
+  attendance     Int?            @default(0)
   batch          String
-  major          String?
-  department     String
-  discord        String
-  gender         String
-  faculty        String
+  department     String?
+  diet           String?
+  discord        String?
+  email          String          @unique
+  faculty        String?
+  gender         String?
   hashedPassword String
-  hobbies        String
-  id             String    @id @unique
-  level          String
+  hobbies        String?
+  id             String          @id @unique
   image          String?
+  level          String
+  linkedin       String?
+  major          String?
   name           String
-  email          String    @unique
-  emailVerified  DateTime?
-  personal_email String
+  phone          String?
+  personal_email String?
+  race           String?
   roles          String
-  telegram       String
+  shirt          String?
+  telegram       String?
+  total_events   Int?            @default(0)
   wallet         String?
-  year           String
-  total_events   Int        @default(0)
-  Account        Account[]
-  Session        Session[]
+  year           String?
+  date_of_birth  DateTime?
+  Announcements  Announcements[]
+  Projects       Projects[]
+}
+
+model event {
+  id          Int      @id @default(autoincrement())
+  date        DateTime @db.Date
+  qr_code     String?
+  departments Json     @db.Json
+  attendees   Json     @db.Json
+  name        String
 }
