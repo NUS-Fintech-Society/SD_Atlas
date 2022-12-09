@@ -1,5 +1,8 @@
+import {
+  MultiSelectColumnFilter,
+  MultiSelectFilterFn,
+} from './MultiSelectFilter'
 import ReactSelect, { components } from 'react-select'
-import { BiFilterAlt } from 'react-icons/bi'
 import { BsChevronUp, BsChevronDown, BsArrowDownUp } from 'react-icons/bs'
 import {
   ColumnDef,
@@ -34,7 +37,7 @@ type Attendees = {
   name: string
 }
 
-//TODO: find a way to add checkbox to id each row
+//TODO:why not just add a row ontop of the table where you can filter 😭
 export const data: Attendees[] = [
   {
     department: 'millimetres (mm)',
@@ -89,11 +92,6 @@ function IndeterminateCheckbox({
     />
   )
 }
-const MultiSelectFilterFn: FilterFn<any> = (row, columnId, value) => {
-  if (value.length === 0) return true
-  const rowValue = row.getValue(columnId)
-  return rowValue !== undefined ? value.includes(rowValue) : true
-}
 
 const columnHelper = createColumnHelper<Attendees>()
 
@@ -129,7 +127,7 @@ export const columns = [
     cell: (info) => info.getValue(),
     header: 'Name',
     enableColumnFilter: true,
-    filterFn: 'equalsString',
+    filterFn: MultiSelectFilterFn,
   }),
 ]
 
@@ -139,7 +137,7 @@ export type DataTableProps<Data extends object> = {
 }
 
 // ref https://github.com/chakra-ui/chakra-ui/discussions/4380
-//TODO: Add filtering
+//TODO: create form logic
 export function DataTable<Data extends object>({
   data,
   columns,
@@ -209,20 +207,13 @@ export function DataTable<Data extends object>({
                       isNumeric={meta?.isNumeric}
                       className="border-x-2 border-[#97AEFF]"
                     >
-                      <div className="flex items-center">
+                      <div className="flex items-center justify-between ">
                         {header.column.getCanFilter() ? (
                           <MultiSelectColumnFilter
                             column={header.column}
                             table={table}
                           />
                         ) : null}
-                        <button
-                          onClick={() =>
-                            console.log(header.column.getFilterValue())
-                          }
-                        >
-                          get
-                        </button>
                         {flexRender(
                           header.column.columnDef.header,
                           header.getContext()
@@ -275,71 +266,6 @@ export function DataTable<Data extends object>({
           </Tbody>
         </Table>
       </Box>
-    </div>
-  )
-}
-
-function MultiSelectColumnFilter({
-  column,
-  table,
-}: {
-  column: any
-  table: any
-}) {
-  const preFilteredRows = table.getPreFilteredRowModel().rows
-  const id = column.id
-  const filterValue = column.getFilterValue()
-
-  const options = React.useMemo(() => {
-    const options = new Set()
-    preFilteredRows.forEach((row) => {
-      options.add(row.original[id])
-    })
-    const arr = []
-    for (const key of options) {
-      arr.push({ value: key, label: key })
-    }
-    return arr
-  }, [id, preFilteredRows])
-
-  const [selectedOptions, setSelectedOptions] = React.useState([])
-
-  return (
-    <div>
-      <ReactSelect
-        options={options}
-        isMulti
-        closeMenuOnSelect={false}
-        hideSelectedOptions={false}
-        components={{
-          Option,
-        }}
-        onChange={(options) => {
-          setSelectedOptions(options)
-          console.log(options)
-          if (Array.isArray(options)) {
-            column.setFilterValue(options.map((opt) => opt.value))
-          }
-        }}
-        value={selectedOptions}
-        className="text-black w-40"
-        isSearchable={false}
-      />
-    </div>
-  )
-}
-
-const Option = (props) => {
-  return (
-    <div>
-      <components.Option {...props}>
-        <input
-          type="checkbox"
-          checked={props.isSelected}
-          onChange={() => null}
-        />{' '}
-        <label>{props.label}</label>
-      </components.Option>
     </div>
   )
 }

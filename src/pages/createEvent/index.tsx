@@ -15,7 +15,7 @@ import { DataTable, data, columns } from './DataTable'
 const EventPage = () => {
   return (
     <div className="h-fill bg-black text-white items-center">
-      <div className="max-w-3xl mx-auto p-10">
+      <div className="max-w-4xl mx-auto p-10">
         <h1 className="text-2xl text-center text-[#FF9900] mb-10">
           Create New Event
         </h1>
