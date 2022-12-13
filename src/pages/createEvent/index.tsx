@@ -8,11 +8,32 @@ import {
   VStack,
   Button,
 } from '@chakra-ui/react'
-import { DataTable, data, columns } from './DataTable'
+import { DataTable, columns } from './DataTable'
+import { trpc } from '../../utils/trpc'
+import { useSession } from "next-auth/react";
+import React, { useState } from 'react';
 //TODO: Make the form submit stuff
 //https://chakra-ui.com/docs/components/form-control
 //https://chakra-ui.com/docs/components/checkbox
 const EventPage = () => {
+  const{data: data} = trpc.useQuery(["create-event.getAll"])
+  const members: Record<string, unknown>[] = []
+  const { data: session, status } = useSession();
+  const [eventName, setEventName] = useState("");
+  const [eventDate, setEventDate] = useState("");
+  const [eventDepart, setEventDepart] = useState([]);
+  const attendees = ['abc','dsd','fgh','hhh'] //replace with datatable input later
+  const newEvent = trpc.useMutation("create-event.createEvent");
+  if (!data) {
+    return <div>Loading...</div>
+  } else {
+    {data?.map((p,i) => { // can add a id col to uniquely identify the member?
+      members.push({
+        department: p.department,
+        role: p.roles,
+        name: p.name
+      })
+    })}
   return (
     <div className="h-fill bg-black text-white items-center">
       <div className="max-w-4xl mx-auto p-10">
@@ -23,13 +44,16 @@ const EventPage = () => {
           <VStack align="left" spacing="6">
             <div>
               <FormLabel>Event Name</FormLabel>
-              <Input type="email" />
+              <Input type="text" value = {eventName}
+              onChange={(event) => setEventName(event.target.value)}
+              />
             </div>
             <div className="flex">
               <FormLabel>Department</FormLabel>
               <CheckboxGroup
                 colorScheme="green"
-                defaultValue={['naruto', 'kakashi']}
+                value = {eventDepart}
+                onChange={(event) => setEventDepart(event)}
               >
                 <Stack spacing={[1, 5]} direction={['row', 'column']}>
                   <Checkbox value="naruto">Naruto</Checkbox>
@@ -43,7 +67,9 @@ const EventPage = () => {
               <Input
                 placeholder="Select Date and Time"
                 size="md"
-                type="datetime-local"
+                type="date"
+                value = {eventDate}
+                onChange={(event) => setEventDate(event.target.value)}
               />
             </div>
             <div className="flex ">
@@ -51,13 +77,27 @@ const EventPage = () => {
               <Checkbox></Checkbox>
             </div>
             <div>
-              <DataTable columns={columns} data={data} />
+              <DataTable columns={columns} data={members} />
             </div>
             <div className="flex justify-between">
               <Button bgColor="#FF9900" width={150} textColor="black">
                 Back
               </Button>
-              <Button bgColor="#4365DD" width={150}>
+              <Button bgColor="#4365DD" width={150} onClick = {(event) => {
+                  event.preventDefault();
+
+                  newEvent.mutate({
+                    name: eventName,
+                    date: new Date(eventDate),
+                    departments:eventDepart,
+                    attendees:attendees,
+                  });
+
+                  setEventName("")
+                  setEventDate("")
+                  setEventDepart([])
+                  alert('A new event is successfully created!')
+                }}>
                 Create Event
               </Button>
             </div>
@@ -66,5 +106,6 @@ const EventPage = () => {
       </div>
     </div>
   )
+}
 }
 export default EventPage
