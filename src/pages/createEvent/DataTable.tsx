@@ -2,7 +2,6 @@ import {
   MultiSelectColumnFilter,
   MultiSelectFilterFn,
 } from './MultiSelectFilter'
-import ReactSelect, { components } from 'react-select'
 import { BsChevronUp, BsChevronDown, BsArrowDownUp } from 'react-icons/bs'
 import {
   ColumnDef,
@@ -25,11 +24,8 @@ import {
   Th,
   Thead,
   Tr,
-  Menu,
-  MenuButton,
-  MenuList,
 } from '@chakra-ui/react'
-import React, { HTMLProps, useRef } from 'react'
+import React, { HTMLProps } from 'react'
 
 type Attendees = {
   department: string
@@ -37,7 +33,6 @@ type Attendees = {
   name: string
 }
 
-//TODO:why not just add a row ontop of the table where you can filter 😭
 export const data: Attendees[] = [
   {
     department: 'millimetres (mm)',
@@ -70,18 +65,20 @@ export const data: Attendees[] = [
     name: 'sal',
   },
 ]
+
 function IndeterminateCheckbox({
   indeterminate,
   className = '',
   ...rest
 }: { indeterminate?: boolean } & HTMLProps<HTMLInputElement>) {
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const ref = React.useRef<HTMLInputElement>(null!)
 
   React.useEffect(() => {
     if (typeof indeterminate === 'boolean') {
       ref.current.indeterminate = !rest.checked && indeterminate
     }
-  }, [ref, indeterminate])
+  }, [ref, indeterminate, rest.checked])
 
   return (
     <input
