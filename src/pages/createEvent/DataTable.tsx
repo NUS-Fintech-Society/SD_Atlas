@@ -1,3 +1,4 @@
+
 import {
   MultiSelectColumnFilter,
   MultiSelectFilterFn,
@@ -25,7 +26,7 @@ import {
   Thead,
   Tr,
 } from '@chakra-ui/react'
-import React, { HTMLProps } from 'react'
+import React, { HTMLProps, useEffect } from 'react'
 
 type Attendees = {
   department: string
@@ -126,6 +127,12 @@ export const columns = [
     enableColumnFilter: true,
     filterFn: MultiSelectFilterFn,
   }),
+  columnHelper.accessor('id', {
+    cell: (info) => info.getValue(),
+    header: 'ID',
+    enableColumnFilter: true,
+    filterFn: MultiSelectFilterFn,
+  }),
 ]
 
 export type DataTableProps<Data extends object> = {
@@ -138,12 +145,14 @@ export type DataTableProps<Data extends object> = {
 export function DataTable<Data extends object>({
   data,
   columns,
+  sendDataToParent
 }: DataTableProps<Data>) {
   const [rowSelection, setRowSelection] = React.useState({})
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
   )
+
   const table = useReactTable({
     columns,
     data,
@@ -171,11 +180,19 @@ export function DataTable<Data extends object>({
       table.toggleAllRowsSelected()
     }
   }
+  useEffect(() => {
+    const att: Record<string, unknown>[] = []
+    table.getSelectedRowModel().flatRows.map(
+    (d) => att.push(d.getValue("id")),
+    sendDataToParent(att)
+    );
+}, [rowSelection,table,sendDataToParent]);
 
   return (
     <div>
       <div className="flex justify-between items-center py-4">
         <p className="text-2xl">Attendees</p>
+        {/* <p>{JSON.stringify(rowSelection)}</p> */}
         <div className="flex gap-4">
           <Button bgColor="#4365DD" onClick={clearSelection}>
             Clear Selection

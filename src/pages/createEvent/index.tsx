@@ -1,3 +1,4 @@
+import {clearSelection} from "./DataTable"
 import {
   FormControl,
   FormLabel,
@@ -15,13 +16,19 @@ import React, { useState } from 'react';
 //TODO: Make the form submit stuff
 //https://chakra-ui.com/docs/components/form-control
 //https://chakra-ui.com/docs/components/checkbox
+
+
 const EventPage = () => {
   const{data: data} = trpc.useQuery(["create-event.getAll"])
   const members: Record<string, unknown>[] = []
   const { data: session, status } = useSession();
   const [eventName, setEventName] = useState("");
   const [eventDate, setEventDate] = useState("");
-  const [eventDepart, setEventDepart] = useState([]);
+  const [eventDepart, setEventDepart] = useState<string[]>([]);
+  const[attendee,setAttendee] = useState<string[]>([])
+  const sendDataToParent = (att) => { // the callback. Use a better name
+    setAttendee(att);
+  };
   const attendees = ['abc','dsd','fgh','hhh'] //replace with datatable input later
   const newEvent = trpc.useMutation("create-event.createEvent");
   if (!data) {
@@ -31,7 +38,8 @@ const EventPage = () => {
       members.push({
         department: p.department,
         role: p.roles,
-        name: p.name
+        name: p.name,
+        id: p.id
       })
     })}
   return (
@@ -56,9 +64,11 @@ const EventPage = () => {
                 onChange={(event) => setEventDepart(event)}
               >
                 <Stack spacing={[1, 5]} direction={['row', 'column']}>
-                  <Checkbox value="naruto">Naruto</Checkbox>
-                  <Checkbox value="sasuke">Sasuke</Checkbox>
-                  <Checkbox value="kakashi">Kakashi</Checkbox>
+                  <Checkbox value="ml">Machine Learning</Checkbox>
+                  <Checkbox value="sd">Software Development</Checkbox>
+                  <Checkbox value="bc">Blockchain</Checkbox>
+                  <Checkbox value="ir">Internal Relations</Checkbox>
+                  <Checkbox value="ea">External Affairs</Checkbox>
                 </Stack>
               </CheckboxGroup>
             </div>
@@ -76,8 +86,9 @@ const EventPage = () => {
               <FormLabel>QR Code required</FormLabel>
               <Checkbox></Checkbox>
             </div>
+            {/* <p>attendees are {attendee}</p> */}
             <div>
-              <DataTable columns={columns} data={members} />
+              <DataTable columns={columns} data={members} sendDataToParent={sendDataToParent} />
             </div>
             <div className="flex justify-between">
               <Button bgColor="#FF9900" width={150} textColor="black">
@@ -90,7 +101,7 @@ const EventPage = () => {
                     name: eventName,
                     date: new Date(eventDate),
                     departments:eventDepart,
-                    attendees:attendees,
+                    attendees:attendee,
                   });
 
                   setEventName("")
