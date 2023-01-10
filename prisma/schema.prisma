@@ -43,8 +43,8 @@ model Announcements {
 
 model User {
   attendance     Int?            @default(0)
-  batch          String?
-  department     String?
+  batch          String
+  department     String
   diet           String?
   discord        String?
   email          String          @unique
@@ -57,7 +57,7 @@ model User {
   level          String
   linkedin       String?
   major          String?
-  name           String?
+  name           String
   phone          String?
   personal_email String?
   race           String?

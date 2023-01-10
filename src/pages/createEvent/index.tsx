@@ -32,6 +32,9 @@ const EventPage = () => {
   const attendees = ['abc','dsd','fgh','hhh'] //replace with datatable input later
   const newEvent = trpc.useMutation("create-event.createEvent");
   if (!data) {
+    if (status == "unauthenticated") {
+      alert("Unauthorized!!")
+    }
     return <div>Loading...</div>
   } else {
     {data?.map((p,i) => { // can add a id col to uniquely identify the member?
