@@ -29,7 +29,6 @@ const EventPage = () => {
   const sendDataToParent = (att) => { // the callback. Use a better name
     setAttendee(att);
   };
-  const attendees = ['abc','dsd','fgh','hhh'] //replace with datatable input later
   const newEvent = trpc.useMutation("create-event.createEvent");
   if (!data) {
     if (status == "unauthenticated") {
