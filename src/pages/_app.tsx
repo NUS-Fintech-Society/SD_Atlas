@@ -8,8 +8,6 @@ import type { AppType } from 'next/app'
 import type { AppRouter } from '../server/router'
 import type { Session } from 'next-auth'
 import { ChakraProvider, extendTheme, type ThemeConfig } from '@chakra-ui/react'
-import { Provider } from 'react-redux'
-import store from '~/store/store'
 import '../styles/globals.css'
 
 export const theme: ThemeConfig = extendTheme({
@@ -62,13 +60,11 @@ const MyApp: AppType<{ session: Session | null }> = ({
   pageProps: { session, ...pageProps },
 }) => {
   return (
-    <Provider store={store}>
-      <ChakraProvider theme={theme}>
-        <SessionProvider session={session}>
-          <Component {...pageProps} />
-        </SessionProvider>
-      </ChakraProvider>
-    </Provider>
+    <ChakraProvider theme={theme}>
+      <SessionProvider session={session}>
+        <Component {...pageProps} />
+      </SessionProvider>
+    </ChakraProvider>
   )
 }
 
@@ -79,7 +75,7 @@ const getBaseUrl = () => {
 }
 
 export default withTRPC<AppRouter>({
-  config() {
+  config({ ctx }) {
     /**
      * If you want to use SSR, you need to use the server's full URL
      * @link https://trpc.io/docs/ssr
