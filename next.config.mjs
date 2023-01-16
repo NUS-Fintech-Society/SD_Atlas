@@ -1,8 +1,4 @@
-import bundleAnalyzer from '@next/bundle-analyzer'
-
-const withBundleAnalyzer = bundleAnalyzer({
-  enabled: process.env.ANALYZE === 'true',
-})
+import { env } from "./src/env/server.mjs";
 
 /**
  * Don't be scared of the generics here.
@@ -13,7 +9,7 @@ const withBundleAnalyzer = bundleAnalyzer({
  * @constraint {{import('next').NextConfig}}
  */
 function defineNextConfig(config) {
-  return withBundleAnalyzer(config)
+  return config;
 }
 
 export default defineNextConfig({
@@ -21,16 +17,7 @@ export default defineNextConfig({
   swcMinify: true,
   // Next.js i18n docs: https://nextjs.org/docs/advanced-features/i18n-routing
   i18n: {
-    locales: ['en'],
-    defaultLocale: 'en',
+    locales: ["en"],
+    defaultLocale: "en",
   },
-  async redirects() {
-    return [
-      {
-        source: '/',
-        destination: '/auth/login',
-        permanent: true,
-      },
-    ]
-  },
-})
+});
