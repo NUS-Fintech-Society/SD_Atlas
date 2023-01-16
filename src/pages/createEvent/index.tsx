@@ -1,4 +1,3 @@
-import {clearSelection} from "./DataTable"
 import {
   FormControl,
   FormLabel,
